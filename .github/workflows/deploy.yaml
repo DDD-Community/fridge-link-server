@@ -8,7 +8,7 @@ on:
 
 env:
   S3_BUCKET_NAME: mara-s3bucket
-  RESOURCE_PATH: ./src/main/resources/application.yaml
+  RESOURCE_PATH: ./src/main/resources/application.yml
   CODE_DEPLOY_APPLICATION_NAME: mara-code-deploy
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: mara-deploy-group
 
@@ -20,10 +20,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Set up JDK 11
+      - name: Set up JDK 17
         uses: actions/setup-java@v1
         with:
-          java-version: 11
+          java-version: 17
 
         # [1]
       - name: Set yaml file
