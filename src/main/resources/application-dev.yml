@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://database-mara.cix8ifjprquv.ap-northeast-2.rds.amazonaws.com:3306/maradb?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: admin
+    password: akfkXKD!1
+    driver-class-name: org.mariadb.jdbc.Driver
