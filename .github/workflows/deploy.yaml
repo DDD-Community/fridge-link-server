@@ -7,7 +7,7 @@ on:
 
 env:
   S3_BUCKET_NAME: mara-s3bucket
-  RESOURCE_PATH: ./src/main/resources/application.yml
+  RESOURCE_PATH: ./src/main/resources/application-dev.yml
   CODE_DEPLOY_APPLICATION_NAME: mara-code-deploy
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: mara-deploy-group
 
@@ -25,13 +25,14 @@ jobs:
           java-version: 17
 
         # [1]
-#      - name: Set yaml file
-#        uses: microsoft/variable-substitution@v1
-#        with:
-#          files: ${{ env.RESOURCE_PATH }}
-#        env:
-##          override.value: ${{ secrets.DI_FROM_SECRET }}
-#           override.value: 'from deploy.yaml'
+      - name: Set yml file
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: ${{ env.RESOURCE_PATH }}
+        env:
+          spring.datasource.url: ${{ secrets.DB_URL }}
+          spring.datasource.username: ${{ secrets.DB_USERNAME }}
+          spring.datasource.password: ${{ secrets.DB_PASSWORD }}
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
