@@ -23,4 +23,9 @@ class RefrigeratorController(
     fun updateRefrigerator(@PathVariable(name = "id") id: Long, @RequestBody refrigeratorRequest: RefrigeratorRequest): CommonResponse<RefrigeratorResponse> {
         return success(refrigeratorService.updateRefrigerator(id, refrigeratorRequest))
     }
+
+    @DeleteMapping("/{id}")
+    fun updateRefrigerator(@PathVariable(name = "id") id: Long): CommonResponse<String> {
+        return success(refrigeratorService.deleteRefrigerator(id))
+    }
 }

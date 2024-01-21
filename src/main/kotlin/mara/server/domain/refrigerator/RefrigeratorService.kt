@@ -31,4 +31,9 @@ class RefrigeratorService(
         refrigerator.update(refrigeratorRequest)
         return RefrigeratorResponse(refrigeratorRepository.save(refrigerator))
     }
+
+    fun deleteRefrigerator(id: Long): String {
+        refrigeratorRepository.deleteById(id)
+        return "deleted"
+    }
 }
