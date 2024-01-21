@@ -26,6 +26,11 @@ class RefrigeratorController(
         return success(refrigeratorService.getRefrigerator((id)))
     }
 
+    @GetMapping("/users/{user-id}")
+    fun getRefrigeratorList(@PathVariable(name = "user-id") userId: Long): CommonResponse<List<RefrigeratorResponse>> {
+        return success(refrigeratorService.getRefrigeratorList((userId)))
+    }
+
     @PutMapping("/{id}")
     fun updateRefrigerator(
         @PathVariable(name = "id") id: Long,

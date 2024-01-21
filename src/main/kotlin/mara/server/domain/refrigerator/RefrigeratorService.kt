@@ -25,6 +25,13 @@ class RefrigeratorService(
         return RefrigeratorResponse(refrigerator)
     }
 
+    fun getRefrigeratorList(userId: Long): List<RefrigeratorResponse> {
+        val user =
+            userRepository.findById(userId).orElseThrow { NoSuchElementException("해당 유저가 존재하지 않습니다. ID: $userId") }
+        val refrigeratorList = refrigeratorRepository.findRefrigeratorsByUser(user)
+        return refrigeratorList.toRefrigeratorResponseList()
+    }
+
     fun updateRefrigerator(id: Long, refrigeratorRequest: RefrigeratorRequest): RefrigeratorResponse {
         val refrigerator =
             refrigeratorRepository.findById(id).orElseThrow { NoSuchElementException("해당 냉장고가 존재하지 않습니다. ID: $id") }

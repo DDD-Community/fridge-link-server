@@ -9,3 +9,7 @@ data class RefrigeratorResponse(
         name = refrigerator.name
     )
 }
+
+fun List<Refrigerator>.toRefrigeratorResponseList(): List<RefrigeratorResponse> {
+    return this.map { RefrigeratorResponse(it) }
+}
