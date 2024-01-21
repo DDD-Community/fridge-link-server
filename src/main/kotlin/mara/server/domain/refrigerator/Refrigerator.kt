@@ -5,11 +5,12 @@ import mara.server.domain.user.User
 
 @Entity
 class Refrigerator(
-    var name: String = "기본 냉장고",
+    var name: String? = null,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     val user: User,
-) {
+
+    ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "refrigerator_id", nullable = false)

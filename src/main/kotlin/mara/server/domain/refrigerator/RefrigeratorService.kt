@@ -1,13 +1,25 @@
 package mara.server.domain.refrigerator
 
+import mara.server.domain.user.UserRepository
 import org.springframework.stereotype.Service
 
 @Service
 class RefrigeratorService(
-    private val refrigeratorRepository: RefrigeratorRepository
+    private val refrigeratorRepository: RefrigeratorRepository,
+    private val userRepository: UserRepository
 ) {
+    fun createRefrigerator(refrigeratorRequest: RefrigeratorRequest): Long {
+        val userId = refrigeratorRequest.userId
+        val user =
+            userRepository.findById(userId).orElseThrow { NoSuchElementException("해당 유저가 존재하지 않습니다. ID: $userId") }
+        val refrigerator = Refrigerator(
+            name = refrigeratorRequest.name,
+            user = user
+        )
+        return refrigeratorRepository.save(refrigerator).refrigeratorId
+    }
 
-    fun getBoard(id: Long): String {
+    fun getRefrigerator(id: Long): String {
         val refrigerator =
             refrigeratorRepository.findById(id).orElseThrow { NoSuchElementException("냉장고가 존재하지 않습니다. ID: $id") }
         return "service ok"
