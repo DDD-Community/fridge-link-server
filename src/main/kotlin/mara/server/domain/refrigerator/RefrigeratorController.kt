@@ -10,17 +10,20 @@ class RefrigeratorController(
     private val refrigeratorService: RefrigeratorService
 ) {
     @PostMapping
-    fun createRefrigerator(@RequestBody refrigeratorRequest: RefrigeratorRequest): Long {
-        return refrigeratorService.createRefrigerator(refrigeratorRequest)
+    fun createRefrigerator(@RequestBody refrigeratorRequest: RefrigeratorRequest): CommonResponse<Long> {
+        return success(refrigeratorService.createRefrigerator(refrigeratorRequest))
     }
 
     @GetMapping("/{id}")
-    fun getRefrigerator(@PathVariable(name = "id") id: Long): String {
-        return refrigeratorService.getRefrigerator((id))
+    fun getRefrigerator(@PathVariable(name = "id") id: Long): CommonResponse<RefrigeratorResponse> {
+        return success(refrigeratorService.getRefrigerator((id)))
     }
 
     @PutMapping("/{id}")
-    fun updateRefrigerator(@PathVariable(name = "id") id: Long, @RequestBody refrigeratorRequest: RefrigeratorRequest): CommonResponse<RefrigeratorResponse> {
+    fun updateRefrigerator(
+        @PathVariable(name = "id") id: Long,
+        @RequestBody refrigeratorRequest: RefrigeratorRequest
+    ): CommonResponse<RefrigeratorResponse> {
         return success(refrigeratorService.updateRefrigerator(id, refrigeratorRequest))
     }
 

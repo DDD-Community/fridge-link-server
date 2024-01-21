@@ -19,15 +19,15 @@ class RefrigeratorService(
         return refrigeratorRepository.save(refrigerator).refrigeratorId
     }
 
-    fun getRefrigerator(id: Long): String {
+    fun getRefrigerator(id: Long): RefrigeratorResponse {
         val refrigerator =
-            refrigeratorRepository.findById(id).orElseThrow { NoSuchElementException("냉장고가 존재하지 않습니다. ID: $id") }
-        return "service ok"
+            refrigeratorRepository.findById(id).orElseThrow { NoSuchElementException("해당 냉장고가 존재하지 않습니다. ID: $id") }
+        return RefrigeratorResponse(refrigerator)
     }
 
     fun updateRefrigerator(id: Long, refrigeratorRequest: RefrigeratorRequest): RefrigeratorResponse {
         val refrigerator =
-            refrigeratorRepository.findById(id).orElseThrow { NoSuchElementException("냉장고가 존재하지 않습니다. ID: $id") }
+            refrigeratorRepository.findById(id).orElseThrow { NoSuchElementException("해당 냉장고가 존재하지 않습니다. ID: $id") }
         refrigerator.update(refrigeratorRequest)
         return RefrigeratorResponse(refrigeratorRepository.save(refrigerator))
     }

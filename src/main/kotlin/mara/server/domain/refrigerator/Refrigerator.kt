@@ -1,6 +1,5 @@
 package mara.server.domain.refrigerator
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 import mara.server.domain.user.User
 
