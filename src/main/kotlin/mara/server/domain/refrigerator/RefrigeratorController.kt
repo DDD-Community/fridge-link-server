@@ -12,8 +12,8 @@ class RefrigeratorController(
         return refrigeratorService.createRefrigerator(refrigeratorRequest)
     }
 
-    @GetMapping
-    fun getRefrigerator(): String {
-        return refrigeratorService.getRefrigerator(1)
+    @GetMapping("/{id}")
+    fun getRefrigerator(@PathVariable(name = "id") id: Long): String {
+        return refrigeratorService.getRefrigerator((id))
     }
 }
