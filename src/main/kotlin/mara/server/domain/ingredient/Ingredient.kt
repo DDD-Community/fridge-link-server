@@ -7,10 +7,10 @@ import jakarta.persistence.Id
 
 @Entity
 class Ingredient(
-        var category: String,
-        var name: String,
-        var iconImage: String,
-        var expirationDays: Int = 0
+    var category: String,
+    var name: String,
+    var iconImage: String,
+    var expirationDays: Int = 0
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
