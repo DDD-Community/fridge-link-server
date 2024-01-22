@@ -27,6 +27,11 @@ class IngredientController(
         return success(ingredientService.getIngredient(id))
     }
 
+    @GetMapping
+    fun getIngredientList(): CommonResponse<List<IngredientResponse>> {
+        return success(ingredientService.getIngredientList())
+    }
+
     @PutMapping("/{id}")
     fun updateIngredient(@PathVariable(name = "id") id: Long,
                          @RequestBody ingredientRequest: IngredientRequest): CommonResponse<IngredientResponse> {

@@ -7,9 +7,9 @@ import jakarta.persistence.Id
 
 @Entity
 class Ingredient(
-        var category: String? = null,
-        var name: String? = null,
-        var iconImage: String? = null,
+        var category: String,
+        var name: String,
+        var iconImage: String,
         var expirationDays: Int = 0
 ) {
     @Id

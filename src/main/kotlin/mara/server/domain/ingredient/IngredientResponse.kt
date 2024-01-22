@@ -1,15 +1,21 @@
 package mara.server.domain.ingredient
 
 data class IngredientResponse(
-    val category: String?,
-    val name: String?,
-    val iconImage: String?,
+    val ingredientId: Long,
+    val category: String,
+    val name: String,
+    val iconImage: String,
     val expirationDays: Int
 ) {
     constructor(ingredient: Ingredient) : this(
+        ingredientId = ingredient.ingredientId,
         category = ingredient.category,
         name = ingredient.name,
         iconImage = ingredient.iconImage,
         expirationDays = ingredient.expirationDays
     )
+}
+
+fun List<Ingredient>.toIngredientResponseList(): List<IngredientResponse> {
+    return this.map { IngredientResponse(it) }
 }
