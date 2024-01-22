@@ -4,11 +4,17 @@ import org.springframework.stereotype.Service
 
 @Service
 class IngredientService(
-        private val ingredientRepository: IngredientRepository
+    private val ingredientRepository: IngredientRepository
 ) {
 
-    fun createIngredient(): Long {
-        return 1
+    fun createIngredient(ingredientRequest: IngredientRequest): Long {
+        val ingredient = Ingredient(
+            category = ingredientRequest.category,
+            name = ingredientRequest.name,
+            iconImage = ingredientRequest.iconImage,
+            expirationDays = ingredientRequest.expirationDays
+        )
+        return ingredientRepository.save(ingredient).ingredientId
     }
 
     fun getIngredient(): Long {

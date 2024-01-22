@@ -10,7 +10,7 @@ class Ingredient(
         var category: String? = null,
         var name: String? = null,
         var iconImage: String? = null,
-        var expirationDay: Int = 0
+        var expirationDays: Int = 0
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
