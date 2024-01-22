@@ -28,7 +28,8 @@ class IngredientService(
         return IngredientResponse(ingredientRepository.save(ingredient))
     }
 
-    fun deleteIngredient(): Long {
-        return 1
+    fun deleteIngredient(id: Long): String {
+        ingredientRepository.deleteById(id)
+        return "deleted"
     }
 }

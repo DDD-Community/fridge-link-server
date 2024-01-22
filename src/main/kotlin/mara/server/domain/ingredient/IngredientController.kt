@@ -33,8 +33,8 @@ class IngredientController(
         return success(ingredientService.updateIngredient(id, ingredientRequest))
     }
 
-    @DeleteMapping
-    fun deleteIngredient(): CommonResponse<Long> {
-        return success(ingredientService.deleteIngredient())
+    @DeleteMapping("/{id}")
+    fun deleteIngredient(@PathVariable(name = "id") id: Long): CommonResponse<String> {
+        return success(ingredientService.deleteIngredient(id))
     }
 }
