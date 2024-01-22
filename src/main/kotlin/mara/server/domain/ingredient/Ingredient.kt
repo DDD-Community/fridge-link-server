@@ -15,4 +15,11 @@ class Ingredient(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var ingredientId: Long = 0L
+
+    fun update(ingredientRequest: IngredientRequest) {
+        this.category = ingredientRequest.category
+        this.name = ingredientRequest.name
+        this.iconImage = ingredientRequest.iconImage
+        this.expirationDays = ingredientRequest.expirationDays
+    }
 }
