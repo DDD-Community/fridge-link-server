@@ -17,8 +17,9 @@ class IngredientService(
         return ingredientRepository.save(ingredient).ingredientId
     }
 
-    fun getIngredient(): Long {
-        return 1
+    fun getIngredient(id: Long): IngredientResponse {
+        val ingredient = ingredientRepository.findById(id).orElseThrow { NoSuchElementException("해당 식재료가 존재하지 않습니다. ID: $id") }
+        return IngredientResponse(ingredient)
     }
 
     fun updateIngredient(): Long {

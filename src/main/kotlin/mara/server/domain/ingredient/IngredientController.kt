@@ -4,6 +4,7 @@ import mara.server.common.CommonResponse
 import mara.server.common.success
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -21,9 +22,9 @@ class IngredientController(
         return success(ingredientService.createIngredient(ingredientRequest))
     }
 
-    @GetMapping
-    fun getIngredient(): CommonResponse<Long> {
-        return success(ingredientService.getIngredient())
+    @GetMapping("/{id}")
+    fun getIngredient(@PathVariable(name = "id") id: Long): CommonResponse<IngredientResponse> {
+        return success(ingredientService.getIngredient(id))
     }
 
     @PutMapping
