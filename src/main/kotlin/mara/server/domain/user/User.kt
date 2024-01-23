@@ -13,11 +13,11 @@ import mara.server.domain.board.Board
 
 enum class Role { USER }
 @Entity
-@Table(name = "share_fridge_user")
+@Table(name = "app_user")
 class User(
     val name: String,
     val password: String,
-    val kaKaoId: Long?,
+    val kakaoId: Long?,
     val googleEmail: String?,
 ) {
     @Id

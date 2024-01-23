@@ -1,4 +1,4 @@
-package mara.server.auth
+package mara.server.auth.kakao
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
@@ -12,7 +12,7 @@ data class KakaoInfoResponse(
     @JsonProperty("id")
     var id: Long,
 
-) {
+    ) {
     val email: String
         get() = kakaoAccount.email
 

@@ -2,7 +2,7 @@ package mara.server.domain.user
 
 data class UserRequest(
     val name: String,
-    val kaKaoId: Long?,
+    val kakaoId: Long?,
     val password: String,
     val googleEmail: String?,
 )
@@ -12,14 +12,14 @@ data class JwtDto(
     val refreshToken: String?,
 )
 
-class UserResponseDto(
+class UserResponse(
     val name: String,
-    val kaKaoId: Long?,
+    val kakaoId: Long?,
     val googleEmail: String?,
 ) {
     constructor(user: User) : this(
         name = user.name,
-        kaKaoId = user?.kaKaoId,
+        kakaoId = user?.kakaoId,
         googleEmail = user?.googleEmail
     )
 }

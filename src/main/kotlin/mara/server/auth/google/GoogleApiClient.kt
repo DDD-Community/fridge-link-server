@@ -33,18 +33,17 @@ class GoogleApiClient(
     fun getRedirectUri(status: String): String {
         val os = System.getProperty("os.name")
         log.info("OS : {}", os)
-//        if (os.contains("Mac") || os.contains("Windows")) return "http://localhost:8080/member/login"
-        if (status == "local")return "http://localhost:3000/member/kakao"
-        if (status == "prod") return "http://www.buybye.kr/member/kakao"
+        if (status == "local")return ""
+        if (status == "prod") return ""
         return "http://localhost:8080/users/google-login"
     }
 
-    fun requestAccessToken(code: String, status: String): String {
+    fun requestAccessToken(authorizedCode: String, status: String): String {
         val url = "$authUrl/token"
         val httpHeaders = HttpHeaders()
         httpHeaders.contentType = MediaType.APPLICATION_FORM_URLENCODED
         val body: MultiValueMap<String, String> = LinkedMultiValueMap()
-        body.add("code", code)
+        body.add("code", authorizedCode)
         body.add("grant_type", "authorization_code")
         body.add("client_id", clientId)
         body.add("client_secret", secret)

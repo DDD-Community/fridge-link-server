@@ -1,6 +1,6 @@
 package mara.server.domain.user
 
-import mara.server.auth.KakaoApiClient
+import mara.server.auth.kakao.KakaoApiClient
 import mara.server.auth.google.GoogleApiClient
 import mara.server.auth.jwt.JwtProvider
 import mara.server.auth.security.getCurrentLoginUserId
@@ -16,7 +16,7 @@ class UserService(
     private val userRepository: UserRepository,
     private val jwtProvider: JwtProvider,
     private val passwordEncoder: BCryptPasswordEncoder,
-    private val client: KakaoApiClient,
+    private val kakaoApiClient: KakaoApiClient,
     private val googleClient: GoogleApiClient,
 ) {
 
@@ -24,12 +24,12 @@ class UserService(
 
     fun getCurrentLoginUser(): User = userRepository.findById(getCurrentLoginUserId()).orElseThrow()
 
-    fun getCurrentUserInfo() = UserResponseDto(getCurrentLoginUser())
+    fun getCurrentUserInfo() = UserResponse(getCurrentLoginUser())
 
     fun createUser(userRequest: UserRequest): Long {
         val user = User(
             name = userRequest.name,
-            kaKaoId = userRequest.kaKaoId,
+            kakaoId = userRequest.kakaoId,
             password = passwordEncoder.encode(userRequest.name),
             googleEmail = userRequest.googleEmail,
         )
@@ -39,8 +39,8 @@ class UserService(
     fun kaKaoLogin(authorizedCode: String): JwtDto {
         // 리다이랙트 url 환경 따라 다르게 전달하기 위한 구분 값
         val status = ""
-        val accessToken = client.requestAccessToken(authorizedCode, status)
-        val infoResponse = client.requestOauthInfo(accessToken)
+        val accessToken = kakaoApiClient.requestAccessToken(authorizedCode, status)
+        val infoResponse = kakaoApiClient.requestOauthInfo(accessToken)
         log.info("kakaoId ? " + infoResponse.id)
         val user = userRepository.findByKaKaoId(infoResponse.id)
 

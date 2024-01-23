@@ -23,8 +23,8 @@ class JwtProvider(
 
     fun generateToken(user: User): String {
         val now = Date(System.currentTimeMillis())
-        var claimName = "kaKaoId"
-        var claimValue = user.kaKaoId.toString()
+        var claimName = "kakaoId"
+        var claimValue = user.kakaoId.toString()
         if (user.googleEmail != null) {
             claimName = "googleEmail"
             claimValue = user.googleEmail!!

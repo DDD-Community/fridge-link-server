@@ -1,4 +1,4 @@
-package mara.server.auth
+package mara.server.auth.kakao
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
