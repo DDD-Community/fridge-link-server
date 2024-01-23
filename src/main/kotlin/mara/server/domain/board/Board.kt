@@ -14,7 +14,7 @@ class Board(
     var title: String? = null,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
-    val writer: User,
+    val user: User,
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

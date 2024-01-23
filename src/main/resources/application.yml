@@ -13,3 +13,26 @@ spring:
         format_sql: true
         show_sql: true
 
+oauth:
+  kakao:
+    client-id: ${kakao-client-id}
+    client-secret: ${kakao-client-secret}
+    app-admin-key: ${kakao-app-admin-key}
+    url:
+      auth: https://kauth.kakao.com
+      api: https://kapi.kakao.com
+  google:
+    client-id: ${google-client-id}
+    client-secret: ${google-client-secret}
+    url:
+      auth: https://oauth2.googleapis.com
+      api: https://www.googleapis.com
+
+jwt:
+  secret-key: ${jwt-secret-key}
+  access-duration-mils: 2147483647
+
+logging:
+  level:
+    root: info
+    mara.server: TRACE

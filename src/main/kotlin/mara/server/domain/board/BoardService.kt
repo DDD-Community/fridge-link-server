@@ -14,7 +14,7 @@ class BoardService(
         val user = userRepository.findById(userId).orElseThrow { NoSuchElementException("해당 유저가 존재하지 않습니다. ID: $userId") }
         val board = Board(
             title = boardRequest.title,
-            writer = user
+            user = user
         )
         return boardRepository.save(board).boardId
     }
