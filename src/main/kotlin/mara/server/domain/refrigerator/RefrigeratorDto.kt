@@ -1,5 +1,10 @@
 package mara.server.domain.refrigerator
 
+data class RefrigeratorRequest(
+    var name: String,
+    val userId: Long
+)
+
 data class RefrigeratorResponse(
     var id: Long,
     var name: String,
