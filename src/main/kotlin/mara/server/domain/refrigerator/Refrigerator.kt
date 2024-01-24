@@ -21,7 +21,7 @@ class Refrigerator(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "refrigerator_id", nullable = false)
-    var refrigeratorId: Long = 0L
+    val refrigeratorId: Long = 0L
 
     fun update(refrigeratorRequest: RefrigeratorRequest) {
         this.name = refrigeratorRequest.name
