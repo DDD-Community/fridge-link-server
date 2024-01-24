@@ -3,10 +3,20 @@ package mara.server.domain.ingredient
 import org.springframework.stereotype.Service
 
 @Service
-class IngredientDetailService {
+class IngredientDetailService(
+    private val ingredientDetailRepository: IngredientDetailRepository
+) {
 
-    fun createIngredientDetail(): Long {
-        return 1
+    fun createIngredientDetail(ingredientDetailRequest: IngredientDetailRequest): Long {
+        val ingredientDetail = IngredientDetail(
+            quantity = ingredientDetailRequest.quantity,
+            location = ingredientDetailRequest.location,
+            memo = ingredientDetailRequest.memo,
+            addDate = ingredientDetailRequest.addDate,
+            expirationDate = ingredientDetailRequest.expirationDate,
+            isDeleted = ingredientDetailRequest.isDeleted
+        )
+        return ingredientDetailRepository.save(ingredientDetail).ingredientDetailId
     }
 
     fun getIngredientDetail(): Long {

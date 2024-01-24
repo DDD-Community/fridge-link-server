@@ -8,11 +8,11 @@ import java.time.LocalDateTime
 
 @Entity
 class IngredientDetail(
-    var quantity: Int? = 0,
-    var location: String? = null,
-    var memo: String? = null,
-    var addDate: LocalDateTime? = null,
-    var exprirationDate: LocalDateTime? = null,
+    var quantity: Int = 0,
+    var location: String,
+    var memo: String,
+    var addDate: LocalDateTime,
+    var expirationDate: LocalDateTime,
     var isDeleted: Boolean? = null
 ) {
     @Id
