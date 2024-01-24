@@ -12,25 +12,27 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/ingrs/det")
-class IngredientDetailController {
+class IngredientDetailController(
+    private val ingredientDetailService: IngredientDetailService
+) {
 
     @PostMapping
     fun createIngredientDetail(): CommonResponse<Long> {
-        return success(1)
+        return success(ingredientDetailService.createIngredientDetail())
     }
 
     @GetMapping("/{id}")
     fun getIngredientDetail(@PathVariable(name = "id") id: Long): CommonResponse<Long> {
-        return success(2)
+        return success(ingredientDetailService.getIngredientDetail())
     }
 
     @PutMapping("/{id}")
     fun updateIngredientDetail(@PathVariable(name = "id") id: Long): CommonResponse<Long> {
-        return success(3)
+        return success(ingredientDetailService.updateIngredientDetail())
     }
 
     @DeleteMapping("/{id}")
     fun deleteIngredient(@PathVariable(name = "id") id: Long): CommonResponse<Long> {
-        return success(4)
+        return success(ingredientDetailService.deleteIngredientDetail())
     }
 }
