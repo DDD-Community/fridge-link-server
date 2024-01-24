@@ -23,17 +23,17 @@ class IngredientDetailController(
     }
 
     @GetMapping("/{id}")
-    fun getIngredientDetail(@PathVariable(name = "id") id: Long): CommonResponse<Long> {
-        return success(ingredientDetailService.getIngredientDetail())
+    fun getIngredientDetail(@PathVariable(name = "id") id: Long): CommonResponse<IngredientDetailResponse> {
+        return success(ingredientDetailService.getIngredientDetail(id))
     }
 
     @PutMapping("/{id}")
-    fun updateIngredientDetail(@PathVariable(name = "id") id: Long): CommonResponse<Long> {
-        return success(ingredientDetailService.updateIngredientDetail())
+    fun updateIngredientDetail(@PathVariable(name = "id") id: Long, @RequestBody ingredientDetailRequest: IngredientDetailRequest): CommonResponse<IngredientDetailResponse> {
+        return success(ingredientDetailService.updateIngredientDetail(id, ingredientDetailRequest))
     }
 
     @DeleteMapping("/{id}")
-    fun deleteIngredient(@PathVariable(name = "id") id: Long): CommonResponse<Long> {
-        return success(ingredientDetailService.deleteIngredientDetail())
+    fun deleteIngredient(@PathVariable(name = "id") id: Long): CommonResponse<String> {
+        return success(ingredientDetailService.deleteIngredientDetail(id))
     }
 }
