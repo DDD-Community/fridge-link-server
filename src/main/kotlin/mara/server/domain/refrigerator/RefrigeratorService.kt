@@ -32,10 +32,10 @@ class RefrigeratorService(
         return refrigeratorList.toRefrigeratorResponseList()
     }
 
-    fun updateRefrigerator(id: Long, refrigeratorRequest: RefrigeratorRequest): RefrigeratorResponse {
+    fun updateRefrigerator(id: Long, refrigeratorUpdateRequest: RefrigeratorUpdateRequest): RefrigeratorResponse {
         val refrigerator =
             refrigeratorRepository.findById(id).orElseThrow { NoSuchElementException("해당 냉장고가 존재하지 않습니다. ID: $id") }
-        refrigerator.update(refrigeratorRequest)
+        refrigerator.update(refrigeratorUpdateRequest)
         return RefrigeratorResponse(refrigeratorRepository.save(refrigerator))
     }
 

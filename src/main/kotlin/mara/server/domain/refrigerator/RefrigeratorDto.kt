@@ -5,6 +5,10 @@ data class RefrigeratorRequest(
     val userId: Long
 )
 
+data class RefrigeratorUpdateRequest(
+    var name: String
+)
+
 data class RefrigeratorResponse(
     var id: Long,
     var name: String,
