@@ -41,7 +41,7 @@ class SecurityConfig(
                     .requestMatchers(PathRequest.toH2Console()).permitAll()
                     .anyRequest().authenticated()
             }
-            .headers { it.frameOptions { it.disable() } }
+            .headers { it.frameOptions { frameOptions->frameOptions.disable() } }
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
