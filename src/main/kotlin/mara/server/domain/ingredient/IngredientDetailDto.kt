@@ -1,6 +1,5 @@
 package mara.server.domain.ingredient
 
-import mara.server.domain.refrigerator.Refrigerator
 import java.time.LocalDateTime
 
 data class IngredientDetailRequest(
