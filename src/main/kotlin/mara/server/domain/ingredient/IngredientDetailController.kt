@@ -27,10 +27,9 @@ class IngredientDetailController(
         return success(ingredientDetailService.getIngredientDetail(id))
     }
 
-    // TODO CommonResponse<List<IngredientDetailResponse>> 로 return 변경
     @GetMapping("/refrig/{id}")
-    fun getIngredientDetailList(@PathVariable(name = "id") refrigId: Long): CommonResponse<Long> {
-        return success(ingredientDetailService.getIngredientDetailList(refrigId))
+    fun getIngredientDetailList(@PathVariable(name = "id") refrigeratorId: Long): CommonResponse<List<IngredientDetailResponse>> {
+        return success(ingredientDetailService.getIngredientDetailList(refrigeratorId))
     }
 
     @PutMapping("/{id}")

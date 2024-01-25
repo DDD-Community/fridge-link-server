@@ -35,9 +35,10 @@ class IngredientDetailService(
         return IngredientDetailResponse(ingredientDetail)
     }
 
-    // TODO List<IngredientDetailResponse> 로 return 변경
-    fun getIngredientDetailList(refrigId: Long): Long {
-        return 1
+    fun getIngredientDetailList(refrigeratorId: Long): List<IngredientDetailResponse> {
+        val refrigerator = refrigeratorRepository.findById(refrigeratorId).orElseThrow { NoSuchElementException("해당 냉장고가 존재하지 않습니다. ID: $refrigeratorId") }
+        val ingredientDetailList = ingredientDetailRepository.findIngredientDetailsByRefrigerator(refrigerator)
+        return ingredientDetailList.toIngredientResponseList()
     }
 
     fun updateIngredientDetail(id: Long, ingredientDetailRequest: IngredientDetailRequest): IngredientDetailResponse {
