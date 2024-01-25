@@ -42,7 +42,7 @@ class UserService(
         val accessToken = kakaoApiClient.requestAccessToken(authorizedCode, status)
         val infoResponse = kakaoApiClient.requestOauthInfo(accessToken)
         log.info("kakaoId ? " + infoResponse.id)
-        val user = userRepository.findByKaKaoId(infoResponse.id)
+        val user = userRepository.findByKakaoId(infoResponse.id)
 
         val userName = infoResponse.id
 
