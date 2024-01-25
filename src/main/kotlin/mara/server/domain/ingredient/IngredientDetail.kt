@@ -30,13 +30,13 @@ class IngredientDetail(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val ingredientDetailId: Long = 0L
 
-    fun update(ingredientDetailRequest: IngredientDetailRequest) {
-        this.quantity = ingredientDetailRequest.quantity
-        this.location = ingredientDetailRequest.location
-        this.memo = ingredientDetailRequest.memo
-        this.addDate = ingredientDetailRequest.addDate
-        this.expirationDate = ingredientDetailRequest.expirationDate
-        this.isDeleted = ingredientDetailRequest.isDeleted
+    fun update(ingredientDetailUpdateRequest: IngredientDetailUpdateRequest) {
+        this.quantity = ingredientDetailUpdateRequest.quantity
+        this.location = ingredientDetailUpdateRequest.location
+        this.memo = ingredientDetailUpdateRequest.memo
+        this.addDate = ingredientDetailUpdateRequest.addDate
+        this.expirationDate = ingredientDetailUpdateRequest.expirationDate
+        this.isDeleted = ingredientDetailUpdateRequest.isDeleted
     }
 
     fun delete() {
