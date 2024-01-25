@@ -17,7 +17,7 @@ class IngredientDetail(
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var ingredientDetailId: Long = 0L
+    val ingredientDetailId: Long = 0L
 
     fun update(ingredientDetailRequest: IngredientDetailRequest) {
         this.quantity = ingredientDetailRequest.quantity
