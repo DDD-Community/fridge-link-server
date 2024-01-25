@@ -18,13 +18,13 @@ class UserController(private val userService: UserService) {
     }
 
     @GetMapping("/kakao-login")
-    fun login(authorizedCode: String): JwtDto {
-        return userService.kaKaoLogin(authorizedCode)
+    fun login(code: String): JwtDto {
+        return userService.kaKaoLogin(code)
     }
 
     @GetMapping("/google-login")
-    fun googleLogin(authorizedCode: String): JwtDto {
-        return userService.googleLogin(authorizedCode)
+    fun googleLogin(code: String): JwtDto {
+        return userService.googleLogin(code)
     }
 
     @GetMapping("/me")
