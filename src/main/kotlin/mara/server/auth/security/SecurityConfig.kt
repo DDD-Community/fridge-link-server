@@ -25,7 +25,7 @@ class SecurityConfig(
     private val jwtAccessDeniedHandler: JwtAccessDeniedHandler,
 ) {
 
-    private val allowedUrls = arrayOf("/", "/swagger-ui/**", "/v3/**", "/users/**","favicon.ico","/error") // sign-up, sign-in 추가
+    private val allowedUrls = arrayOf("/", "/swagger-ui/**", "/v3/**", "/users/**", "favicon.ico", "/error") // sign-up, sign-in 추가
 
     @Bean
     fun passwordEncoder() = BCryptPasswordEncoder()
@@ -41,7 +41,7 @@ class SecurityConfig(
                     .requestMatchers(PathRequest.toH2Console()).permitAll()
                     .anyRequest().authenticated()
             }
-            .headers { it.frameOptions { frameOptions->frameOptions.disable() } }
+            .headers { it.frameOptions { frameOptions -> frameOptions.disable() } }
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
