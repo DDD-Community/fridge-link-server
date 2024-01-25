@@ -25,7 +25,7 @@ class SecurityConfig(
     private val jwtAccessDeniedHandler: JwtAccessDeniedHandler,
 ) {
 
-    private val allowedUrls = arrayOf("/", "/swagger-ui/**", "/v3/**", "/users/**") // sign-up, sign-in 추가
+    private val allowedUrls = arrayOf("/", "/swagger-ui/**", "/v3/**", "/users/**","favicon.ico","/error") // sign-up, sign-in 추가
 
     @Bean
     fun passwordEncoder() = BCryptPasswordEncoder()

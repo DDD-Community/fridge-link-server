@@ -19,8 +19,8 @@ class UserController(private val userService: UserService) {
     }
 
     @GetMapping("/kakao-login")
-    fun login(@RequestParam(value = "code") authorizedCode: String): JwtDto {
-        return userService.kaKaoLogin(authorizedCode)
+    fun kakaoLogin(@RequestParam(value = "code") authorizedCode: String): JwtDto {
+        return userService.kakaoLogin(authorizedCode)
     }
 
     @GetMapping("/google-login")

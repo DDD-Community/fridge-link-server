@@ -1,5 +1,5 @@
 package mara.server.auth.kakao
 
-data class KaKaoUserLogout(
+data class KakaoUserLogout(
     val id: Long,
 )

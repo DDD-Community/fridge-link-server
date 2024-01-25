@@ -73,7 +73,7 @@ class KakaoApiClient(
             ?: throw IllegalStateException("KakaoInfoResponse is null")
     }
 
-    fun logout(kaKaoId: Long): Boolean {
+    fun logout(kakaoId: Long): Boolean {
         val url = "$apiUrl/v1/user/logout"
 
         val httpHeaders = HttpHeaders()
@@ -82,11 +82,11 @@ class KakaoApiClient(
 
         val body = LinkedMultiValueMap<String, String>()
         body.add("target_id_type", "user_id")
-        body.add("target_id", kaKaoId.toString())
+        body.add("target_id", kakaoId.toString())
         val request = HttpEntity(body, httpHeaders)
-        val response = restTemplate.postForObject(url, request, KaKaoUserLogout::class.java)
+        val response = restTemplate.postForObject(url, request, KakaoUserLogout::class.java)
             ?: throw IllegalStateException("KakaoInfoResponse is null")
 
-        return response.id == kaKaoId
+        return response.id == kakaoId
     }
 }

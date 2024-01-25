@@ -17,7 +17,7 @@ class UserService(
     private val jwtProvider: JwtProvider,
     private val passwordEncoder: BCryptPasswordEncoder,
     private val kakaoApiClient: KakaoApiClient,
-    private val googleClient: GoogleApiClient,
+    private val googleApiClient: GoogleApiClient,
 ) {
 
     val log = logger()
@@ -36,7 +36,7 @@ class UserService(
         return userRepository.save(user).userId
     }
 
-    fun kaKaoLogin(authorizedCode: String): JwtDto {
+    fun kakaoLogin(authorizedCode: String): JwtDto {
         // 리다이랙트 url 환경 따라 다르게 전달하기 위한 구분 값
         val status = ""
         val accessToken = kakaoApiClient.requestAccessToken(authorizedCode, status)
@@ -62,8 +62,8 @@ class UserService(
 
     fun googleLogin(authorizedCode: String): JwtDto {
         val status = ""
-        val accessToken = googleClient.requestAccessToken(authorizedCode, status)
-        val infoResponse = googleClient.requestOauthInfo(accessToken)
+        val accessToken = googleApiClient.requestAccessToken(authorizedCode, status)
+        val infoResponse = googleApiClient.requestOauthInfo(accessToken)
 
         log.info(infoResponse.email)
 
