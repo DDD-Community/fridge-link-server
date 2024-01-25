@@ -33,6 +33,12 @@ jobs:
           spring.datasource.url: ${{ secrets.DB_URL }}
           spring.datasource.username: ${{ secrets.DB_USERNAME }}
           spring.datasource.password: ${{ secrets.DB_PASSWORD }}
+          oauth.kakao.client-id: ${{ secrets.KAKAO_CLIENT_ID }}
+          oauth.kakao.client-secret: ${{ secrets.KAKAO_CLIENT_SECRET}}
+          oauth.kakao.app-admin-key: ${{ secrets.KAKAO_APP_ADMIN_KEY }}
+          oauth.google.client-id: ${{ secrets.GOOGLE_CLIENT_ID }}
+          oauth.google.client-secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          jwt.secret-key: ${{ secrets.JWT_SECRET_KEY }}
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew

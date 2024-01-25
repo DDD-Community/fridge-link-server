@@ -1,5 +1,6 @@
-package mara.server.domain.board
+package mara.server.domain.refrigerator
 
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
@@ -10,13 +11,19 @@ import jakarta.persistence.ManyToOne
 import mara.server.domain.user.User
 
 @Entity
-class Board(
-    var title: String? = null,
+class Refrigerator(
+    var name: String,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     val user: User,
+
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val boardId: Long = 0L
+    @Column(name = "refrigerator_id", nullable = false)
+    val refrigeratorId: Long = 0L
+
+    fun update(refrigeratorUpdateRequest: RefrigeratorUpdateRequest) {
+        this.name = refrigeratorUpdateRequest.name
+    }
 }

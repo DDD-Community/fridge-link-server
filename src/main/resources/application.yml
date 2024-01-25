@@ -1,6 +1,4 @@
 spring:
-  profiles:
-    active: local
   mvc:
     path match:
       matching-strategy: ant_path_matcher
@@ -12,4 +10,3 @@ spring:
       hibernate:
         format_sql: true
         show_sql: true
-
