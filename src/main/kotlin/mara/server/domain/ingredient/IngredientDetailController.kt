@@ -28,8 +28,8 @@ class IngredientDetailController(
     }
 
     // TODO CommonResponse<List<IngredientDetailResponse>> 로 return 변경
-    @GetMapping("{refrig-id}")
-    fun getIngredientDetailList(@PathVariable(name = "refrig-id") refrigId: Long): CommonResponse<Long> {
+    @GetMapping("/refrig/{id}")
+    fun getIngredientDetailList(@PathVariable(name = "id") refrigId: Long): CommonResponse<Long> {
         return success(ingredientDetailService.getIngredientDetailList(refrigId))
     }
 

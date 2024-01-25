@@ -1,8 +1,11 @@
 package mara.server.domain.ingredient
 
+import mara.server.domain.refrigerator.Refrigerator
 import java.time.LocalDateTime
 
 data class IngredientDetailRequest(
+    var refrigeratorId: Long,
+    var ingredientId: Long,
     val quantity: Int,
     val location: String,
     val memo: String,
@@ -30,4 +33,8 @@ data class IngredientDetailResponse(
         expirationDate = ingredientDetail.expirationDate,
         isDeleted = ingredientDetail.isDeleted
     )
+}
+
+fun List<IngredientDetail>.toIngredientResponseList(): List<IngredientDetailResponse> {
+    return this.map { IngredientDetailResponse(it) }
 }
