@@ -19,7 +19,7 @@ class UserResponse(
 ) {
     constructor(user: User) : this(
         name = user.name,
-        kakaoId = user?.kakaoId,
-        googleEmail = user?.googleEmail
+        kakaoId = user.kakaoId,
+        googleEmail = user.googleEmail
     )
 }
