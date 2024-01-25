@@ -1,8 +1,8 @@
 package mara.server.domain.user
 
-import mara.server.auth.kakao.KakaoApiClient
 import mara.server.auth.google.GoogleApiClient
 import mara.server.auth.jwt.JwtProvider
+import mara.server.auth.kakao.KakaoApiClient
 import mara.server.auth.security.getCurrentLoginUserId
 import mara.server.util.logger
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
