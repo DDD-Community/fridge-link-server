@@ -32,4 +32,9 @@ class UserController(private val userService: UserService) {
     fun getCurrentLoginUser(): CommonResponse<UserResponse> {
         return success(userService.getCurrentUserInfo())
     }
+
+    @GetMapping("/me/invite-code")
+    fun getCurrentLoginUserInviteCode(): CommonResponse<UserInviteCodeResponse> {
+        return success(userService.getCurrentLoginUserInviteCode())
+    }
 }

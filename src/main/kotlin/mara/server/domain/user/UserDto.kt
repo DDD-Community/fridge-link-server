@@ -23,3 +23,11 @@ class UserResponse(
         googleEmail = user.googleEmail
     )
 }
+
+class UserInviteCodeResponse(
+    val inviteCode: String
+) {
+    constructor(user: User) : this(
+        inviteCode = user.inviteCode
+    )
+}

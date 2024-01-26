@@ -27,6 +27,8 @@ class UserService(
 
     fun getCurrentUserInfo() = UserResponse(getCurrentLoginUser())
 
+    fun getCurrentLoginUserInviteCode() = UserInviteCodeResponse(getCurrentLoginUser())
+
     fun createUser(userRequest: UserRequest): Long {
         val user = User(
             name = userRequest.name,
