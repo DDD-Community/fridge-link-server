@@ -19,12 +19,12 @@ class IngredientDetail(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ingredientId")
     val ingredient: Ingredient,
-    var quantity: Int = 0,
+    var quantity: Int,
     var location: String,
     var memo: String?,
     var addDate: LocalDateTime,
     var expirationDate: LocalDateTime,
-    var isDeleted: Boolean
+    var isDeleted: Boolean = false
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

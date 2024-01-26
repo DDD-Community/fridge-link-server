@@ -7,7 +7,7 @@ data class IngredientDetailRequest(
     var ingredientId: Long,
     val quantity: Int,
     val location: String,
-    val memo: String,
+    val memo: String?,
     val addDate: LocalDateTime,
     val expirationDate: LocalDateTime,
     val isDeleted: Boolean = false
@@ -16,7 +16,7 @@ data class IngredientDetailRequest(
 data class IngredientDetailUpdateRequest(
     val quantity: Int,
     val location: String,
-    val memo: String,
+    val memo: String?,
     val addDate: LocalDateTime,
     val expirationDate: LocalDateTime,
     val isDeleted: Boolean = false
