@@ -12,10 +12,12 @@ class IngredientDetailService(
 
     fun createIngredientDetail(ingredientDetailRequest: IngredientDetailRequest): Long {
         val refrigeratorId = ingredientDetailRequest.refrigeratorId
-        val refrigerator = refrigeratorRepository.findById(refrigeratorId).orElseThrow { NoSuchElementException("해당 냉장고가 존재하지 않습니다. ID: $refrigeratorId") }
+        val refrigerator = refrigeratorRepository.findById(refrigeratorId)
+            .orElseThrow { NoSuchElementException("해당 냉장고가 존재하지 않습니다. ID: $refrigeratorId") }
 
         val ingredientId = ingredientDetailRequest.ingredientId
-        val ingredient = ingredientRepository.findById(ingredientId).orElseThrow { NoSuchElementException("해당 식재료가 존재하지 않습니다. ID: $ingredientId") }
+        val ingredient = ingredientRepository.findById(ingredientId)
+            .orElseThrow { NoSuchElementException("해당 식재료가 존재하지 않습니다. ID: $ingredientId") }
 
         val ingredientDetail = IngredientDetail(
             refrigerator = refrigerator,
@@ -31,24 +33,33 @@ class IngredientDetailService(
     }
 
     fun getIngredientDetail(id: Long): IngredientDetailResponse {
-        val ingredientDetail = ingredientDetailRepository.findById(id).orElseThrow { NoSuchElementException("해당 식재료 상세가 존재하지 않습니다. ID: $id") }
+        val ingredientDetail = ingredientDetailRepository.findIngredientDetailByIngredientDetailIdAndIsDeletedIsFalse(id)
+            .orElseThrow { NoSuchElementException("해당 식재료 상세가 존재하지 않습니다. ID: $id") }
         return IngredientDetailResponse(ingredientDetail)
     }
 
     fun getIngredientDetailList(refrigeratorId: Long): List<IngredientDetailResponse> {
-        val refrigerator = refrigeratorRepository.findById(refrigeratorId).orElseThrow { NoSuchElementException("해당 냉장고가 존재하지 않습니다. ID: $refrigeratorId") }
-        val ingredientDetailList = ingredientDetailRepository.findIngredientDetailsByRefrigerator(refrigerator)
+        val refrigerator = refrigeratorRepository.findById(refrigeratorId)
+            .orElseThrow { NoSuchElementException("해당 냉장고가 존재하지 않습니다. ID: $refrigeratorId") }
+        val ingredientDetailList =
+            ingredientDetailRepository.findIngredientDetailsByRefrigeratorAndIsDeletedIsFalse(refrigerator)
+                .orElseThrow { NoSuchElementException("해당 식재료 상세가 존재하지 않습니다. ID: $refrigeratorId") }
         return ingredientDetailList.toIngredientResponseList()
     }
 
-    fun updateIngredientDetail(id: Long, ingredientDetailUpdateRequest: IngredientDetailUpdateRequest): IngredientDetailResponse {
-        val ingredientDetail = ingredientDetailRepository.findById(id).orElseThrow { NoSuchElementException("해당 식재료 상세가 존재하지 않습니다. ID: $id") }
+    fun updateIngredientDetail(
+        id: Long,
+        ingredientDetailUpdateRequest: IngredientDetailUpdateRequest
+    ): IngredientDetailResponse {
+        val ingredientDetail = ingredientDetailRepository.findById(id)
+            .orElseThrow { NoSuchElementException("해당 식재료 상세가 존재하지 않습니다. ID: $id") }
         ingredientDetail.update(ingredientDetailUpdateRequest)
         return IngredientDetailResponse(ingredientDetailRepository.save(ingredientDetail))
     }
 
     fun deleteIngredientDetail(id: Long): String {
-        val ingredientDetail = ingredientDetailRepository.findById(id).orElseThrow { NoSuchElementException("해당 식재료 상세가 존재하지 않습니다. ID: $id") }
+        val ingredientDetail = ingredientDetailRepository.findById(id)
+            .orElseThrow { NoSuchElementException("해당 식재료 상세가 존재하지 않습니다. ID: $id") }
         ingredientDetail.delete()
         ingredientDetailRepository.save(ingredientDetail)
         return "deleted"
