@@ -10,7 +10,7 @@ data class IngredientDetailRequest(
     val memo: String,
     val addDate: LocalDateTime,
     val expirationDate: LocalDateTime,
-    val isDeleted: Boolean
+    val isDeleted: Boolean = false
 )
 
 data class IngredientDetailUpdateRequest(
@@ -19,7 +19,7 @@ data class IngredientDetailUpdateRequest(
     val memo: String,
     val addDate: LocalDateTime,
     val expirationDate: LocalDateTime,
-    val isDeleted: Boolean
+    val isDeleted: Boolean = false
 )
 
 data class IngredientDetailResponse(
