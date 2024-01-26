@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/ingrs/det")
+@RequestMapping("/ingrs/detail")
 class IngredientDetailController(
     private val ingredientDetailService: IngredientDetailService
 ) {

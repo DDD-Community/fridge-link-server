@@ -2,9 +2,8 @@ package mara.server.domain.ingredient
 
 import mara.server.domain.refrigerator.Refrigerator
 import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
-import java.util.*
+import java.util.Optional
 
 @Repository
 interface IngredientDetailRepository : JpaRepository<IngredientDetail, Long> {
