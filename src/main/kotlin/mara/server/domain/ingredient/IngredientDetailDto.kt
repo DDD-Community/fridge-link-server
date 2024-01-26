@@ -10,7 +10,7 @@ data class IngredientDetailRequest(
     val memo: String,
     val addDate: LocalDateTime,
     val expirationDate: LocalDateTime,
-    val isDeleted: Boolean? = null
+    val isDeleted: Boolean
 )
 
 data class IngredientDetailUpdateRequest(
@@ -19,17 +19,17 @@ data class IngredientDetailUpdateRequest(
     val memo: String,
     val addDate: LocalDateTime,
     val expirationDate: LocalDateTime,
-    val isDeleted: Boolean? = null
+    val isDeleted: Boolean
 )
 
 data class IngredientDetailResponse(
     val ingredientDetailId: Long,
     val quantity: Int,
     val location: String,
-    val memo: String,
+    val memo: String?,
     val addDate: LocalDateTime,
     val expirationDate: LocalDateTime,
-    val isDeleted: Boolean? = null
+    val isDeleted: Boolean
 ) {
 
     constructor(ingredientDetail: IngredientDetail) : this(

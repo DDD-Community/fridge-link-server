@@ -21,10 +21,10 @@ class IngredientDetail(
     val ingredient: Ingredient,
     var quantity: Int = 0,
     var location: String,
-    var memo: String,
+    var memo: String?,
     var addDate: LocalDateTime,
     var expirationDate: LocalDateTime,
-    var isDeleted: Boolean? = null
+    var isDeleted: Boolean
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
