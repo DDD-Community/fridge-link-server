@@ -6,7 +6,10 @@ data class FriendshipRequest(
 
 data class FriendshipUpdateRequest(
     val friendId: Long,
-    val status: Boolean
+    val isFriend: Boolean
 )
 
-// TODO FriendshipResponse
+data class FriendshipResponse(
+    val friendshipId: Long,
+    val friendId: Long
+)

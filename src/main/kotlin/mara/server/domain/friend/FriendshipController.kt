@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/friendship")
-class FriendshipController {
+class FriendshipController(
+    private val friendshipService: FriendshipService
+) {
 
     @PostMapping
     fun createFriendship(@RequestBody friendshipRequest: FriendshipRequest): CommonResponse<Long> {
-        return success(1)
+        return success(friendshipService.createFriendship(friendshipRequest))
     }
 
     @GetMapping("{/id}")
@@ -24,9 +26,10 @@ class FriendshipController {
         return success(1)
     }
 
+    // TODO FrindshipResponse 로 수정 필요
     @GetMapping
-    fun getFriendshipList(): CommonResponse<Long> {
-        return success(1)
+    fun getFriendshipList(): CommonResponse<List<Friendship>> {
+        return success(friendshipService.getFriendShipList())
     }
 
     // 친구 삭제 기능 수행

@@ -20,7 +20,7 @@ class Friendship(
     @JoinColumn(name = "to_user_id")
     val toUser: User,
 
-    var status: Boolean
+    var isFriend: Boolean
     ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
