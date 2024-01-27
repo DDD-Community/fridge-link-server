@@ -28,7 +28,7 @@ class FriendshipController(
 
     // TODO FrindshipResponse 로 수정 필요
     @GetMapping
-    fun getFriendshipList(): CommonResponse<List<Friendship>> {
+    fun getFriendshipList(): CommonResponse<List<FriendshipResponse>> {
         return success(friendshipService.getFriendShipList())
     }
 

@@ -25,10 +25,9 @@ class FriendshipService(
         return friendshipRepository.save(friendship).friendshipId
     }
 
-    fun getFriendShipList(): List<Friendship> {
+    fun getFriendShipList(): List<FriendshipResponse> {
         val currentLoginUser = userService.getCurrentLoginUser()
         val friendshipList = friendshipRepository.findAllByIsFriend(currentLoginUser).orElseThrow { NoSuchElementException("친구 관계가 존재하지 않습니다.") }
-        return friendshipList
+        return friendshipList.toIngredientResponseList()
     }
-
 }
