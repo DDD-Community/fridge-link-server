@@ -15,12 +15,28 @@ data class ShareRequest(
     val personCnt: Int,
     val location: String,
     val status: String,
-    val thumbNailImage: String
+    val thumbNailImage: String,
 )
 
 data class ApplyShareRequest(
     val userId: Long,
     val shareId: Long,
+)
+
+data class UpdateShareRequest(
+    val title: String?,
+    val refrigIngrId: Long?,
+    val content: String?,
+    val limitDate: LocalDate?,
+    val limitTime: LocalTime?,
+    val limitPerson: Int?,
+    val personCnt: Int?,
+    val location: String?,
+    val thumbNailImage: String?,
+)
+
+data class UpdateShareStatusRequest(
+    val status: String,
 )
 
 data class ShareResponse(
@@ -40,7 +56,7 @@ data class ShareResponse(
         limitPerson = share.limitPerson,
         personCnt = share.personCnt,
         location = share.location,
-        status = share.status,
+        status = share.status.statusValue,
         thumbNailImage = share.thumbNailImage,
     )
 }

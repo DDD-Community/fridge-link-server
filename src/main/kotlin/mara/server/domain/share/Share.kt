@@ -1,5 +1,6 @@
 package mara.server.domain.share
 
+import com.fasterxml.jackson.annotation.JsonValue
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -12,7 +13,9 @@ import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import mara.server.domain.ingredient.IngredientDetail
 import mara.server.domain.user.User
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 @Entity
 data class Share(
@@ -21,14 +24,16 @@ data class Share(
     val user: User,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "refrigIngrId")
-    val ingredientDetail: IngredientDetail,
+    var ingredientDetail: IngredientDetail,
     var title: String,
     var content: String,
+    var limitTime: LocalTime,
+    var limitDate: LocalDate,
     var limitDatetime: LocalDateTime,
     var limitPerson: Int,
     var personCnt: Int,
     var location: String,
-    var status: String,
+    var status: ShareStatus,
     var thumbNailImage: String
 ) {
     @Id
@@ -42,6 +47,30 @@ data class Share(
     fun addApplyShareList(applyShare: ApplyShare) {
         this.applyShareMutableList.add(applyShare)
     }
+
+    fun updateIngredientDetail(ingredientDetail: IngredientDetail) {
+        this.ingredientDetail = ingredientDetail
+    }
+
+    fun updateStatus(status: ShareStatus) {
+        this.status = status
+    }
+    fun updateShare(updateShareRequest: UpdateShareRequest) {
+        this.title = updateShareRequest.title ?: this.title
+        this.content = updateShareRequest.content ?: this.content
+        this.limitDate = updateShareRequest.limitDate ?: this.limitDate
+        this.limitTime = updateShareRequest.limitTime ?: this.limitTime
+        this.limitPerson = updateShareRequest.limitPerson ?: this.limitPerson
+        this.personCnt = updateShareRequest.personCnt ?: this.personCnt
+        this.location = updateShareRequest.location ?: this.location
+        this.thumbNailImage = updateShareRequest.thumbNailImage ?: this.thumbNailImage
+    }
+}
+
+enum class ShareStatus(@JsonValue val statusValue: String) {
+    SHARE_START("start"),
+    SHARE_IN_PROGRESS("in_progress"),
+    SHARE_COMPLETE("complete")
 }
 
 @Entity
