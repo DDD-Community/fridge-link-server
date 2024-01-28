@@ -1,7 +1,5 @@
 package mara.server.domain.friend
 
-import mara.server.domain.user.User
-
 data class FriendshipRequest(
     val inviteCode: String
 )
@@ -23,6 +21,6 @@ data class FriendshipResponse(
     )
 }
 
-fun List<Friendship>.toIngredientResponseList(): List<FriendshipResponse> {
+fun List<Friendship>.toFriendshipResponseList(): List<FriendshipResponse> {
     return this.map { FriendshipResponse(it) }
 }

@@ -2,6 +2,7 @@ package mara.server.domain.friend
 
 import mara.server.common.CommonResponse
 import mara.server.common.success
+import mara.server.domain.user.UserNameResponse
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -17,7 +18,7 @@ class FriendshipController(
 ) {
 
     @PostMapping
-    fun createFriendship(@RequestBody friendshipRequest: FriendshipRequest): CommonResponse<Long> {
+    fun createFriendship(@RequestBody friendshipRequest: FriendshipRequest): CommonResponse<String> {
         return success(friendshipService.createFriendship(friendshipRequest))
     }
 
@@ -26,10 +27,9 @@ class FriendshipController(
         return success(1)
     }
 
-    // TODO FrindshipResponse 로 수정 필요
     @GetMapping
-    fun getFriendshipList(): CommonResponse<List<FriendshipResponse>> {
-        return success(friendshipService.getFriendShipList())
+    fun getFriendshipList(): CommonResponse<List<UserNameResponse>> {
+        return success(friendshipService.getFriendshipList())
     }
 
     // 친구 삭제 기능 수행

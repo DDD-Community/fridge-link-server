@@ -21,7 +21,7 @@ class Friendship(
     val toUser: User,
 
     var isFriend: Boolean
-    ) {
+) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "friendship_id", nullable = false)

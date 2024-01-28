@@ -31,3 +31,11 @@ class UserInviteCodeResponse(
         inviteCode = user.inviteCode
     )
 }
+
+class UserNameResponse(
+    val name: String
+) {
+    constructor(user: User) : this(
+        name = user.name
+    )
+}
