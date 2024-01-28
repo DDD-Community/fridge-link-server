@@ -32,9 +32,8 @@ class FriendshipController(
         return success(friendshipService.getFriendshipList())
     }
 
-    // 친구 삭제 기능 수행
     @PutMapping
-    fun updateFriendship(@RequestBody friendshipUpdateRequest: FriendshipUpdateRequest): CommonResponse<Long> {
-        return success(1)
+    fun updateFriendship(@RequestBody friendshipUpdateRequest: FriendshipUpdateRequest): CommonResponse<String> {
+        return success(friendshipService.updateFriendship(friendshipUpdateRequest))
     }
 }

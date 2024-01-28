@@ -41,6 +41,20 @@ class FriendshipService(
         return userNameList
     }
 
+    fun updateFriendship(friendshipUpdateRequest: FriendshipUpdateRequest): String {
+        val currentLoginUser = userService.getCurrentLoginUser()
+        val targetUser = userRepository.findById(friendshipUpdateRequest.friendId).orElseThrow { NoSuchElementException("해당 유저가 존재하지 않습니다. ID: ${friendshipUpdateRequest.friendId}") }
+
+        val friendshipList = friendshipRepository.findAllByFromUserAndToUserIsFriend(currentLoginUser, targetUser).orElseThrow { NoSuchElementException("친구 관계가 존재하지 않습니다.") }
+
+        for (friendship: Friendship in friendshipList) {
+            friendship.update(friendshipUpdateRequest)
+            friendshipRepository.save(friendship)
+        }
+
+        return "updated"
+    }
+
     private fun addFriendship(user1: User, user2: User) {
         val friendship2 = Friendship(
             fromUser = user1,
