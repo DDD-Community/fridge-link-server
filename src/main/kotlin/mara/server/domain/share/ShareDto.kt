@@ -5,7 +5,6 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 
 data class ShareRequest(
-    val userId: Long,
     val title: String,
     val refrigIngrId: Long,
     val content: String,
@@ -19,7 +18,6 @@ data class ShareRequest(
 )
 
 data class ApplyShareRequest(
-    val userId: Long,
     val shareId: Long,
 )
 
@@ -40,6 +38,7 @@ data class UpdateShareStatusRequest(
 )
 
 data class ShareResponse(
+    val shareId: Long,
     val title: String,
     val content: String,
     val limitDatetime: LocalDateTime,
@@ -50,6 +49,7 @@ data class ShareResponse(
     val thumbNailImage: String
 ) {
     constructor(share: Share) : this(
+        shareId = share.id,
         title = share.title,
         content = share.content,
         limitDatetime = share.limitDatetime,

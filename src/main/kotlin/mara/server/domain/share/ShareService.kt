@@ -1,7 +1,6 @@
 package mara.server.domain.share
 
 import mara.server.domain.ingredient.IngredientDetailRepository
-import mara.server.domain.user.UserRepository
 import mara.server.domain.user.UserService
 import org.springframework.stereotype.Service
 import java.lang.RuntimeException
@@ -11,7 +10,6 @@ class ShareService(
     private val shareRepository: ShareRepository,
     private val applyShareRepository: ApplyShareRepository,
     private val ingredientDetailRepository: IngredientDetailRepository,
-    private val userRepository: UserRepository,
     private val userService: UserService,
 ) {
 
@@ -44,9 +42,9 @@ class ShareService(
 
     fun applyShare(applyShareRequest: ApplyShareRequest): Long {
         val share = getShare(applyShareRequest.shareId)
-        val userId = applyShareRequest.userId
-        val user =
-            userRepository.findById(userId).orElseThrow { NoSuchElementException("해당 사용자가 존재하지 않습니다. ID: $userId") }
+        val user = userService.getCurrentLoginUser()
+        if (share.user.userId == user.userId) throw IllegalAccessException("본인이 올린 나눔 글에는 신청을 할 수 없습니다.")
+        if (applyShareRepository.existsByUserAndShare(user, share)) throw IllegalAccessException("이미 신청한 나눔 입니다.")
         val applyShare = ApplyShare(
             user = user,
             share = share
@@ -66,9 +64,6 @@ class ShareService(
 
     fun getAllShareList(): List<ShareResponse>? {
         val shareList = shareRepository.findAll()
-        if (shareList.isEmpty()) {
-            return null
-        }
         return shareList.toShareResponseList()
     }
 
@@ -79,7 +74,6 @@ class ShareService(
     fun getAllApplyUserList(shareId: Long): List<String>? {
         val share = getShare(shareId)
         val applyShareList = share.applyShareList
-        if (applyShareList.isEmpty()) return null
         return applyShareList.map { it.user.name }.toList()
     }
 
