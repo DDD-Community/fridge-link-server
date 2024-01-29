@@ -3,6 +3,7 @@ package mara.server.domain.share
 import mara.server.domain.ingredient.IngredientDetailRepository
 import mara.server.domain.user.UserService
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.lang.RuntimeException
 
 @Service
@@ -14,7 +15,7 @@ class ShareService(
 ) {
 
     private val deleted = "deleted"
-
+    @Transactional
     fun createShare(shareRequest: ShareRequest): Long {
         val refrigIngrId = shareRequest.refrigIngrId
         val refrigIngr =
@@ -39,7 +40,7 @@ class ShareService(
 
         return shareRepository.save(share).id
     }
-
+    @Transactional
     fun applyShare(applyShareRequest: ApplyShareRequest): Long {
         val share = getShare(applyShareRequest.shareId)
         val user = userService.getCurrentLoginUser()
@@ -82,7 +83,7 @@ class ShareService(
             ?.map { ShareResponse(it.share) }
             ?.toList()
     }
-
+    @Transactional
     fun updateShareInfo(shareId: Long, updateShareRequest: UpdateShareRequest): Boolean {
         val refrigIngrId = updateShareRequest.refrigIngrId
         val share = getShare(shareId)
@@ -97,7 +98,7 @@ class ShareService(
         val savedShare = shareRepository.save(share)
         return savedShare.id == share.id
     }
-
+    @Transactional
     fun changeShareStatus(shareId: Long, updateShareStatusRequest: UpdateShareStatusRequest): Boolean {
         val share = getShare(shareId)
         share.updateStatus(ShareStatus.valueOf(updateShareStatusRequest.status))
@@ -105,13 +106,14 @@ class ShareService(
 
         return savedShare.id == share.id
     }
-
+    @Transactional
     fun deleteShare(shareId: Long): String {
         val user = userService.getCurrentLoginUser()
         if (user.userId != getShare(shareId).user.userId) throw RuntimeException("잘못된 사용자로부터 전달된 요청입니다.")
         shareRepository.deleteById(shareId)
         return deleted
     }
+    @Transactional
     fun deleteApply(applyId: Long): String {
         val user = userService.getCurrentLoginUser()
         val applyShare = applyShareRepository.findById(applyId).orElseThrow { NoSuchElementException("해당 나눔 신청이 존재 하지 않습니다. ID: $applyId") }
