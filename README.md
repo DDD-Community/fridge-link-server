@@ -1,7 +1,7 @@
 # mara-server
 > DDD 10기 web1 팀 Server 레퍼지토리
 
-![issue](https://img.shields.io/badge/issue-open-green) ![문의사항](https://img.shields.io/badge/%EB%AC%B8%EC%9D%98%ED%95%98%EA%B8%B0-gwon188%40gamil.com-green) ![문의사항](https://img.shields.io/badge/%EB%AC%B8%EC%9D%98%ED%95%98%EA%B8%B0-jhkang1517%40gamil.com-green)
+![issue](https://img.shields.io/badge/issue-open-green) ![문의사항](https://img.shields.io/badge/%EB%AC%B8%EC%9D%98%ED%95%98%EA%B8%B0-gwon188%40gmail.com-green) ![문의사항](https://img.shields.io/badge/%EB%AC%B8%EC%9D%98%ED%95%98%EA%B8%B0-jhkang1517%40gmail.com-green)
 
 ### Period
 
