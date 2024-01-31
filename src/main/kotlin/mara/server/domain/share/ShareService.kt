@@ -17,15 +17,15 @@ class ShareService(
     private val deleted = "deleted"
     @Transactional
     fun createShare(shareRequest: ShareRequest): Long {
-        val refrigIngrId = shareRequest.refrigIngrId
-        val refrigIngr =
-            ingredientDetailRepository.findIngredientDetailByIngredientDetailIdAndIsDeletedIsFalse(refrigIngrId)
-                .orElseThrow { NoSuchElementException("해당 식재료가 존재하지 않습니다. ID: $refrigIngrId") }
+        val ingredientDetailId = shareRequest.ingredientDetailId
+        val ingredientDetail =
+            ingredientDetailRepository.findIngredientDetailByIngredientDetailIdAndIsDeletedIsFalse(ingredientDetailId)
+                .orElseThrow { NoSuchElementException("해당 식재료가 존재하지 않습니다. ID: $ingredientDetailId") }
         val user = userService.getCurrentLoginUser()
         // 생성 보단 조회가 빈번 할것 같아, 매번 조회 할 때마다, 일자와 시간을 분리하기 보단, 저장 할 때 각각 & 일자+시간 저장 하는 방식으로 진행
         val share = Share(
             user = user,
-            ingredientDetail = refrigIngr,
+            ingredientDetail = ingredientDetail,
             title = shareRequest.title,
             content = shareRequest.content,
             limitTime = shareRequest.limitTime,
@@ -85,13 +85,13 @@ class ShareService(
     }
     @Transactional
     fun updateShareInfo(shareId: Long, updateShareRequest: UpdateShareRequest): Boolean {
-        val refrigIngrId = updateShareRequest.refrigIngrId
+        val ingredientDetailId = updateShareRequest.ingredientDetailId
         val share = getShare(shareId)
-        refrigIngrId?.let { ingrId ->
-            val refrigIngr =
-                ingredientDetailRepository.findIngredientDetailByIngredientDetailIdAndIsDeletedIsFalse(ingrId)
-                    .orElseThrow { NoSuchElementException("해당 식재료가 존재하지 않습니다. ID: $ingrId") }
-            share.updateIngredientDetail(refrigIngr)
+        ingredientDetailId?.let { ingrDetailId ->
+            val ingredientDetail =
+                ingredientDetailRepository.findIngredientDetailByIngredientDetailIdAndIsDeletedIsFalse(ingrDetailId)
+                    .orElseThrow { NoSuchElementException("해당 식재료가 존재하지 않습니다. ID: $ingrDetailId") }
+            share.updateIngredientDetail(ingredientDetail)
         }
         share.updateShare(updateShareRequest)
 
@@ -114,7 +114,7 @@ class ShareService(
         return deleted
     }
     @Transactional
-    fun deleteApply(applyId: Long): String {
+    fun deleteApplyShare(applyId: Long): String {
         val user = userService.getCurrentLoginUser()
         val applyShare = applyShareRepository.findById(applyId).orElseThrow { NoSuchElementException("해당 나눔 신청이 존재 하지 않습니다. ID: $applyId") }
         if (user.userId != applyShare.user.userId) throw RuntimeException("잘못된 사용자로부터 전달된 요청입니다.")

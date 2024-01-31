@@ -57,6 +57,6 @@ class ShareController(private val shareService: ShareService) {
 
     @DeleteMapping("/applies/{id}")
     fun deleteApply(@PathVariable(name = "id") applyId: Long): CommonResponse<String> {
-        return success(shareService.deleteApply(applyId))
+        return success(shareService.deleteApplyShare(applyId))
     }
 }

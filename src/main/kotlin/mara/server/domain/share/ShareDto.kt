@@ -6,7 +6,7 @@ import java.time.LocalTime
 
 data class ShareRequest(
     val title: String,
-    val refrigIngrId: Long,
+    val ingredientDetailId: Long,
     val content: String,
     val limitDate: LocalDate,
     val limitTime: LocalTime,
@@ -23,7 +23,7 @@ data class ApplyShareRequest(
 
 data class UpdateShareRequest(
     val title: String?,
-    val refrigIngrId: Long?,
+    val ingredientDetailId: Long?,
     val content: String?,
     val limitDate: LocalDate?,
     val limitTime: LocalTime?,

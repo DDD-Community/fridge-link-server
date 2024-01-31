@@ -23,7 +23,7 @@ data class Share(
     @JoinColumn(name = "userId")
     val user: User,
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "refrigIngrId")
+    @JoinColumn(name = "ingredientDetailId")
     var ingredientDetail: IngredientDetail,
     var title: String,
     var content: String,
