@@ -56,11 +56,11 @@ class FriendshipService(
     }
 
     private fun addFriendship(user1: User, user2: User) {
-        val friendship2 = Friendship(
+        val friendship = Friendship(
             fromUser = user1,
             toUser = user2,
             isFriend = true
         )
-        friendshipRepository.save(friendship2)
+        friendshipRepository.save(friendship)
     }
 }
