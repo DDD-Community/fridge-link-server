@@ -22,11 +22,6 @@ class FriendshipController(
         return success(friendshipService.createFriendship(friendshipRequest))
     }
 
-    @GetMapping("{/id}")
-    fun getFriendship(@PathVariable(name = "id") id: Long): CommonResponse<Long> {
-        return success(1)
-    }
-
     @GetMapping
     fun getFriendshipList(): CommonResponse<List<UserNameResponse>> {
         return success(friendshipService.getFriendshipList())
