@@ -13,6 +13,9 @@ class FriendshipService(
     private val userService: UserService
 ) {
 
+    private val ok = "ok"
+    private val deleted = "deleted"
+
     fun createFriendship(friendshipRequest: FriendshipRequest): String {
         val currentUserId = userService.getCurrentLoginUser().userId
         val fromUser = userRepository.findById(currentUserId)
@@ -23,7 +26,7 @@ class FriendshipService(
         addFriendship(fromUser, toUser)
         addFriendship(toUser, fromUser)
 
-        return "ok"
+        return ok
     }
 
     fun getFriendshipList(): List<UserNameResponse> {
