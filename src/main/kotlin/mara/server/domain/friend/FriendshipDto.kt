@@ -4,9 +4,8 @@ data class FriendshipRequest(
     val inviteCode: String
 )
 
-data class FriendshipUpdateRequest(
-    val friendId: Long,
-    val isFriend: Boolean
+data class FriendshipDeleteRequest(
+    val friendId: Long
 )
 
 data class FriendshipResponse(

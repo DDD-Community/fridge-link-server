@@ -26,8 +26,4 @@ class Friendship(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "friendship_id", nullable = false)
     val friendshipId: Long = 0L
-
-    fun update(friendshipUpdateRequest: FriendshipUpdateRequest) {
-        this.isFriend = friendshipUpdateRequest.isFriend
-    }
 }
