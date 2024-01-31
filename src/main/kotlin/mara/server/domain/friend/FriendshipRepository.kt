@@ -9,13 +9,13 @@ import java.util.Optional
 @Repository
 interface FriendshipRepository : JpaRepository<Friendship, Long> {
 
-    @Query("select f from Friendship f where f.fromUser = ?1 and f.isFriend = true")
-    fun findAllByFromUserAndIsFriend(
+    @Query("select f from Friendship f where f.fromUser = ?1")
+    fun findAllByFromUser(
         user: User
     ): Optional<List<Friendship>>
 
-    @Query("select f from Friendship f where (f.fromUser = ?1 and f.toUser = ?2 and f.isFriend = true) or (f.fromUser = ?2 and f.toUser = ?1 and f.isFriend = true)")
-    fun findAllByFromUserAndToUserIsFriend(
+    @Query("select f from Friendship f where (f.fromUser = ?1 and f.toUser = ?2) or (f.fromUser = ?2 and f.toUser = ?1)")
+    fun findAllByFromUserAndToUser(
         fromUser: User,
         toUser: User
     ): Optional<List<Friendship>>
