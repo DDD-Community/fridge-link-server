@@ -15,6 +15,7 @@ class ShareService(
 ) {
 
     private val deleted = "deleted"
+
     @Transactional
     fun createShare(shareRequest: ShareRequest): Long {
         val ingredientDetailId = shareRequest.ingredientDetailId
@@ -28,11 +29,10 @@ class ShareService(
             ingredientDetail = ingredientDetail,
             title = shareRequest.title,
             content = shareRequest.content,
-            limitTime = shareRequest.limitTime,
-            limitDate = shareRequest.limitDate,
-            limitDatetime = shareRequest.limitDate.atTime(shareRequest.limitTime),
+            shareDate = shareRequest.shareDate,
+            shareTime = shareRequest.shareTime,
+            shareDatetime = shareRequest.shareDate.atTime(shareRequest.shareTime),
             limitPerson = shareRequest.limitPerson,
-            personCnt = shareRequest.personCnt,
             location = shareRequest.location,
             status = ShareStatus.valueOf(shareRequest.status),
             thumbNailImage = shareRequest.thumbNailImage,
@@ -40,6 +40,7 @@ class ShareService(
 
         return shareRepository.save(share).id
     }
+
     @Transactional
     fun applyShare(applyShareRequest: ApplyShareRequest): Long {
         val share = getShare(applyShareRequest.shareId)
@@ -51,6 +52,12 @@ class ShareService(
             share = share
         )
         share.addApplyShareList(applyShare)
+        /**
+         신청자 수가 제한 한 신청자 수와 같아지는지 확인을 위한 기능
+         기획에 따로 해당 상황일 때 신청을 막는 기능은 없지만
+         혹시 모를 상황에 대비해 추가 함
+         **/
+        share.plusPeopleCnt()
         return shareRepository.save(share).id
     }
 
@@ -83,21 +90,26 @@ class ShareService(
             ?.map { ShareResponse(it.share) }
             ?.toList()
     }
+
     @Transactional
     fun updateShareInfo(shareId: Long, updateShareRequest: UpdateShareRequest): Boolean {
         val ingredientDetailId = updateShareRequest.ingredientDetailId
         val share = getShare(shareId)
-        ingredientDetailId?.let { ingrDetailId ->
+        if (ingredientDetailId != share.ingredientDetail.ingredientDetailId) {
             val ingredientDetail =
-                ingredientDetailRepository.findIngredientDetailByIngredientDetailIdAndIsDeletedIsFalse(ingrDetailId)
-                    .orElseThrow { NoSuchElementException("해당 식재료가 존재하지 않습니다. ID: $ingrDetailId") }
+                ingredientDetailRepository.findIngredientDetailByIngredientDetailIdAndIsDeletedIsFalse(
+                    ingredientDetailId
+                )
+                    .orElseThrow { NoSuchElementException("해당 식재료가 존재하지 않습니다. ID: $ingredientDetailId") }
             share.updateIngredientDetail(ingredientDetail)
         }
+
         share.updateShare(updateShareRequest)
 
         val savedShare = shareRepository.save(share)
         return savedShare.id == share.id
     }
+
     @Transactional
     fun changeShareStatus(shareId: Long, updateShareStatusRequest: UpdateShareStatusRequest): Boolean {
         val share = getShare(shareId)
@@ -106,6 +118,7 @@ class ShareService(
 
         return savedShare.id == share.id
     }
+
     @Transactional
     fun deleteShare(shareId: Long): String {
         val user = userService.getCurrentLoginUser()
@@ -113,11 +126,17 @@ class ShareService(
         shareRepository.deleteById(shareId)
         return deleted
     }
+
     @Transactional
     fun deleteApplyShare(applyId: Long): String {
         val user = userService.getCurrentLoginUser()
-        val applyShare = applyShareRepository.findById(applyId).orElseThrow { NoSuchElementException("해당 나눔 신청이 존재 하지 않습니다. ID: $applyId") }
+        val applyShare = applyShareRepository.findById(applyId)
+            .orElseThrow { NoSuchElementException("해당 나눔 신청이 존재 하지 않습니다. ID: $applyId") }
         if (user.userId != applyShare.user.userId) throw RuntimeException("잘못된 사용자로부터 전달된 요청입니다.")
+        /**
+         신청을 취소하면 사람 수 차감
+         **/
+        applyShare.share.minusPeopleCnt()
         applyShareRepository.deleteById(applyId)
         return deleted
     }

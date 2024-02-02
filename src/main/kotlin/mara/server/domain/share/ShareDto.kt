@@ -1,20 +1,18 @@
 package mara.server.domain.share
 
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.LocalTime
 
 data class ShareRequest(
     val title: String,
     val ingredientDetailId: Long,
     val content: String,
-    val limitDate: LocalDate,
-    val limitTime: LocalTime,
+    val shareTime: LocalTime,
+    val shareDate: LocalDate,
     val limitPerson: Int,
-    val personCnt: Int,
     val location: String,
     val status: String,
-    val thumbNailImage: String,
+    val thumbNailImage: String
 )
 
 data class ApplyShareRequest(
@@ -22,15 +20,14 @@ data class ApplyShareRequest(
 )
 
 data class UpdateShareRequest(
-    val title: String?,
-    val ingredientDetailId: Long?,
-    val content: String?,
-    val limitDate: LocalDate?,
-    val limitTime: LocalTime?,
-    val limitPerson: Int?,
-    val personCnt: Int?,
-    val location: String?,
-    val thumbNailImage: String?,
+    val title: String,
+    val ingredientDetailId: Long,
+    val content: String,
+    val shareDate: LocalDate,
+    val shareTime: LocalTime,
+    val limitPerson: Int,
+    val location: String,
+    val thumbNailImage: String,
 )
 
 data class UpdateShareStatusRequest(
@@ -40,10 +37,13 @@ data class UpdateShareStatusRequest(
 data class ShareResponse(
     val shareId: Long,
     val title: String,
+    val itemName: String,
     val content: String,
-    val limitDatetime: LocalDateTime,
+    val shareTime: LocalTime,
+    val shareDate: LocalDate,
+    // 식재료 소비 기한
+    val limitDate: LocalDate,
     val limitPerson: Int,
-    val personCnt: Int,
     val location: String,
     val status: String,
     val thumbNailImage: String
@@ -52,9 +52,11 @@ data class ShareResponse(
         shareId = share.id,
         title = share.title,
         content = share.content,
-        limitDatetime = share.limitDatetime,
+        shareTime = share.shareTime,
+        shareDate = share.shareDate,
+        itemName = share.ingredientDetail.ingredient.name,
+        limitDate = share.ingredientDetail.expirationDate.toLocalDate(),
         limitPerson = share.limitPerson,
-        personCnt = share.personCnt,
         location = share.location,
         status = share.status.statusValue,
         thumbNailImage = share.thumbNailImage,
