@@ -38,6 +38,11 @@ class UserController(
         return success(userService.getCurrentUserInfo())
     }
 
+    @GetMapping("/me/invite-code")
+    fun getCurrentLoginUserInviteCode(): CommonResponse<UserInviteCodeResponse> {
+        return success(userService.getCurrentLoginUserInviteCode())
+    }
+
     @GetMapping("/me/shares")
     fun getAllMyShareList(): CommonResponse<List<ShareResponse>?> {
         return success(shareService.getAllMyShareList())

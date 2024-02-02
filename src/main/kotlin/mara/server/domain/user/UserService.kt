@@ -4,6 +4,7 @@ import mara.server.auth.google.GoogleApiClient
 import mara.server.auth.jwt.JwtProvider
 import mara.server.auth.kakao.KakaoApiClient
 import mara.server.auth.security.getCurrentLoginUserId
+import mara.server.util.StringUtil
 import mara.server.util.logger
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -26,12 +27,15 @@ class UserService(
 
     fun getCurrentUserInfo() = UserResponse(getCurrentLoginUser())
 
+    fun getCurrentLoginUserInviteCode() = UserInviteCodeResponse(getCurrentLoginUser())
+
     fun createUser(userRequest: UserRequest): Long {
         val user = User(
             name = userRequest.name,
             kakaoId = userRequest.kakaoId,
             password = passwordEncoder.encode(userRequest.name),
             googleEmail = userRequest.googleEmail,
+            inviteCode = StringUtil.generateRandomString(8, 11)
         )
         return userRepository.save(user).userId
     }

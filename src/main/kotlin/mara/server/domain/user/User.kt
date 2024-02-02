@@ -19,6 +19,7 @@ class User(
     val password: String,
     val kakaoId: Long?,
     val googleEmail: String?,
+    val inviteCode: String
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

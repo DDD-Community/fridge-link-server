@@ -25,6 +25,7 @@ noArg {
 
 group = "mara"
 version = "0.0.1-SNAPSHOT"
+val queryDslVersion = "5.0.0"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -50,6 +51,10 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-api:0.11.2")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.2")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.2")
+
+    // queryDsl
+    implementation("com.querydsl:querydsl-jpa:$queryDslVersion:jakarta")
+    kapt("com.querydsl:querydsl-apt:$queryDslVersion:jakarta")
 
     // test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
