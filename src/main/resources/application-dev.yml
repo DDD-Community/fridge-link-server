@@ -20,6 +20,19 @@ oauth:
       auth: https://oauth2.googleapis.com
       api: https://www.googleapis.com
 
+cloud:
+  aws:
+    credentials:
+      accessKey: ${aws-access-key-id}
+      secretKey: ${aws-secret-access-key}
+    s3:
+      bucket: mara-s3bucket
+      dir: upload/
+    region:
+      static: ${aws-region}
+#    stack:
+#      auto: false
+
 jwt:
   secret-key: ${jwt-secret-key}
   access-duration-mils: 2147483647
