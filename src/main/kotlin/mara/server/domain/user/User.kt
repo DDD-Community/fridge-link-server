@@ -1,5 +1,6 @@
 package mara.server.domain.user
 
+import com.fasterxml.jackson.annotation.JsonValue
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
@@ -15,10 +16,10 @@ class User(
     val nickName: String,
     val password: String,
     val kakaoId: Long?,
-    var profileImage: String,
-    val googleEmail: String?,
     val kakaoEmail: String?,
-    val inviteCode: String
+    val googleEmail: String?,
+    val inviteCode: String,
+    var profileImage: Profile,
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,4 +28,11 @@ class User(
     @Enumerated(EnumType.STRING)
     var role: Role = Role.USER
         protected set
+}
+
+enum class Profile(@JsonValue val profileValue: String) {
+    BLUE("blue"),
+    RED("red"),
+    YELLOW("yellow"),
+    GREEN("green")
 }

@@ -36,7 +36,7 @@ class UserService(
             password = passwordEncoder.encode(userRequest.nickName),
             googleEmail = userRequest.googleEmail,
             kakaoEmail = userRequest.kakaoEmail,
-            profileImage = userRequest.profileImage,
+            profileImage = Profile.valueOf(userRequest.profileImage),
             inviteCode = StringUtil.generateRandomString(8, 11)
         )
         return userRepository.save(user).userId

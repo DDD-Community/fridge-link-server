@@ -3,8 +3,8 @@ package mara.server.domain.user
 data class UserRequest(
     val nickName: String,
     val kakaoId: Long?,
-    val googleEmail: String?,
     val kakaoEmail: String?,
+    val googleEmail: String?,
     val profileImage: String,
 )
 
@@ -18,8 +18,8 @@ data class CheckDuplicateResponse(val isDuplicated: Boolean)
 class UserResponse(
     val nickName: String?,
     val kakaoId: Long?,
-    val googleEmail: String?,
     val kakaoEmail: String?,
+    val googleEmail: String?,
     val profileImage: String?,
 ) {
     constructor(user: User) : this(
@@ -27,7 +27,7 @@ class UserResponse(
         kakaoId = user.kakaoId,
         googleEmail = user.googleEmail,
         kakaoEmail = user.kakaoEmail,
-        profileImage = user.profileImage,
+        profileImage = user.profileImage.profileValue,
     )
 }
 
