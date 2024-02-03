@@ -1,10 +1,11 @@
 package mara.server.domain.user
 
 data class UserRequest(
-    val name: String,
+    val nickName: String,
     val kakaoId: Long?,
-    val password: String,
     val googleEmail: String?,
+    val kakaoEmail: String?,
+    val profileImage: String,
 )
 
 data class JwtDto(
@@ -12,15 +13,21 @@ data class JwtDto(
     val refreshToken: String?,
 )
 
+data class CheckDuplicateResponse(val isDuplicated: Boolean)
+
 class UserResponse(
-    val name: String,
+    val nickName: String?,
     val kakaoId: Long?,
     val googleEmail: String?,
+    val kakaoEmail: String?,
+    val profileImage: String?,
 ) {
     constructor(user: User) : this(
-        name = user.name,
+        nickName = user.nickName,
         kakaoId = user.kakaoId,
-        googleEmail = user.googleEmail
+        googleEmail = user.googleEmail,
+        kakaoEmail = user.kakaoEmail,
+        profileImage = user.profileImage,
     )
 }
 
@@ -34,10 +41,10 @@ class UserInviteCodeResponse(
 
 class UserNameResponse(
     val userId: Long,
-    val name: String
+    val nickName: String
 ) {
     constructor(user: User) : this(
         userId = user.userId,
-        name = user.name
+        nickName = user.nickName
     )
 }

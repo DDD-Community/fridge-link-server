@@ -23,14 +23,17 @@ class UserController(
         return success(userService.createUser(userRequest))
     }
 
+    @GetMapping("/nickname/check")
+    fun checkNickname(@RequestParam("nickname") nickname: String): CommonResponse<CheckDuplicateResponse> = success(userService.checkNickName(nickname))
+
     @GetMapping("/kakao-login")
-    fun kakaoLogin(@RequestParam(value = "code") authorizedCode: String): JwtDto {
-        return userService.kakaoLogin(authorizedCode)
+    fun kakaoLogin(@RequestParam(value = "code") authorizedCode: String): CommonResponse<Any> {
+        return success(userService.kakaoLogin(authorizedCode))
     }
 
     @GetMapping("/google-login")
-    fun googleLogin(@RequestParam(value = "code") authorizedCode: String): JwtDto {
-        return userService.googleLogin(authorizedCode)
+    fun googleLogin(@RequestParam(value = "code") authorizedCode: String): CommonResponse<Any> {
+        return success(userService.googleLogin(authorizedCode))
     }
 
     @GetMapping("/me")

@@ -31,19 +31,22 @@ class UserService(
 
     fun createUser(userRequest: UserRequest): Long {
         val user = User(
-            name = userRequest.name,
+            nickName = userRequest.nickName,
             kakaoId = userRequest.kakaoId,
-            password = passwordEncoder.encode(userRequest.name),
+            password = passwordEncoder.encode(userRequest.nickName),
             googleEmail = userRequest.googleEmail,
+            kakaoEmail = userRequest.kakaoEmail,
+            profileImage = userRequest.profileImage,
             inviteCode = StringUtil.generateRandomString(8, 11)
         )
         return userRepository.save(user).userId
     }
 
-    fun kakaoLogin(authorizedCode: String): JwtDto {
+    fun checkNickName(nickName: String): CheckDuplicateResponse = CheckDuplicateResponse(userRepository.existsByNickName(nickName))
+
+    fun kakaoLogin(authorizedCode: String): Any {
         // 리다이랙트 url 환경 따라 다르게 전달하기 위한 구분 값
-        val status = ""
-        val accessToken = kakaoApiClient.requestAccessToken(authorizedCode, status)
+        val accessToken = kakaoApiClient.requestAccessToken(authorizedCode)
         val infoResponse = kakaoApiClient.requestOauthInfo(accessToken)
         log.info("kakaoId ? " + infoResponse.id)
         val user = userRepository.findByKakaoId(infoResponse.id)
@@ -61,12 +64,17 @@ class UserService(
             return JwtDto(jwtProvider.generateToken(user), refreshToken)
         }
 
-        return JwtDto(null, null)
+        return UserResponse(
+            nickName = null,
+            kakaoEmail = infoResponse.email,
+            kakaoId = userName,
+            googleEmail = null,
+            profileImage = null,
+        )
     }
 
-    fun googleLogin(authorizedCode: String): JwtDto {
-        val status = ""
-        val accessToken = googleApiClient.requestAccessToken(authorizedCode, status)
+    fun googleLogin(authorizedCode: String): Any {
+        val accessToken = googleApiClient.requestAccessToken(authorizedCode)
         val infoResponse = googleApiClient.requestOauthInfo(accessToken)
 
         log.info(infoResponse.email)
@@ -83,6 +91,12 @@ class UserService(
             return JwtDto(jwtProvider.generateToken(user), refreshToken)
         }
 
-        return JwtDto(null, null)
+        return UserResponse(
+            nickName = null,
+            kakaoEmail = null,
+            kakaoId = null,
+            googleEmail = userName,
+            profileImage = null,
+        )
     }
 }
