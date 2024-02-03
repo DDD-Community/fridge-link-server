@@ -1,6 +1,9 @@
 package mara.server.domain.ingredient
 
+import com.fasterxml.jackson.annotation.JsonValue
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
@@ -21,7 +24,9 @@ class IngredientDetail(
     val ingredient: Ingredient,
     var name: String,
     var quantity: Int,
-    var location: String,
+
+    @Enumerated(EnumType.STRING)
+    var location: IngredientLocation,
     var memo: String?,
     var addDate: LocalDateTime,
     var expirationDate: LocalDateTime,
@@ -44,4 +49,9 @@ class IngredientDetail(
     fun delete() {
         this.isDeleted = true
     }
+}
+
+enum class IngredientLocation() {
+    FREEZING,
+    REFRIGERATION
 }
