@@ -22,6 +22,7 @@ class IngredientDetailService(
         val ingredientDetail = IngredientDetail(
             refrigerator = refrigerator,
             ingredient = ingredient,
+            name = ingredientDetailRequest.name,
             quantity = ingredientDetailRequest.quantity,
             location = ingredientDetailRequest.location,
             memo = ingredientDetailRequest.memo,

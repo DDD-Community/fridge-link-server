@@ -5,6 +5,7 @@ import java.time.LocalDateTime
 data class IngredientDetailRequest(
     var refrigeratorId: Long,
     var ingredientId: Long,
+    val name: String,
     val quantity: Int,
     val location: String,
     val memo: String?,
@@ -14,6 +15,7 @@ data class IngredientDetailRequest(
 )
 
 data class IngredientDetailUpdateRequest(
+    val name: String,
     val quantity: Int,
     val location: String,
     val memo: String?,
@@ -24,6 +26,7 @@ data class IngredientDetailUpdateRequest(
 
 data class IngredientDetailResponse(
     val ingredientDetailId: Long,
+    val name: String,
     val quantity: Int,
     val location: String,
     val memo: String?,
@@ -34,6 +37,7 @@ data class IngredientDetailResponse(
 
     constructor(ingredientDetail: IngredientDetail) : this(
         ingredientDetailId = ingredientDetail.ingredientDetailId,
+        name = ingredientDetail.name,
         quantity = ingredientDetail.quantity,
         location = ingredientDetail.location,
         memo = ingredientDetail.memo,

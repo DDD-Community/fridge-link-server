@@ -19,6 +19,7 @@ class IngredientDetail(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ingredientId")
     val ingredient: Ingredient,
+    var name: String,
     var quantity: Int,
     var location: String,
     var memo: String?,
@@ -31,6 +32,7 @@ class IngredientDetail(
     val ingredientDetailId: Long = 0L
 
     fun update(ingredientDetailUpdateRequest: IngredientDetailUpdateRequest) {
+        this.name = ingredientDetailUpdateRequest.name
         this.quantity = ingredientDetailUpdateRequest.quantity
         this.location = ingredientDetailUpdateRequest.location
         this.memo = ingredientDetailUpdateRequest.memo
