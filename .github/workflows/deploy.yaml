@@ -4,12 +4,12 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - HOTFIX**
 
 env:
   S3_BUCKET_NAME: mara-s3bucket
-  AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
-  AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
-  AWS_REGION: ${{secrets.AWS_REGION}}
   RESOURCE_PATH: ./src/main/resources/application-dev.yml
   CODE_DEPLOY_APPLICATION_NAME: mara-code-deploy
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: mara-deploy-group
@@ -42,9 +42,9 @@ jobs:
           oauth.google.client-id: ${{ secrets.GOOGLE_CLIENT_ID }}
           oauth.google.client-secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           jwt.secret-key: ${{ secrets.JWT_SECRET_KEY }}
-          cloud.aws.credentials.accessKey: $AWS_ACCESS_KEY_ID
-          cloud.aws.credentials.secretKey: $AWS_SECRET_ACCESS_KEY
-          cloud.aws.region.static: $AWS_REGION
+          cloud.aws.credentials.accessKey: ${{secrets.AWS_ACCESS_KEY_ID}}
+          cloud.aws.credentials.secretKey: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          cloud.aws.region.static: ${{secrets.AWS_REGION}}
 
 
       - name: Grant execute permission for gradlew
@@ -65,9 +65,9 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: $AWS_ACCESS_KEY_ID
-          aws-secret-access-key: $AWS_SECRET_ACCESS_KEY
-          aws-region: $AWS_REGION
+          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          aws-region: ${{secrets.AWS_REGION}}
 
         # [5]
       - name: Upload to S3
