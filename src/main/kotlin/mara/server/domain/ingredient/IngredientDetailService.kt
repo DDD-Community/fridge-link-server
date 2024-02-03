@@ -2,6 +2,7 @@ package mara.server.domain.ingredient
 
 import mara.server.domain.refrigerator.RefrigeratorRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class IngredientDetailService(
@@ -10,6 +11,7 @@ class IngredientDetailService(
     private val ingredientRepository: IngredientRepository
 ) {
 
+    @Transactional
     fun createIngredientDetail(ingredientDetailRequest: IngredientDetailRequest): Long {
         val refrigeratorId = ingredientDetailRequest.refrigeratorId
         val refrigerator = refrigeratorRepository.findById(refrigeratorId)
@@ -48,6 +50,7 @@ class IngredientDetailService(
         return ingredientDetailList.toIngredientResponseList()
     }
 
+    @Transactional
     fun updateIngredientDetail(
         id: Long,
         ingredientDetailUpdateRequest: IngredientDetailUpdateRequest
@@ -58,6 +61,7 @@ class IngredientDetailService(
         return IngredientDetailResponse(ingredientDetailRepository.save(ingredientDetail))
     }
 
+    @Transactional
     fun deleteIngredientDetail(id: Long): String {
         val ingredientDetail = ingredientDetailRepository.findById(id)
             .orElseThrow { NoSuchElementException("해당 식재료 상세가 존재하지 않습니다. ID: $id") }
