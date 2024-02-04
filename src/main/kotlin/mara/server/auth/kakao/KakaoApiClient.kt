@@ -34,9 +34,8 @@ class KakaoApiClient(
     fun getRedirectUri(): String {
         val os = System.getProperty("os.name")
         log.info("OS : {}", os)
-        if (os.contains("Mac")) return "http://localhost:8080/users/kakao-login"
-        if (os.contains("Windows")) return "http://localhost:3000/login"
-        return "http://43.203.20.41:8081/users/kakao-login"
+        if (os.contains("Mac") || os.contains("Windows")) return "http://localhost:8080/users/kakao-login"
+        return "http://localhost:3000/login"
     }
 
     fun requestAccessToken(authorizedCode: String): String {
