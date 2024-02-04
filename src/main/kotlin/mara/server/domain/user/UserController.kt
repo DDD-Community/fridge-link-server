@@ -19,8 +19,8 @@ class UserController(
 ) {
 
     @PostMapping
-    fun createUser(@RequestBody userRequest: UserRequest): CommonResponse<Long> {
-        return success(userService.createUser(userRequest))
+    fun createUser(@RequestBody userRequest: UserRequest): CommonResponse<JwtDto> {
+        return success(userService.singUp(userRequest))
     }
 
     @GetMapping("/nickname/check")

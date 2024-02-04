@@ -27,7 +27,7 @@ class UserResponse(
         kakaoId = user.kakaoId,
         googleEmail = user.googleEmail,
         kakaoEmail = user.kakaoEmail,
-        profileImage = user.profileImage.profileValue,
+        profileImage = user.profileImage.name,
     )
 }
 

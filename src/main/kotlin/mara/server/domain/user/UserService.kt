@@ -10,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.UUID
 
 @Service
@@ -29,17 +30,31 @@ class UserService(
 
     fun getCurrentLoginUserInviteCode() = UserInviteCodeResponse(getCurrentLoginUser())
 
-    fun createUser(userRequest: UserRequest): Long {
+    @Transactional
+    fun singUp(user: UserRequest): JwtDto {
+        val newUser = createUser(user)
+
+        var userName = newUser.kakaoId.toString()
+        if (newUser.googleEmail != null) userName = newUser.googleEmail!!
+
+        SecurityContextHolder.getContext().authentication =
+            UsernamePasswordAuthenticationToken(userName, newUser.password)
+        val refreshToken = UUID.randomUUID().toString()
+
+        // JWT 발급
+        return JwtDto(jwtProvider.generateToken(newUser), refreshToken)
+    }
+    private fun createUser(userRequest: UserRequest): User {
         val user = User(
             nickName = userRequest.nickName,
             kakaoId = userRequest.kakaoId,
             password = passwordEncoder.encode(userRequest.nickName),
             googleEmail = userRequest.googleEmail,
             kakaoEmail = userRequest.kakaoEmail,
-            profileImage = Profile.valueOf(userRequest.profileImage),
+            profileImage = ProfileImage.valueOf(userRequest.profileImage),
             inviteCode = StringUtil.generateRandomString(8, 11)
         )
-        return userRepository.save(user).userId
+        return userRepository.save(user)
     }
 
     fun checkNickName(nickName: String): CheckDuplicateResponse = CheckDuplicateResponse(userRepository.existsByNickName(nickName))
@@ -47,11 +62,11 @@ class UserService(
     fun kakaoLogin(authorizedCode: String): Any {
         // 리다이랙트 url 환경 따라 다르게 전달하기 위한 구분 값
         val accessToken = kakaoApiClient.requestAccessToken(authorizedCode)
-        val infoResponse = kakaoApiClient.requestOauthInfo(accessToken)
-        log.info("kakaoId ? " + infoResponse.id)
-        val user = userRepository.findByKakaoId(infoResponse.id)
+        val oauthInfoResponse = kakaoApiClient.requestOauthInfo(accessToken)
+        log.info("kakaoId ? " + oauthInfoResponse.id)
+        val user = userRepository.findByKakaoId(oauthInfoResponse.id)
 
-        val userName = infoResponse.id
+        val userName = oauthInfoResponse.id
 
         // password 는 서비스에서 사용X, Security 설정을 위해 넣어준 값
         val password = userName.toString()
@@ -66,7 +81,7 @@ class UserService(
 
         return UserResponse(
             nickName = null,
-            kakaoEmail = infoResponse.email,
+            kakaoEmail = oauthInfoResponse.email,
             kakaoId = userName,
             googleEmail = null,
             profileImage = null,
@@ -75,13 +90,13 @@ class UserService(
 
     fun googleLogin(authorizedCode: String): Any {
         val accessToken = googleApiClient.requestAccessToken(authorizedCode)
-        val infoResponse = googleApiClient.requestOauthInfo(accessToken)
+        val oauthInfoResponse = googleApiClient.requestOauthInfo(accessToken)
 
-        log.info(infoResponse.email)
+        log.info(oauthInfoResponse.email)
 
-        val user = userRepository.findByGoogleEmail(infoResponse.email)
+        val user = userRepository.findByGoogleEmail(oauthInfoResponse.email)
 
-        val userName = infoResponse.email
+        val userName = oauthInfoResponse.email
 
         if (user != null) {
             SecurityContextHolder.getContext().authentication =
