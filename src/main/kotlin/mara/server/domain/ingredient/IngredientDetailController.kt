@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -22,14 +23,19 @@ class IngredientDetailController(
         return success(ingredientDetailService.createIngredientDetail(ingredientDetailRequest))
     }
 
-    @GetMapping("/{id}")
-    fun getIngredientDetail(@PathVariable(name = "id") id: Long): CommonResponse<IngredientDetailResponse> {
-        return success(ingredientDetailService.getIngredientDetail(id))
-    }
+//    @GetMapping("/{id}")
+//    fun getIngredientDetail(@PathVariable(name = "id") id: Long): CommonResponse<IngredientDetailResponse> {
+//        return success(ingredientDetailService.getIngredientDetail(id))
+//    }
 
     @GetMapping("/refrig/{id}")
     fun getIngredientDetailList(@PathVariable(name = "id") refrigeratorId: Long): CommonResponse<List<IngredientDetailResponse>> {
         return success(ingredientDetailService.getIngredientDetailList(refrigeratorId))
+    }
+
+    @GetMapping("/count")
+    fun getIngredientDetailCount(@RequestParam("day") days: Long): CommonResponse<Long> {
+        return success(ingredientDetailService.getIngredientDetailCount(days))
     }
 
     @PutMapping("/{id}")
