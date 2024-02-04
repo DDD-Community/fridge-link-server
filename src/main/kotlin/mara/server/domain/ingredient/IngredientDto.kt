@@ -23,6 +23,11 @@ data class IngredientResponse(
     )
 }
 
+data class IngredientGroup(
+    val name: String,
+    val iconImage: String
+)
+
 fun List<Ingredient>.toIngredientResponseList(): List<IngredientResponse> {
     return this.map { IngredientResponse(it) }
 }

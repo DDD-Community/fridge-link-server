@@ -5,7 +5,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class IngredientService(
-    private val ingredientRepository: IngredientRepository
+    private val ingredientRepository: IngredientRepository,
 ) {
 
     @Transactional
@@ -20,7 +20,8 @@ class IngredientService(
     }
 
     fun getIngredient(id: Long): IngredientResponse {
-        val ingredient = ingredientRepository.findById(id).orElseThrow { NoSuchElementException("해당 식재료가 존재하지 않습니다. ID: $id") }
+        val ingredient =
+            ingredientRepository.findById(id).orElseThrow { NoSuchElementException("해당 식재료가 존재하지 않습니다. ID: $id") }
         return IngredientResponse(ingredient)
     }
 
@@ -29,9 +30,15 @@ class IngredientService(
         return ingredientList.toIngredientResponseList()
     }
 
+    fun getIngredientListByCategory(): Map<String, List<IngredientGroup>> {
+        val ingredientList = ingredientRepository.findAll()
+        return ingredientList.groupBy({ it.category }, { IngredientGroup(it.name, it.iconImage) })
+    }
+
     @Transactional
     fun updateIngredient(id: Long, ingredientRequest: IngredientRequest): IngredientResponse {
-        val ingredient = ingredientRepository.findById(id).orElseThrow { NoSuchElementException("해당 식재료가 존재하지 않습니다. ID: $id") }
+        val ingredient =
+            ingredientRepository.findById(id).orElseThrow { NoSuchElementException("해당 식재료가 존재하지 않습니다. ID: $id") }
         ingredient.update(ingredientRequest)
         return IngredientResponse(ingredientRepository.save(ingredient))
     }
