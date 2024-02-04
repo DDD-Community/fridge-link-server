@@ -1,17 +1,15 @@
 package mara.server.domain.refrigerator
 
-import mara.server.domain.user.UserRepository
+import mara.server.domain.user.UserService
 import org.springframework.stereotype.Service
 
 @Service
 class RefrigeratorService(
     private val refrigeratorRepository: RefrigeratorRepository,
-    private val userRepository: UserRepository
+    private val userService: UserService
 ) {
     fun createRefrigerator(refrigeratorRequest: RefrigeratorRequest): Long {
-        val userId = refrigeratorRequest.userId
-        val user =
-            userRepository.findById(userId).orElseThrow { NoSuchElementException("해당 유저가 존재하지 않습니다. ID: $userId") }
+        val user = userService.getCurrentLoginUser()
         val refrigerator = Refrigerator(
             name = refrigeratorRequest.name,
             user = user
@@ -26,16 +24,15 @@ class RefrigeratorService(
     }
 
     fun getRefrigeratorList(userId: Long): List<RefrigeratorResponse> {
-        val user =
-            userRepository.findById(userId).orElseThrow { NoSuchElementException("해당 유저가 존재하지 않습니다. ID: $userId") }
+        val user = userService.getCurrentLoginUser()
         val refrigeratorList = refrigeratorRepository.findRefrigeratorsByUser(user)
         return refrigeratorList.toRefrigeratorResponseList()
     }
 
-    fun updateRefrigerator(id: Long, refrigeratorUpdateRequest: RefrigeratorUpdateRequest): RefrigeratorResponse {
+    fun updateRefrigerator(id: Long, refrigeratorRequest: RefrigeratorRequest): RefrigeratorResponse {
         val refrigerator =
             refrigeratorRepository.findById(id).orElseThrow { NoSuchElementException("해당 냉장고가 존재하지 않습니다. ID: $id") }
-        refrigerator.update(refrigeratorUpdateRequest)
+        refrigerator.update(refrigeratorRequest)
         return RefrigeratorResponse(refrigeratorRepository.save(refrigerator))
     }
 
