@@ -59,7 +59,7 @@ class UserService(
 
     fun checkNickName(nickName: String): CheckDuplicateResponse = CheckDuplicateResponse(userRepository.existsByNickName(nickName))
 
-    fun kakaoLogin(authorizedCode: String): Any {
+    fun kakaoLogin(authorizedCode: String): AuthDto {
         // 리다이랙트 url 환경 따라 다르게 전달하기 위한 구분 값
         val accessToken = kakaoApiClient.requestAccessToken(authorizedCode)
         val oauthInfoResponse = kakaoApiClient.requestOauthInfo(accessToken)
@@ -79,16 +79,13 @@ class UserService(
             return JwtDto(jwtProvider.generateToken(user), refreshToken)
         }
 
-        return UserResponse(
-            nickName = null,
-            kakaoEmail = oauthInfoResponse.email,
+        return KakaoAuthInfo(
             kakaoId = userName,
-            googleEmail = null,
-            profileImage = null,
+            kakaoEmail = oauthInfoResponse.email
         )
     }
 
-    fun googleLogin(authorizedCode: String): Any {
+    fun googleLogin(authorizedCode: String): AuthDto {
         val accessToken = googleApiClient.requestAccessToken(authorizedCode)
         val oauthInfoResponse = googleApiClient.requestOauthInfo(accessToken)
 
@@ -106,12 +103,8 @@ class UserService(
             return JwtDto(jwtProvider.generateToken(user), refreshToken)
         }
 
-        return UserResponse(
-            nickName = null,
-            kakaoEmail = null,
-            kakaoId = null,
+        return GoogleAuthInfo(
             googleEmail = userName,
-            profileImage = null,
         )
     }
 }

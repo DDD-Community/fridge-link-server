@@ -8,11 +8,6 @@ data class UserRequest(
     val profileImage: String,
 )
 
-data class JwtDto(
-    val accessToken: String?,
-    val refreshToken: String?,
-)
-
 data class CheckDuplicateResponse(val isDuplicated: Boolean)
 
 class UserResponse(
