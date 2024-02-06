@@ -34,7 +34,7 @@ class UserInviteCodeResponse(
     )
 }
 
-class UserNameResponse(
+class UserFriendResponse(
     val userId: Long,
     val nickName: String
 ) {

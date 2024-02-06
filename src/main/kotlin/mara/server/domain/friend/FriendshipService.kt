@@ -1,7 +1,7 @@
 package mara.server.domain.friend
 
 import mara.server.domain.user.User
-import mara.server.domain.user.UserNameResponse
+import mara.server.domain.user.UserFriendResponse
 import mara.server.domain.user.UserRepository
 import mara.server.domain.user.UserService
 import org.springframework.stereotype.Service
@@ -31,16 +31,16 @@ class FriendshipService(
         return ok
     }
 
-    fun getFriendshipList(): List<UserNameResponse> {
+    fun getFriendshipList(): List<UserFriendResponse> {
         val currentLoginUser = userService.getCurrentLoginUser()
         val friendshipList = friendshipRepository.findAllByFromUser(currentLoginUser)
             .orElseThrow { NoSuchElementException("친구 관계가 존재하지 않습니다.") }
 
-        val userNameList: List<UserNameResponse> = friendshipList.map { friendship ->
+        val userNameList: List<UserFriendResponse> = friendshipList.map { friendship ->
             val userId = friendship.toUser.userId
             val user =
                 userRepository.findById(userId).orElseThrow { NoSuchElementException("해당 유저가 존재하지 않습니다. ID: $userId") }
-            UserNameResponse(user)
+            UserFriendResponse(user)
         }
 
         return userNameList

@@ -2,7 +2,7 @@ package mara.server.domain.friend
 
 import mara.server.common.CommonResponse
 import mara.server.common.success
-import mara.server.domain.user.UserNameResponse
+import mara.server.domain.user.UserFriendResponse
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -21,7 +21,7 @@ class FriendshipController(
     }
 
     @GetMapping
-    fun getFriendshipList(): CommonResponse<List<UserNameResponse>> {
+    fun getFriendshipList(): CommonResponse<List<UserFriendResponse>> {
         return success(friendshipService.getFriendshipList())
     }
 
