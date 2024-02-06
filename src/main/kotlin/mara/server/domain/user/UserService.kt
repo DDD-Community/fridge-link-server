@@ -34,11 +34,11 @@ class UserService(
     fun singUp(user: UserRequest): JwtDto {
         val newUser = createUser(user)
 
-        var userName = newUser.kakaoId.toString()
-        if (newUser.googleEmail != null) userName = newUser.googleEmail!!
+        var authId = newUser.kakaoId.toString()
+        if (newUser.googleEmail != null) authId = newUser.googleEmail!!
 
         SecurityContextHolder.getContext().authentication =
-            UsernamePasswordAuthenticationToken(userName, newUser.password)
+            UsernamePasswordAuthenticationToken(authId, newUser.password)
         val refreshToken = UUID.randomUUID().toString()
 
         // JWT 발급
@@ -66,21 +66,21 @@ class UserService(
         log.info("kakaoId ? " + oauthInfoResponse.id)
         val user = userRepository.findByKakaoId(oauthInfoResponse.id)
 
-        val userName = oauthInfoResponse.id
+        val authId = oauthInfoResponse.id
 
         // password 는 서비스에서 사용X, Security 설정을 위해 넣어준 값
-        val password = userName.toString()
+        val password = authId.toString()
 
         if (user != null) {
             SecurityContextHolder.getContext().authentication =
-                UsernamePasswordAuthenticationToken(userName, password)
+                UsernamePasswordAuthenticationToken(authId, password)
 
             val refreshToken = UUID.randomUUID().toString()
             return JwtDto(jwtProvider.generateToken(user), refreshToken)
         }
 
         return KakaoAuthInfo(
-            kakaoId = userName,
+            kakaoId = authId,
             kakaoEmail = oauthInfoResponse.email
         )
     }
@@ -93,18 +93,18 @@ class UserService(
 
         val user = userRepository.findByGoogleEmail(oauthInfoResponse.email)
 
-        val userName = oauthInfoResponse.email
+        val authId = oauthInfoResponse.email
 
         if (user != null) {
             SecurityContextHolder.getContext().authentication =
-                UsernamePasswordAuthenticationToken(userName, userName)
+                UsernamePasswordAuthenticationToken(authId, authId)
 
             val refreshToken = UUID.randomUUID().toString()
             return JwtDto(jwtProvider.generateToken(user), refreshToken)
         }
 
         return GoogleAuthInfo(
-            googleEmail = userName,
+            googleEmail = authId,
         )
     }
 }
