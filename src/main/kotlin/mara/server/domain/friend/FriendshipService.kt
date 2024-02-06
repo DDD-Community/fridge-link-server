@@ -5,6 +5,7 @@ import mara.server.domain.user.UserNameResponse
 import mara.server.domain.user.UserRepository
 import mara.server.domain.user.UserService
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class FriendshipService(
@@ -16,6 +17,7 @@ class FriendshipService(
     private val ok = "ok"
     private val deleted = "deleted"
 
+    @Transactional
     fun createFriendship(friendshipRequest: FriendshipRequest): String {
         val currentUserId = userService.getCurrentLoginUser().userId
         val fromUser = userRepository.findById(currentUserId)
@@ -44,6 +46,7 @@ class FriendshipService(
         return userNameList
     }
 
+    @Transactional
     fun deleteFriendship(friendshipDeleteRequest: FriendshipDeleteRequest): String {
         val currentLoginUser = userService.getCurrentLoginUser()
         val targetUser = userRepository.findById(friendshipDeleteRequest.friendId)
