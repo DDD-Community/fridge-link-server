@@ -26,7 +26,7 @@ class FriendshipController(
     }
 
     @PostMapping("/delete")
-    fun deleteFriendship(@RequestBody friendshipDeleteRequest: FriendshipDeleteRequest): CommonResponse<String> {
-        return success(friendshipService.deleteFriendship(friendshipDeleteRequest))
+    fun deleteFriendship(@RequestBody friendshipDeleteRequestList: List<FriendshipDeleteRequest>): CommonResponse<String> {
+        return success(friendshipService.deleteFriendship(friendshipDeleteRequestList))
     }
 }
