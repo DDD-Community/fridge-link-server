@@ -25,6 +25,11 @@ class FriendshipController(
         return success(friendshipService.getFriendshipList())
     }
 
+    @GetMapping("/count")
+    fun getFriendshipCount(): CommonResponse<Long> {
+        return success(friendshipService.getFriendshipCount())
+    }
+
     @PostMapping("/delete")
     fun deleteFriendship(@RequestBody friendshipDeleteRequestList: List<FriendshipDeleteRequest>): CommonResponse<String> {
         return success(friendshipService.deleteFriendship(friendshipDeleteRequestList))

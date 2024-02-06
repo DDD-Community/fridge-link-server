@@ -46,6 +46,11 @@ class FriendshipService(
         return userNameList
     }
 
+    fun getFriendshipCount(): Long {
+        val currentLoginUser = userService.getCurrentLoginUser()
+        return friendshipRepository.countByFromUser(currentLoginUser)
+    }
+
     @Transactional
     fun deleteFriendship(friendshipDeleteRequestList: List<FriendshipDeleteRequest>): String {
         val currentLoginUser = userService.getCurrentLoginUser()
