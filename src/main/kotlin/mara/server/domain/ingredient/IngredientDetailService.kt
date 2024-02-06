@@ -2,6 +2,8 @@ package mara.server.domain.ingredient
 
 import mara.server.domain.refrigerator.RefrigeratorRepository
 import mara.server.domain.user.UserService
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
@@ -13,6 +15,7 @@ class IngredientDetailService(
     private val ingredientRepository: IngredientRepository,
     private val userService: UserService
 ) {
+    private val deleted = "deleted"
 
     @Transactional
     fun createIngredientDetail(ingredientDetailRequest: IngredientDetailRequest): Long {
@@ -58,7 +61,20 @@ class IngredientDetailService(
         val refrigeratorList = refrigeratorRepository.findRefrigeratorsByUser(user)
         val expirationDate = LocalDateTime.now().plusDays(days)
 
-        return ingredientDetailRepository.findIngredientDetailCountByRefrigeratorAndExpirationDate(refrigeratorList, expirationDate)
+        return ingredientDetailRepository.findIngredientDetailCountByRefrigeratorAndExpirationDate(
+            refrigeratorList,
+            expirationDate
+        )
+    }
+
+    fun getIngredientDetailRecent(count: Int): List<IngredientDetailResponse> {
+        val user = userService.getCurrentLoginUser()
+        val refrigeratorList = refrigeratorRepository.findRefrigeratorsByUser(user)
+
+        val pageable: Pageable = PageRequest.of(0, count)
+        val ingredientDetailRecentList =
+            ingredientDetailRepository.findByRefrigeratorsOrderByExpirationDate(refrigeratorList, pageable)
+        return ingredientDetailRecentList.toIngredientResponseList()
     }
 
     @Transactional
@@ -78,6 +94,6 @@ class IngredientDetailService(
             .orElseThrow { NoSuchElementException("해당 식재료 상세가 존재하지 않습니다. ID: $id") }
         ingredientDetail.delete()
         ingredientDetailRepository.save(ingredientDetail)
-        return "deleted"
+        return deleted
     }
 }

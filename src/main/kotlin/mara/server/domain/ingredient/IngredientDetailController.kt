@@ -38,6 +38,11 @@ class IngredientDetailController(
         return success(ingredientDetailService.getIngredientDetailCount(days))
     }
 
+    @GetMapping("/recent")
+    fun getIngredientDetailRecent(@RequestParam(name = "count") count: Int): CommonResponse<List<IngredientDetailResponse>> {
+        return success(ingredientDetailService.getIngredientDetailRecent(count))
+    }
+
     @PutMapping("/{id}")
     fun updateIngredientDetail(@PathVariable(name = "id") id: Long, @RequestBody ingredientDetailUpdateRequest: IngredientDetailUpdateRequest): CommonResponse<IngredientDetailResponse> {
         return success(ingredientDetailService.updateIngredientDetail(id, ingredientDetailUpdateRequest))
