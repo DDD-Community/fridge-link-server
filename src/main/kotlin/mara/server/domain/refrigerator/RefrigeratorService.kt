@@ -8,6 +8,8 @@ class RefrigeratorService(
     private val refrigeratorRepository: RefrigeratorRepository,
     private val userService: UserService
 ) {
+    private val deleted = "deleted"
+
     fun createRefrigerator(refrigeratorRequest: RefrigeratorRequest): Long {
         val user = userService.getCurrentLoginUser()
         val refrigerator = Refrigerator(
@@ -38,6 +40,6 @@ class RefrigeratorService(
 
     fun deleteRefrigerator(id: Long): String {
         refrigeratorRepository.deleteById(id)
-        return "deleted"
+        return deleted
     }
 }

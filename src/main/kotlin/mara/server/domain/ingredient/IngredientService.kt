@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional
 class IngredientService(
     private val ingredientRepository: IngredientRepository,
 ) {
+    private val deleted = "deleted"
 
     @Transactional
     fun createIngredient(ingredientRequest: IngredientRequest): Long {
@@ -46,6 +47,6 @@ class IngredientService(
     @Transactional
     fun deleteIngredient(id: Long): String {
         ingredientRepository.deleteById(id)
-        return "deleted"
+        return deleted
     }
 }
