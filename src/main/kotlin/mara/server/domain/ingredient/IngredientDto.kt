@@ -23,11 +23,32 @@ data class IngredientResponse(
     )
 }
 
+data class IngredientGroupResponse(
+    val category: String,
+    val ingredientGroup: List<IngredientGroup>
+) {
+    constructor(ingredients: List<Ingredient>) : this(
+        category = ingredients.firstOrNull()?.category ?: "",
+        ingredientGroup = ingredients.map { IngredientGroup(it) }
+    )
+}
+
 data class IngredientGroup(
+    val id: Long,
     val name: String,
     val iconImage: String
-)
+) {
+    constructor(ingredient: Ingredient) : this(
+        id = ingredient.ingredientId,
+        name = ingredient.name,
+        iconImage = ingredient.iconImage
+    )
+}
 
 fun List<Ingredient>.toIngredientResponseList(): List<IngredientResponse> {
     return this.map { IngredientResponse(it) }
+}
+
+fun List<Ingredient>.toIngredientCategoryGroupResponseList(): List<IngredientGroupResponse> {
+    return this.groupBy { it.category }.values.map { IngredientGroupResponse(it) }
 }

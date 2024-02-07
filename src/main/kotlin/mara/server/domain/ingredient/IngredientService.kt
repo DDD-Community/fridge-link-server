@@ -31,9 +31,9 @@ class IngredientService(
         return ingredientList.toIngredientResponseList()
     }
 
-    fun getIngredientListByCategory(): Map<String, List<IngredientGroup>> {
+    fun getIngredientListByCategory(): List<IngredientGroupResponse> {
         val ingredientList = ingredientRepository.findAll()
-        return ingredientList.groupBy({ it.category }, { IngredientGroup(it.name, it.iconImage) })
+        return ingredientList.toIngredientCategoryGroupResponseList()
     }
 
     @Transactional
