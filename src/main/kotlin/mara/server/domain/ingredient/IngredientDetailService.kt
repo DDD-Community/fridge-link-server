@@ -2,7 +2,7 @@ package mara.server.domain.ingredient
 
 import mara.server.domain.refrigerator.RefrigeratorRepository
 import mara.server.domain.user.UserService
-import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -53,7 +53,7 @@ class IngredientDetailService(
         val ingredientDetailList =
             ingredientDetailRepository.findIngredientDetailsByRefrigeratorAndIsDeletedIsFalse(refrigerator)
                 .orElseThrow { NoSuchElementException("해당 식재료 상세가 존재하지 않습니다. ID: $refrigeratorId") }
-        return ingredientDetailList.toIngredientResponseList()
+        return ingredientDetailList.toIngredientDetailResponseList()
     }
 
     fun getIngredientDetailCount(days: Long): Long {
@@ -67,14 +67,13 @@ class IngredientDetailService(
         )
     }
 
-    fun getIngredientDetailRecent(count: Int): List<IngredientDetailResponse> {
+    fun getIngredientDetailRecent(pageable: Pageable): Page<IngredientDetailResponse> {
         val user = userService.getCurrentLoginUser()
         val refrigeratorList = refrigeratorRepository.findRefrigeratorsByUser(user)
-
-        val pageable: Pageable = PageRequest.of(0, count)
         val ingredientDetailRecentList =
-            ingredientDetailRepository.findByRefrigeratorsOrderByExpirationDate(refrigeratorList, pageable)
-        return ingredientDetailRecentList.toIngredientResponseList()
+            ingredientDetailRepository.findByRefrigerators(refrigeratorList, pageable)
+
+        return ingredientDetailRecentList.toIngredientDetailResponseListPage()
     }
 
     @Transactional

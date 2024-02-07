@@ -2,6 +2,10 @@ package mara.server.domain.ingredient
 
 import mara.server.common.CommonResponse
 import mara.server.common.success
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
+import org.springframework.data.web.PageableDefault
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -39,12 +43,20 @@ class IngredientDetailController(
     }
 
     @GetMapping("/recent")
-    fun getIngredientDetailRecent(@RequestParam(name = "count") count: Int): CommonResponse<List<IngredientDetailResponse>> {
-        return success(ingredientDetailService.getIngredientDetailRecent(count))
+    fun getIngredientDetailRecent(
+        @PageableDefault(
+            size = 4, sort = ["expirationDate"], direction = Sort.Direction.ASC
+        )
+        pageable: Pageable,
+    ): CommonResponse<Page<IngredientDetailResponse>> {
+        return success(ingredientDetailService.getIngredientDetailRecent(pageable))
     }
 
     @PutMapping("/{id}")
-    fun updateIngredientDetail(@PathVariable(name = "id") id: Long, @RequestBody ingredientDetailUpdateRequest: IngredientDetailUpdateRequest): CommonResponse<IngredientDetailResponse> {
+    fun updateIngredientDetail(
+        @PathVariable(name = "id") id: Long,
+        @RequestBody ingredientDetailUpdateRequest: IngredientDetailUpdateRequest
+    ): CommonResponse<IngredientDetailResponse> {
         return success(ingredientDetailService.updateIngredientDetail(id, ingredientDetailUpdateRequest))
     }
 

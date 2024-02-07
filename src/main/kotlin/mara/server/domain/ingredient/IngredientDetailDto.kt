@@ -1,5 +1,6 @@
 package mara.server.domain.ingredient
 
+import org.springframework.data.domain.Page
 import java.time.LocalDateTime
 
 data class IngredientDetailRequest(
@@ -47,6 +48,10 @@ data class IngredientDetailResponse(
     )
 }
 
-fun List<IngredientDetail>.toIngredientResponseList(): List<IngredientDetailResponse> {
+fun List<IngredientDetail>.toIngredientDetailResponseList(): List<IngredientDetailResponse> {
+    return this.map { IngredientDetailResponse(it) }
+}
+
+fun Page<IngredientDetail>.toIngredientDetailResponseListPage(): Page<IngredientDetailResponse> {
     return this.map { IngredientDetailResponse(it) }
 }
