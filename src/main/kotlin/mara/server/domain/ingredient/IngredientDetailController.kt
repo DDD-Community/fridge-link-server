@@ -23,10 +23,10 @@ class IngredientDetailController(
         return success(ingredientDetailService.createIngredientDetail(ingredientDetailRequest))
     }
 
-//    @GetMapping("/{id}")
-//    fun getIngredientDetail(@PathVariable(name = "id") id: Long): CommonResponse<IngredientDetailResponse> {
-//        return success(ingredientDetailService.getIngredientDetail(id))
-//    }
+    @GetMapping("/{id}")
+    fun getIngredientDetail(@PathVariable(name = "id") id: Long): CommonResponse<IngredientDetailResponse> {
+        return success(ingredientDetailService.getIngredientDetail(id))
+    }
 
     @GetMapping("/refrig/{id}")
     fun getIngredientDetailList(@PathVariable(name = "id") refrigeratorId: Long): CommonResponse<List<IngredientDetailResponse>> {

@@ -41,11 +41,11 @@ class IngredientDetailService(
         return ingredientDetailRepository.save(ingredientDetail).ingredientDetailId
     }
 
-//    fun getIngredientDetail(id: Long): IngredientDetailResponse {
-//        val ingredientDetail = ingredientDetailRepository.findIngredientDetailByIngredientDetailIdAndIsDeletedIsFalse(id)
-//            .orElseThrow { NoSuchElementException("해당 식재료 상세가 존재하지 않습니다. ID: $id") }
-//        return IngredientDetailResponse(ingredientDetail)
-//    }
+    fun getIngredientDetail(id: Long): IngredientDetailResponse {
+        val ingredientDetail = ingredientDetailRepository.findIngredientDetailByIngredientDetailId(id)
+            .orElseThrow { NoSuchElementException("해당 식재료 상세가 존재하지 않습니다. ID: $id") }
+        return IngredientDetailResponse(ingredientDetail)
+    }
 
     fun getIngredientDetailList(refrigeratorId: Long): List<IngredientDetailResponse> {
         val refrigerator = refrigeratorRepository.findById(refrigeratorId)
