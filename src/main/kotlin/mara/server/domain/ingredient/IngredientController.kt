@@ -33,7 +33,7 @@ class IngredientController(
     }
 
     @GetMapping("/category")
-    fun getIngredientListByCategory(): CommonResponse<List<IngredientGroupResponse>> {
+    fun getIngredientGroupListByCategory(): CommonResponse<List<IngredientGroupResponse>> {
         return success(ingredientService.getIngredientListByCategory())
     }
 

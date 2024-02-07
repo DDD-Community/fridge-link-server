@@ -25,11 +25,11 @@ data class IngredientResponse(
 
 data class IngredientGroupResponse(
     val category: String,
-    val ingredientGroup: List<IngredientGroup>
+    val ingredientGroupList: List<IngredientGroup>
 ) {
-    constructor(ingredients: List<Ingredient>) : this(
-        category = ingredients.firstOrNull()?.category ?: "",
-        ingredientGroup = ingredients.map { IngredientGroup(it) }
+    constructor(ingredientList: List<Ingredient>) : this(
+        category = ingredientList.firstOrNull()?.category ?: "",
+        ingredientGroupList = ingredientList.map { IngredientGroup(it) }
     )
 }
 
