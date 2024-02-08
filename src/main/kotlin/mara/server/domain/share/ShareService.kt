@@ -82,7 +82,7 @@ class ShareService(
     fun getAllApplyUserList(shareId: Long): List<String>? {
         val share = getShare(shareId)
         val applyShareList = share.applyShareList
-        return applyShareList.map { it.user.name }.toList()
+        return applyShareList.map { it.user.nickName }.toList()
     }
 
     fun getAllMyApplyShareList(): List<ShareResponse>? {
