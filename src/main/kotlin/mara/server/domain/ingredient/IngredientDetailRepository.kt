@@ -13,7 +13,6 @@ import java.util.Optional
 @Repository
 interface IngredientDetailRepository : JpaRepository<IngredientDetail, Long> {
 
-    fun findIngredientDetailByIngredientDetailId(ingredientDetailId: Long): Optional<IngredientDetail>
     fun findIngredientDetailsByRefrigeratorAndIsDeletedIsFalse(refrigerator: Refrigerator): Optional<List<IngredientDetail>>
 
     @Query("SELECT count(i) from IngredientDetail i where i.refrigerator in (?1) and i.expirationDate between now() and ?2")

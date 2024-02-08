@@ -20,7 +20,7 @@ class ShareService(
     fun createShare(shareRequest: ShareRequest): Long {
         val ingredientDetailId = shareRequest.ingredientDetailId
         val ingredientDetail =
-            ingredientDetailRepository.findIngredientDetailByIngredientDetailId(ingredientDetailId)
+            ingredientDetailRepository.findById(ingredientDetailId)
                 .orElseThrow { NoSuchElementException("해당 식재료가 존재하지 않습니다. ID: $ingredientDetailId") }
         val user = userService.getCurrentLoginUser()
         // 생성 보단 조회가 빈번 할것 같아, 매번 조회 할 때마다, 일자와 시간을 분리하기 보단, 저장 할 때 각각 & 일자+시간 저장 하는 방식으로 진행
@@ -97,7 +97,7 @@ class ShareService(
         val share = getShare(shareId)
         if (ingredientDetailId != share.ingredientDetail.ingredientDetailId) {
             val ingredientDetail =
-                ingredientDetailRepository.findIngredientDetailByIngredientDetailId(
+                ingredientDetailRepository.findById(
                     ingredientDetailId
                 )
                     .orElseThrow { NoSuchElementException("해당 식재료가 존재하지 않습니다. ID: $ingredientDetailId") }

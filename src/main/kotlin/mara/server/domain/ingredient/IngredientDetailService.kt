@@ -42,7 +42,7 @@ class IngredientDetailService(
     }
 
     fun getIngredientDetail(id: Long): IngredientDetailResponse {
-        val ingredientDetail = ingredientDetailRepository.findIngredientDetailByIngredientDetailId(id)
+        val ingredientDetail = ingredientDetailRepository.findById(id)
             .orElseThrow { NoSuchElementException("해당 식재료 상세가 존재하지 않습니다. ID: $id") }
         return IngredientDetailResponse(ingredientDetail)
     }
