@@ -4,6 +4,8 @@ import mara.server.auth.google.GoogleApiClient
 import mara.server.auth.jwt.JwtProvider
 import mara.server.auth.kakao.KakaoApiClient
 import mara.server.auth.security.getCurrentLoginUserId
+import mara.server.config.redis.RefreshToken
+import mara.server.config.redis.RefreshTokenRepository
 import mara.server.util.StringUtil
 import mara.server.util.logger
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -11,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.lang.NullPointerException
 import java.util.UUID
 
 @Service
@@ -18,6 +21,7 @@ class UserService(
     private val userRepository: UserRepository,
     private val jwtProvider: JwtProvider,
     private val passwordEncoder: BCryptPasswordEncoder,
+    private val refreshTokenRepository: RefreshTokenRepository,
     private val kakaoApiClient: KakaoApiClient,
     private val googleApiClient: GoogleApiClient,
 ) {
@@ -75,8 +79,9 @@ class UserService(
             SecurityContextHolder.getContext().authentication =
                 UsernamePasswordAuthenticationToken(authId, password)
 
-            val refreshToken = UUID.randomUUID().toString()
-            return JwtDto(jwtProvider.generateToken(user), refreshToken)
+            val refreshToken = RefreshToken(UUID.randomUUID().toString(), user.userId)
+            refreshTokenRepository.save(refreshToken)
+            return JwtDto(jwtProvider.generateToken(user), refreshToken.refreshToken)
         }
 
         return KakaoAuthInfo(
@@ -99,12 +104,20 @@ class UserService(
             SecurityContextHolder.getContext().authentication =
                 UsernamePasswordAuthenticationToken(authId, authId)
 
-            val refreshToken = UUID.randomUUID().toString()
-            return JwtDto(jwtProvider.generateToken(user), refreshToken)
+            val refreshToken = RefreshToken(UUID.randomUUID().toString(), user.userId)
+            refreshTokenRepository.save(refreshToken)
+            return JwtDto(jwtProvider.generateToken(user), refreshToken.refreshToken)
         }
 
         return GoogleAuthInfo(
             googleEmail = authId,
         )
+    }
+
+    fun generateAccessToken(request: JwtDto): JwtDto {
+        val refreshToken = refreshTokenRepository.findByRefreshToken(request.refreshToken)
+            ?: throw NullPointerException("refreshToken 없음")
+        val member = userRepository.findById(refreshToken.userId).orElseThrow()
+        return JwtDto(jwtProvider.generateToken(member), refreshToken.refreshToken)
     }
 }

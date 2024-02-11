@@ -63,6 +63,9 @@ dependencies {
     // db
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
 
+    // redis
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+
     // s3
     implementation("org.springframework.cloud:spring-cloud-starter-aws:2.0.1.RELEASE")
     implementation("javax.xml.bind:jaxb-api:2.3.1")
