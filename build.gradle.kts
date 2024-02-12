@@ -64,7 +64,8 @@ dependencies {
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
 
     // redis
-    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    implementation("org.springframework.data:spring-data-redis:3.1.2")
+    implementation("io.lettuce:lettuce-core:6.2.5.RELEASE")
 
     // s3
     implementation("org.springframework.cloud:spring-cloud-starter-aws:2.0.1.RELEASE")

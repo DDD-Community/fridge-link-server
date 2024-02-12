@@ -37,8 +37,8 @@ class UserController(
     }
 
     @PostMapping("/accessToken")
-    fun login(@RequestBody request: JwtDto): CommonResponse<JwtDto> {
-        return success(userService.generateAccessToken(request))
+    fun refreshAccessToken(@RequestBody refreshToken: RefreshAccessTokenRequest): CommonResponse<JwtDto> {
+        return success(userService.refreshAccessToken(refreshToken))
     }
 
     @GetMapping("/me")

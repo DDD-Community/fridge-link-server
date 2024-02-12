@@ -43,9 +43,8 @@ class UserService(
 
         SecurityContextHolder.getContext().authentication =
             UsernamePasswordAuthenticationToken(authId, newUser.password)
-        val refreshToken = UUID.randomUUID().toString()
 
-        // JWT 발급
+        val refreshToken = createRefreshToken(newUser)
         return JwtDto(jwtProvider.generateToken(newUser), refreshToken)
     }
     private fun createUser(userRequest: UserRequest): User {
@@ -79,9 +78,8 @@ class UserService(
             SecurityContextHolder.getContext().authentication =
                 UsernamePasswordAuthenticationToken(authId, password)
 
-            val refreshToken = RefreshToken(UUID.randomUUID().toString(), user.userId)
-            refreshTokenRepository.save(refreshToken)
-            return JwtDto(jwtProvider.generateToken(user), refreshToken.refreshToken)
+            val refreshToken = createRefreshToken(user)
+            return JwtDto(jwtProvider.generateToken(user), refreshToken)
         }
 
         return KakaoAuthInfo(
@@ -104,9 +102,9 @@ class UserService(
             SecurityContextHolder.getContext().authentication =
                 UsernamePasswordAuthenticationToken(authId, authId)
 
-            val refreshToken = RefreshToken(UUID.randomUUID().toString(), user.userId)
-            refreshTokenRepository.save(refreshToken)
-            return JwtDto(jwtProvider.generateToken(user), refreshToken.refreshToken)
+            val refreshToken = createRefreshToken(user)
+
+            return JwtDto(jwtProvider.generateToken(user), refreshToken)
         }
 
         return GoogleAuthInfo(
@@ -114,10 +112,24 @@ class UserService(
         )
     }
 
-    fun generateAccessToken(request: JwtDto): JwtDto {
-        val refreshToken = refreshTokenRepository.findByRefreshToken(request.refreshToken)
+    fun refreshAccessToken(refreshToken: RefreshAccessTokenRequest): JwtDto {
+        val token = validRefreshToken(refreshToken.refreshToken)
+        val user = userRepository.findById(token.userId).orElseThrow()
+        return JwtDto(jwtProvider.generateToken(user), token.refreshToken)
+    }
+
+    fun createRefreshToken(user: User): String {
+        val refreshToken = refreshTokenRepository.save(RefreshToken(UUID.randomUUID().toString(), user.userId, 20000))
+        return refreshToken.refreshToken
+    }
+
+    fun validRefreshToken(refreshToken: String): RefreshToken {
+        val token = refreshTokenRepository.findByRefreshToken(refreshToken)
             ?: throw NullPointerException("refreshToken 없음")
-        val member = userRepository.findById(refreshToken.userId).orElseThrow()
-        return JwtDto(jwtProvider.generateToken(member), refreshToken.refreshToken)
+        if (token.expiration <1) {
+            token.updateExpiration(20000)
+            refreshTokenRepository.save(token)
+        }
+        return token
     }
 }

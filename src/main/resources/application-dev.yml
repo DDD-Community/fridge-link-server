@@ -4,10 +4,6 @@ spring:
     username: ${username}
     password: ${password}
     driver-class-name: org.mariadb.jdbc.Driver
-  data:
-    redis:
-      host:
-      port:
 oauth:
   kakao:
     client-id: ${kakao-client-id}
