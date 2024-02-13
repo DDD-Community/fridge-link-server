@@ -4,10 +4,6 @@ data class RefrigeratorRequest(
     var name: String
 )
 
-data class RefrigeratorUpdateRequest(
-    var name: String
-)
-
 data class RefrigeratorResponse(
     var id: Long,
     var name: String,

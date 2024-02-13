@@ -25,7 +25,7 @@ class Refrigerator(
     @Column(name = "refrigerator_id", nullable = false)
     val refrigeratorId: Long = 0L
 
-    fun update(refrigeratorUpdateRequest: RefrigeratorUpdateRequest) {
-        this.name = refrigeratorUpdateRequest.name
+    fun update(refrigeratorRequest: RefrigeratorRequest) {
+        this.name = refrigeratorRequest.name
     }
 }

@@ -1,5 +1,6 @@
 package mara.server.domain.ingredient
 
+import org.springframework.data.domain.Page
 import java.time.LocalDateTime
 
 data class IngredientDetailRequest(
@@ -7,7 +8,7 @@ data class IngredientDetailRequest(
     var ingredientId: Long,
     val name: String,
     val quantity: Int,
-    val location: String,
+    val location: IngredientLocation,
     val memo: String?,
     val addDate: LocalDateTime,
     val expirationDate: LocalDateTime,
@@ -17,7 +18,7 @@ data class IngredientDetailRequest(
 data class IngredientDetailUpdateRequest(
     val name: String,
     val quantity: Int,
-    val location: String,
+    val location: IngredientLocation,
     val memo: String?,
     val addDate: LocalDateTime,
     val expirationDate: LocalDateTime,
@@ -28,7 +29,7 @@ data class IngredientDetailResponse(
     val ingredientDetailId: Long,
     val name: String,
     val quantity: Int,
-    val location: String,
+    val location: IngredientLocation,
     val memo: String?,
     val addDate: LocalDateTime,
     val expirationDate: LocalDateTime,
@@ -47,6 +48,10 @@ data class IngredientDetailResponse(
     )
 }
 
-fun List<IngredientDetail>.toIngredientResponseList(): List<IngredientDetailResponse> {
+fun List<IngredientDetail>.toIngredientDetailResponseList(): List<IngredientDetailResponse> {
+    return this.map { IngredientDetailResponse(it) }
+}
+
+fun Page<IngredientDetail>.toIngredientDetailResponseListPage(): Page<IngredientDetailResponse> {
     return this.map { IngredientDetailResponse(it) }
 }
