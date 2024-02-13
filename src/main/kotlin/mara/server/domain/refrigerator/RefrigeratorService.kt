@@ -11,9 +11,7 @@ class RefrigeratorService(
     private val userService: UserService
 ) {
     fun createRefrigerator(refrigeratorRequest: RefrigeratorRequest): Long {
-        val userId = refrigeratorRequest.userId
-        val user =
-            userRepository.findById(userId).orElseThrow { NoSuchElementException("해당 유저가 존재하지 않습니다. ID: $userId") }
+        val user = userService.getCurrentLoginUser()
         val refrigerator = Refrigerator(
             name = refrigeratorRequest.name,
             user = user
