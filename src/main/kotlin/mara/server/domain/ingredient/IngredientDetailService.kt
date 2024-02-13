@@ -2,6 +2,8 @@ package mara.server.domain.ingredient
 
 import mara.server.domain.refrigerator.RefrigeratorRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 
 @Service
 class IngredientDetailService(
@@ -10,6 +12,7 @@ class IngredientDetailService(
     private val ingredientRepository: IngredientRepository
 ) {
 
+    @Transactional
     fun createIngredientDetail(ingredientDetailRequest: IngredientDetailRequest): Long {
         val refrigeratorId = ingredientDetailRequest.refrigeratorId
         val refrigerator = refrigeratorRepository.findById(refrigeratorId)
@@ -30,12 +33,18 @@ class IngredientDetailService(
             expirationDate = ingredientDetailRequest.expirationDate,
             isDeleted = ingredientDetailRequest.isDeleted
         )
+
+        // 식재료 추가 일자 update
+        refrigerator.ingredientAddDate = LocalDateTime.now()
+        refrigeratorRepository.save(refrigerator)
+
         return ingredientDetailRepository.save(ingredientDetail).ingredientDetailId
     }
 
     fun getIngredientDetail(id: Long): IngredientDetailResponse {
-        val ingredientDetail = ingredientDetailRepository.findIngredientDetailByIngredientDetailIdAndIsDeletedIsFalse(id)
-            .orElseThrow { NoSuchElementException("해당 식재료 상세가 존재하지 않습니다. ID: $id") }
+        val ingredientDetail =
+            ingredientDetailRepository.findIngredientDetailByIngredientDetailIdAndIsDeletedIsFalse(id)
+                .orElseThrow { NoSuchElementException("해당 식재료 상세가 존재하지 않습니다. ID: $id") }
         return IngredientDetailResponse(ingredientDetail)
     }
 

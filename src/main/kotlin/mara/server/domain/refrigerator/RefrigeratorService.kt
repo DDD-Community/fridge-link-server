@@ -14,7 +14,8 @@ class RefrigeratorService(
         val user = userService.getCurrentLoginUser()
         val refrigerator = Refrigerator(
             name = refrigeratorRequest.name,
-            user = user
+            user = user,
+            ingredientAddDate = null
         )
         return refrigeratorRepository.save(refrigerator).refrigeratorId
     }

@@ -36,14 +36,14 @@ class FriendshipService(
         val friendshipList = friendshipRepository.findAllByFromUser(currentLoginUser)
             .orElseThrow { NoSuchElementException("친구 관계가 존재하지 않습니다.") }
 
-        val userNameList: List<UserFriendResponse> = friendshipList.map { friendship ->
+        val userFriendResponseList: List<UserFriendResponse> = friendshipList.map { friendship ->
             val userId = friendship.toUser.userId
             val user =
                 userRepository.findById(userId).orElseThrow { NoSuchElementException("해당 유저가 존재하지 않습니다. ID: $userId") }
             UserFriendResponse(user)
         }
 
-        return userNameList
+        return userFriendResponseList
     }
 
     fun getFriendshipCount(): Long {

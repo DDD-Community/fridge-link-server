@@ -9,10 +9,12 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import mara.server.domain.user.User
+import java.time.LocalDateTime
 
 @Entity
 class Refrigerator(
     var name: String,
+    var ingredientAddDate: LocalDateTime?,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     val user: User,
