@@ -21,15 +21,12 @@ class FriendRefrigeratorService(
         val userList = friendshipList.map { it.toUser }
         val refrigeratorList = refrigeratorRepository.findRefrigeratorByUserInOrderByIngredientAddDateDesc(userList)
 
-        val friendRefrigeratorResponseList = userList.flatMap { user ->
-            refrigeratorList.map { refrig ->
-                val ingredientDetailList = ingredientDetailRepository
+        val friendRefrigeratorResponseList = refrigeratorList.map { refrig ->
+            val ingredientDetailList = ingredientDetailRepository
                     .findIngredientDetailsByRefrigeratorAndIsDeletedIsFalse(refrig)
                     .orElseThrow { NoSuchElementException("해당 식재료 상세가 존재하지 않습니다.") }
-
-                val ingredientList = ingredientDetailList.map { it.ingredient }
-                FriendRefrigeratorResponse(user, refrig, ingredientList)
-            }
+            val ingredientList = ingredientDetailList.map { it.ingredient }
+            FriendRefrigeratorResponse(refrig.user, refrig, ingredientList)
         }
 
         return friendRefrigeratorResponseList
