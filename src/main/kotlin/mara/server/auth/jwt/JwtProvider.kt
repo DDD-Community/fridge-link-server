@@ -1,15 +1,22 @@
 package mara.server.auth.jwt
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import mara.server.auth.security.PrincipalDetailsService
+import mara.server.config.redis.RefreshToken
+import mara.server.config.redis.RefreshTokenRepository
 import mara.server.domain.user.User
+import mara.server.domain.user.UserRepository
 import mara.server.util.logger
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 import java.security.Key
+import java.util.Base64
 import java.util.Date
 
 @Component
@@ -17,9 +24,16 @@ class JwtProvider(
     @Value("\${jwt.secret-key}") private val secretKey: String,
     @Value("\${jwt.access-duration-mils}") private val accessDurationMils: Long,
     private val principalDetailsService: PrincipalDetailsService,
+    private val userRepository: UserRepository,
+    @Value("\${jwt.refresh-duration-mins}") private val refreshDurationMins: Int,
+    private val refreshTokenRepository: RefreshTokenRepository
 ) {
     val key: Key = Keys.hmacShaKeyFor(secretKey.toByteArray())
     val log = logger()
+    private val objectMapper = ObjectMapper()
+    private val ok: String = "ok"
+    private val reissue: String = "reissue"
+    private val fail: String = "fail"
 
     fun generateToken(user: User): String {
         val now = Date(System.currentTimeMillis())
@@ -39,16 +53,34 @@ class JwtProvider(
             .compact()
     }
 
-    fun validate(token: String): Boolean {
-        return try {
+    @Transactional
+    fun recreateAccessToken(oldAccessToken: String): String {
+        val subject = decodeJwtPayloadSubject(oldAccessToken)
+        val user = userRepository.findById(subject.toLong()).get()
+        return generateToken(user)
+    }
+
+    fun validRefreshToken(refreshToken: String): RefreshToken {
+        val token = refreshTokenRepository.findByRefreshToken(refreshToken)
+            ?: throw NullPointerException("만료된 RefreshToken 입니다.")
+        if (token.expiration <1) {
+            token.updateExpiration(refreshDurationMins)
+            refreshTokenRepository.save(token)
+        }
+        return token
+    }
+    fun validate(token: String): String {
+        try {
             Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
-            true
+            return ok
+        } catch (ex: ExpiredJwtException) {
+            return reissue
         } catch (e: Exception) {
             log.warn("JWT 오류 발생 [{}] {}", e.javaClass.simpleName, e.message)
-            false
+            return fail
         }
     }
 
@@ -66,4 +98,10 @@ class JwtProvider(
             userDetails.authorities,
         )
     }
+
+    private fun decodeJwtPayloadSubject(oldAccessToken: String) =
+        objectMapper.readValue(
+            Base64.getUrlDecoder().decode(oldAccessToken.split('.')[1]).decodeToString(),
+            Map::class.java
+        )["sub"].toString()
 }

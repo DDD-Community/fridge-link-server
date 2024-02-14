@@ -8,12 +8,12 @@ import mara.server.config.redis.RefreshToken
 import mara.server.config.redis.RefreshTokenRepository
 import mara.server.util.StringUtil
 import mara.server.util.logger
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.lang.NullPointerException
 import java.util.UUID
 
 @Service
@@ -24,6 +24,8 @@ class UserService(
     private val refreshTokenRepository: RefreshTokenRepository,
     private val kakaoApiClient: KakaoApiClient,
     private val googleApiClient: GoogleApiClient,
+    @Value("\${jwt.refresh-duration-mins}") private val refreshDurationMins: Int,
+
 ) {
 
     val log = logger()
@@ -112,24 +114,8 @@ class UserService(
         )
     }
 
-    fun refreshAccessToken(refreshToken: RefreshAccessTokenRequest): JwtDto {
-        val token = validRefreshToken(refreshToken.refreshToken)
-        val user = userRepository.findById(token.userId).orElseThrow()
-        return JwtDto(jwtProvider.generateToken(user), token.refreshToken)
-    }
-
     fun createRefreshToken(user: User): String {
-        val refreshToken = refreshTokenRepository.save(RefreshToken(UUID.randomUUID().toString(), user.userId, 20000))
+        val refreshToken = refreshTokenRepository.save(RefreshToken(UUID.randomUUID().toString(), user.userId, refreshDurationMins))
         return refreshToken.refreshToken
-    }
-
-    fun validRefreshToken(refreshToken: String): RefreshToken {
-        val token = refreshTokenRepository.findByRefreshToken(refreshToken)
-            ?: throw NullPointerException("refreshToken 없음")
-        if (token.expiration <1) {
-            token.updateExpiration(20000)
-            refreshTokenRepository.save(token)
-        }
-        return token
     }
 }
