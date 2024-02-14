@@ -4,7 +4,6 @@ spring:
     username: ${username}
     password: ${password}
     driver-class-name: org.mariadb.jdbc.Driver
-
 oauth:
   kakao:
     client-id: ${kakao-client-id}
@@ -36,7 +35,6 @@ cloud:
 jwt:
   secret-key: ${jwt-secret-key}
   access-duration-mils: 2147483647
-  refresh-duration-mins: 200000
 
 logging:
   level:

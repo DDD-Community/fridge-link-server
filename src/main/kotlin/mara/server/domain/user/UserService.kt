@@ -8,7 +8,6 @@ import mara.server.config.redis.RefreshToken
 import mara.server.config.redis.RefreshTokenRepository
 import mara.server.util.StringUtil
 import mara.server.util.logger
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -19,13 +18,12 @@ import java.util.UUID
 
 @Service
 class UserService(
-        private val userRepository: UserRepository,
-        private val jwtProvider: JwtProvider,
-        private val passwordEncoder: BCryptPasswordEncoder,
-        private val refreshTokenRepository: RefreshTokenRepository,
-        private val kakaoApiClient: KakaoApiClient,
-        private val googleApiClient: GoogleApiClient,
-        @Value("\${jwt.refresh-duration-mins}") private val refreshDurationMins: Int,
+    private val userRepository: UserRepository,
+    private val jwtProvider: JwtProvider,
+    private val passwordEncoder: BCryptPasswordEncoder,
+    private val refreshTokenRepository: RefreshTokenRepository,
+    private val kakaoApiClient: KakaoApiClient,
+    private val googleApiClient: GoogleApiClient,
 ) {
 
     val log = logger()
@@ -44,21 +42,20 @@ class UserService(
         if (newUser.googleEmail != null) authId = newUser.googleEmail!!
 
         SecurityContextHolder.getContext().authentication =
-                UsernamePasswordAuthenticationToken(authId, newUser.password)
+            UsernamePasswordAuthenticationToken(authId, newUser.password)
 
         val refreshToken = createRefreshToken(newUser)
         return JwtDto(jwtProvider.generateToken(newUser), refreshToken)
     }
-
     private fun createUser(userRequest: UserRequest): User {
         val user = User(
-                nickName = userRequest.nickName,
-                kakaoId = userRequest.kakaoId,
-                password = passwordEncoder.encode(userRequest.nickName),
-                googleEmail = userRequest.googleEmail,
-                kakaoEmail = userRequest.kakaoEmail,
-                profileImage = ProfileImage.valueOf(userRequest.profileImage),
-                inviteCode = StringUtil.generateRandomString(8, 11)
+            nickName = userRequest.nickName,
+            kakaoId = userRequest.kakaoId,
+            password = passwordEncoder.encode(userRequest.nickName),
+            googleEmail = userRequest.googleEmail,
+            kakaoEmail = userRequest.kakaoEmail,
+            profileImage = ProfileImage.valueOf(userRequest.profileImage),
+            inviteCode = StringUtil.generateRandomString(8, 11)
         )
         return userRepository.save(user)
     }
@@ -79,15 +76,15 @@ class UserService(
 
         if (user != null) {
             SecurityContextHolder.getContext().authentication =
-                    UsernamePasswordAuthenticationToken(authId, password)
+                UsernamePasswordAuthenticationToken(authId, password)
 
             val refreshToken = createRefreshToken(user)
             return JwtDto(jwtProvider.generateToken(user), refreshToken)
         }
 
         return KakaoAuthInfo(
-                kakaoId = authId,
-                kakaoEmail = oauthInfoResponse.email
+            kakaoId = authId,
+            kakaoEmail = oauthInfoResponse.email
         )
     }
 
@@ -103,7 +100,7 @@ class UserService(
 
         if (user != null) {
             SecurityContextHolder.getContext().authentication =
-                    UsernamePasswordAuthenticationToken(authId, authId)
+                UsernamePasswordAuthenticationToken(authId, authId)
 
             val refreshToken = createRefreshToken(user)
 
@@ -111,7 +108,7 @@ class UserService(
         }
 
         return GoogleAuthInfo(
-                googleEmail = authId,
+            googleEmail = authId,
         )
     }
 
@@ -122,15 +119,15 @@ class UserService(
     }
 
     fun createRefreshToken(user: User): String {
-        val refreshToken = refreshTokenRepository.save(RefreshToken(UUID.randomUUID().toString(), user.userId, refreshDurationMins))
+        val refreshToken = refreshTokenRepository.save(RefreshToken(UUID.randomUUID().toString(), user.userId, 20000))
         return refreshToken.refreshToken
     }
 
     fun validRefreshToken(refreshToken: String): RefreshToken {
         val token = refreshTokenRepository.findByRefreshToken(refreshToken)
-                ?: throw NullPointerException("refreshToken 없음")
-        if (token.expiration < 1) {
-            token.updateExpiration(refreshDurationMins)
+            ?: throw NullPointerException("refreshToken 없음")
+        if (token.expiration <1) {
+            token.updateExpiration(20000)
             refreshTokenRepository.save(token)
         }
         return token
