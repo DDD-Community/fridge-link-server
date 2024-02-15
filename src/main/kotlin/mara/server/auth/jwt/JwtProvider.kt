@@ -64,6 +64,7 @@ class JwtProvider(
             ?: throw NullPointerException("만료된 RefreshToken 입니다.")
         return token
     }
+
     fun validate(token: String): String {
         try {
             Jwts.parserBuilder()
