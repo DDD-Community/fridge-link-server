@@ -15,9 +15,5 @@ data class RefreshToken(
     val userId: Long,
 
     @TimeToLive(unit = TimeUnit.MINUTES)
-    var expiration: Int,
-) {
-    fun updateExpiration(expiration: Int) {
-        this.expiration = expiration
-    }
-}
+    val expiration: Int,
+)

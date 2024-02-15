@@ -25,7 +25,6 @@ class JwtProvider(
     @Value("\${jwt.access-duration-mils}") private val accessDurationMils: Long,
     private val principalDetailsService: PrincipalDetailsService,
     private val userRepository: UserRepository,
-    @Value("\${jwt.refresh-duration-mins}") private val refreshDurationMins: Int,
     private val refreshTokenRepository: RefreshTokenRepository
 ) {
     val key: Key = Keys.hmacShaKeyFor(secretKey.toByteArray())
@@ -63,10 +62,6 @@ class JwtProvider(
     fun validRefreshToken(refreshToken: String): RefreshToken {
         val token = refreshTokenRepository.findByRefreshToken(refreshToken)
             ?: throw NullPointerException("만료된 RefreshToken 입니다.")
-        if (token.expiration <1) {
-            token.updateExpiration(refreshDurationMins)
-            refreshTokenRepository.save(token)
-        }
         return token
     }
     fun validate(token: String): String {
