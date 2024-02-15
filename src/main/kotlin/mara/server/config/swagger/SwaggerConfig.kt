@@ -1,35 +1,39 @@
 package mara.server.config.swagger
 
-import io.swagger.v3.oas.models.Components
+import io.swagger.v3.oas.annotations.OpenAPIDefinition
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType
+import io.swagger.v3.oas.annotations.security.SecurityScheme
+import io.swagger.v3.oas.annotations.security.SecuritySchemes
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.info.Info
 import io.swagger.v3.oas.models.security.SecurityRequirement
-import io.swagger.v3.oas.models.security.SecurityScheme
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
+@OpenAPIDefinition
+@SecuritySchemes(
+    SecurityScheme(
+        name = "jwtAuth",
+        type = SecuritySchemeType.HTTP,
+        scheme = "bearer",
+        bearerFormat = "JWT",
+        description = "JWT (JSON Web Token) 인증을 위한 헤더"
+    ),
+    SecurityScheme(
+        name = "Refresh-Token",
+        type = SecuritySchemeType.APIKEY,
+        `in` = SecuritySchemeIn.HEADER,
+        description = "Refresh Token을 포함한 헤더"
+    )
+)
 class SwaggerConfig {
     @Bean
     fun openAPI(): OpenAPI {
-        val jwtSchemeName = "jwtAuth"
-        // API 요청 헤더에 인증 정보 포함
-        val securityRequirement = SecurityRequirement().addList(jwtSchemeName)
-        // SecuritySchemes 등록
-        val components = Components()
-            .addSecuritySchemes(
-                jwtSchemeName,
-                SecurityScheme()
-                    .name(jwtSchemeName)
-                    .type(SecurityScheme.Type.HTTP) // HTTP 방식
-                    .scheme("bearer")
-                    .bearerFormat("JWT")
-            )
-
         return OpenAPI()
-            .components(Components())
-            .addSecurityItem(securityRequirement)
-            .components(components)
+            .addSecurityItem(SecurityRequirement().addList("jwtAuth"))
+            .addSecurityItem(SecurityRequirement().addList("Refresh-Token"))
             .info(apiInfo())
     }
 

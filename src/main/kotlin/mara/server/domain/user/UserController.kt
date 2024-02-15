@@ -36,11 +36,6 @@ class UserController(
         return success(userService.googleLogin(authorizedCode))
     }
 
-    @PostMapping("/accessToken")
-    fun refreshAccessToken(@RequestBody refreshToken: RefreshAccessTokenRequest): CommonResponse<JwtDto> {
-        return success(userService.refreshAccessToken(refreshToken))
-    }
-
     @GetMapping("/me")
     fun getCurrentLoginUser(): CommonResponse<UserResponse> {
         return success(userService.getCurrentUserInfo())

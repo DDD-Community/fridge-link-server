@@ -40,7 +40,7 @@ class JwtFilter(private val jwtProvider: JwtProvider) : OncePerRequestFilter() {
 
     private fun reissueAccessToken(request: HttpServletRequest, response: HttpServletResponse) {
         try {
-            val refreshToken = jwtProvider.validRefreshToken(parseRefresh(request, "Refresh-Token")).refreshToken
+            val refreshToken = jwtProvider.validRefreshToken(request.getHeader("Refresh-Token")).refreshToken
             val oldAccessToken = request.getToken()
             var newAccessToken = ""
             if (oldAccessToken != null) {
@@ -56,6 +56,4 @@ class JwtFilter(private val jwtProvider: JwtProvider) : OncePerRequestFilter() {
             request.setAttribute("exception", e)
         }
     }
-
-    private fun parseRefresh(request: HttpServletRequest, headerName: String) = request.getHeader(headerName).replace("Bearer ", "")
 }
