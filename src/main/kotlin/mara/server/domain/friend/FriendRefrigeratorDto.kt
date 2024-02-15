@@ -2,7 +2,6 @@ package mara.server.domain.friend
 
 import mara.server.domain.ingredient.Ingredient
 import mara.server.domain.ingredient.IngredientDetail
-import mara.server.domain.ingredient.IngredientDetailResponse
 import mara.server.domain.refrigerator.Refrigerator
 import mara.server.domain.user.User
 import org.springframework.data.domain.Page
