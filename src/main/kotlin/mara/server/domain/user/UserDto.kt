@@ -10,6 +10,7 @@ data class UserRequest(
 
 data class CheckDuplicateResponse(val isDuplicated: Boolean)
 
+data class RefreshAccessTokenRequest(val refreshToken: String)
 class UserResponse(
     val nickName: String?,
     val kakaoId: Long?,

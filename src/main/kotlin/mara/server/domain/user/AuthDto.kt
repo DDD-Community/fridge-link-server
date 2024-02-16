@@ -3,8 +3,8 @@ package mara.server.domain.user
 sealed class AuthDto
 
 data class JwtDto(
-    val accessToken: String?,
-    val refreshToken: String?,
+    val accessToken: String,
+    val refreshToken: String,
 ) : AuthDto()
 
 data class KakaoAuthInfo(
