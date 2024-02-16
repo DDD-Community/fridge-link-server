@@ -73,6 +73,7 @@ class JwtProvider(
                 .parseClaimsJws(token)
             return ok
         } catch (ex: ExpiredJwtException) {
+            log.warn("JWT 토큰 만료 [{}] {}", ex.javaClass.simpleName, ex.message)
             return reissue
         } catch (e: Exception) {
             log.warn("JWT 오류 발생 [{}] {}", e.javaClass.simpleName, e.message)
