@@ -14,6 +14,10 @@ interface FriendshipRepository : JpaRepository<Friendship, Long> {
         user: User
     ): Optional<List<Friendship>>
 
+    fun countByFromUser(
+        user: User
+    ): Long
+
     @Query("select f from Friendship f where (f.fromUser = ?1 and f.toUser = ?2) or (f.fromUser = ?2 and f.toUser = ?1)")
     fun findAllByFromUserAndToUser(
         fromUser: User,

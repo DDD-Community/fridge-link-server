@@ -33,8 +33,14 @@ class IngredientDetailController(
     }
 
     @GetMapping("/refrig/{id}")
-    fun getIngredientDetailList(@PathVariable(name = "id") refrigeratorId: Long): CommonResponse<List<IngredientDetailResponse>> {
-        return success(ingredientDetailService.getIngredientDetailList(refrigeratorId))
+    fun getIngredientDetailList(
+        @PageableDefault(
+            size = 5
+        )
+        pageable: Pageable,
+        @PathVariable(name = "id") refrigeratorId: Long
+    ): CommonResponse<Page<IngredientDetailResponse>> {
+        return success(ingredientDetailService.getIngredientDetailList(refrigeratorId, pageable))
     }
 
     @GetMapping("/count")

@@ -38,6 +38,11 @@ class IngredientDetailService(
             expirationDate = ingredientDetailRequest.expirationDate,
             isDeleted = ingredientDetailRequest.isDeleted
         )
+
+        // 식재료 추가 일자 update
+        refrigerator.ingredientAddDate = LocalDateTime.now()
+        refrigeratorRepository.save(refrigerator)
+
         return ingredientDetailRepository.save(ingredientDetail).ingredientDetailId
     }
 
@@ -47,13 +52,12 @@ class IngredientDetailService(
         return IngredientDetailResponse(ingredientDetail)
     }
 
-    fun getIngredientDetailList(refrigeratorId: Long): List<IngredientDetailResponse> {
+    fun getIngredientDetailList(refrigeratorId: Long, pageable: Pageable): Page<IngredientDetailResponse> {
         val refrigerator = refrigeratorRepository.findById(refrigeratorId)
             .orElseThrow { NoSuchElementException("해당 냉장고가 존재하지 않습니다. ID: $refrigeratorId") }
         val ingredientDetailList =
-            ingredientDetailRepository.findIngredientDetailsByRefrigeratorAndIsDeletedIsFalse(refrigerator)
-                .orElseThrow { NoSuchElementException("해당 식재료 상세가 존재하지 않습니다. ID: $refrigeratorId") }
-        return ingredientDetailList.toIngredientDetailResponseList()
+            ingredientDetailRepository.findByRefrigeratorAndIsDeletedIsFalse(refrigerator, pageable)
+        return ingredientDetailList.toIngredientDetailResponseListPage()
     }
 
     fun getIngredientDetailCount(days: Long): Long {

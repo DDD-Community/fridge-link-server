@@ -14,7 +14,8 @@ class RefrigeratorService(
         val user = userService.getCurrentLoginUser()
         val refrigerator = Refrigerator(
             name = refrigeratorRequest.name,
-            user = user
+            user = user,
+            ingredientAddDate = null
         )
         return refrigeratorRepository.save(refrigerator).refrigeratorId
     }
@@ -26,6 +27,12 @@ class RefrigeratorService(
     }
 
     fun getRefrigeratorList(userId: Long): List<RefrigeratorResponse> {
+        val user = userService.getCurrentLoginUser()
+        val refrigeratorList = refrigeratorRepository.findRefrigeratorsByUser(user)
+        return refrigeratorList.toRefrigeratorResponseList()
+    }
+
+    fun getMyRefrigeratorList(): List<RefrigeratorResponse> {
         val user = userService.getCurrentLoginUser()
         val refrigeratorList = refrigeratorRepository.findRefrigeratorsByUser(user)
         return refrigeratorList.toRefrigeratorResponseList()
