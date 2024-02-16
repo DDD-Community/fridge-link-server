@@ -6,23 +6,23 @@ import mara.server.domain.user.User
 import org.springframework.data.domain.Page
 
 data class FriendRefrigeratorResponse(
-        val nickname: String,
-        val refrigeratorId: Long,
-        val friendRefrigeratorIngredientGroupList: Page<FriendRefrigeratorIngredient>
+    val nickname: String,
+    val refrigeratorId: Long,
+    val friendRefrigeratorIngredientGroupList: Page<FriendRefrigeratorIngredient>
 ) {
     constructor(user: User, refrigerator: Refrigerator, ingredientList: Page<Ingredient>) : this(
-            nickname = user.nickName,
-            refrigeratorId = refrigerator.refrigeratorId,
-            friendRefrigeratorIngredientGroupList = ingredientList.map { FriendRefrigeratorIngredient(it) }
+        nickname = user.nickName,
+        refrigeratorId = refrigerator.refrigeratorId,
+        friendRefrigeratorIngredientGroupList = ingredientList.map { FriendRefrigeratorIngredient(it) }
     )
 }
 
 data class FriendRefrigeratorIngredient(
-        val name: String,
-        val iconImage: String,
+    val name: String,
+    val iconImage: String,
 ) {
     constructor(ingredient: Ingredient) : this(
-            name = ingredient.name,
-            iconImage = ingredient.iconImage
+        name = ingredient.name,
+        iconImage = ingredient.iconImage
     )
 }

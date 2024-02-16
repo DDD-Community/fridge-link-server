@@ -14,21 +14,21 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/friend-refrigs")
 class FriendRefrigeratorController(
-        private val friendRefrigeratorService: FriendRefrigeratorService
+    private val friendRefrigeratorService: FriendRefrigeratorService
 ) {
 
     @GetMapping("/recent")
     fun getRecentFriendRefrigeratorList(
-            @Qualifier("userPageable")
-            @PageableDefault(
-                    size = 5, sort = ["ingredientAddDate"], direction = Sort.Direction.DESC
-            )
-            userPageable: Pageable,
-            @Qualifier("ingredientPageable")
-            @PageableDefault(
-                    size = 4, sort = ["addDate"], direction = Sort.Direction.DESC
-            )
-            ingredientPageable: Pageable,
+        @Qualifier("userPageable")
+        @PageableDefault(
+            size = 5, sort = ["ingredientAddDate"], direction = Sort.Direction.DESC
+        )
+        userPageable: Pageable,
+        @Qualifier("ingredientPageable")
+        @PageableDefault(
+            size = 4, sort = ["addDate"], direction = Sort.Direction.DESC
+        )
+        ingredientPageable: Pageable,
     ): CommonResponse<Page<FriendRefrigeratorResponse>> {
         return success(friendRefrigeratorService.getRecentFriendRefrigeratorList(userPageable, ingredientPageable))
     }
