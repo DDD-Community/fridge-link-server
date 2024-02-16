@@ -4,7 +4,6 @@ import mara.server.auth.jwt.JwtAccessDeniedHandler
 import mara.server.auth.jwt.JwtAuthenticationEntryPoint
 import mara.server.auth.jwt.JwtFilter
 import mara.server.auth.jwt.JwtProvider
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
@@ -25,7 +24,15 @@ class SecurityConfig(
     private val jwtAccessDeniedHandler: JwtAccessDeniedHandler,
 ) {
 
-    private val allowedUrls = arrayOf("/", "/swagger-ui/**", "/v3/**", "/users/**", "favicon.ico", "/error") // sign-up, sign-in 추가
+    private val allowedUrls = arrayOf(
+        "/",
+        "/swagger-ui/**",
+        "/v3/**",
+        "/users/**",
+        "favicon.ico",
+        "/error",
+        "/h2-console/**"
+    ) // sign-up, sign-in 추가
 
     @Bean
     fun passwordEncoder() = BCryptPasswordEncoder()
@@ -37,9 +44,7 @@ class SecurityConfig(
         http
             .csrf { it.disable() }
             .authorizeHttpRequests {
-                it.requestMatchers(*allowedUrls).permitAll()
-                    .requestMatchers(PathRequest.toH2Console()).permitAll()
-                    .anyRequest().authenticated()
+                it.requestMatchers(*allowedUrls).permitAll().anyRequest().authenticated()
             }
             .headers { it.frameOptions { frameOptions -> frameOptions.disable() } }
             .sessionManagement {
