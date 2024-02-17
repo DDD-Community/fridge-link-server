@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
+import mara.server.common.BaseEntity
 import mara.server.domain.user.User
 
 @Entity
@@ -20,7 +21,7 @@ class Friendship(
     @JoinColumn(name = "to_user_id")
     val toUser: User,
 
-) {
+) : BaseEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "friendship_id", nullable = false)

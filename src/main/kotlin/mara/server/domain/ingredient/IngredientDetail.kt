@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
+import mara.server.common.BaseEntity
 import mara.server.domain.refrigerator.Refrigerator
 import java.time.LocalDateTime
 
@@ -30,7 +31,7 @@ class IngredientDetail(
     var addDate: LocalDateTime,
     var expirationDate: LocalDateTime,
     var isDeleted: Boolean = false
-) {
+) : BaseEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val ingredientDetailId: Long = 0L

@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import mara.server.common.BaseEntity
 
 enum class Role { USER }
 @Entity
@@ -20,7 +21,7 @@ class User(
     val inviteCode: String,
     @Enumerated(EnumType.STRING)
     var profileImage: ProfileImage,
-) {
+) : BaseEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val userId: Long = 0L
