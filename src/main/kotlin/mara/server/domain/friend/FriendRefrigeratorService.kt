@@ -21,7 +21,7 @@ class FriendRefrigeratorService(
             .orElseThrow { NoSuchElementException("친구 관계가 존재하지 않습니다.") }
 
         val userList = friendshipList.map { it.toUser }
-        val refrigeratorList = refrigeratorRepository.findRefrigeratorByUserIn(userList, userPageable)
+        val refrigeratorList = refrigeratorRepository.findByUserIn(userList, userPageable)
 
         val friendRefrigeratorResponseList = refrigeratorList.map { refrig ->
             val ingredientDetailList = ingredientDetailRepository

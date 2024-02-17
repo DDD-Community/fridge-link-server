@@ -1,6 +1,7 @@
 package mara.server.domain.ingredient
 
 import mara.server.domain.refrigerator.RefrigeratorRepository
+import mara.server.domain.refrigerator.RefrigeratorService
 import mara.server.domain.user.UserService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -10,10 +11,11 @@ import java.time.LocalDateTime
 
 @Service
 class IngredientDetailService(
-    private val ingredientDetailRepository: IngredientDetailRepository,
+    private val refrigeratorService: RefrigeratorService,
     private val refrigeratorRepository: RefrigeratorRepository,
     private val ingredientRepository: IngredientRepository,
-    private val userService: UserService
+    private val ingredientDetailRepository: IngredientDetailRepository
+
 ) {
     private val deleted = "deleted"
 
@@ -61,8 +63,7 @@ class IngredientDetailService(
     }
 
     fun getIngredientDetailCount(days: Long): Long {
-        val user = userService.getCurrentLoginUser()
-        val refrigeratorList = refrigeratorRepository.findRefrigeratorsByUser(user)
+        val refrigeratorList = refrigeratorService.getCurrentLoginUserRefrigeratorList()
         val expirationDate = LocalDateTime.now().plusDays(days)
 
         return ingredientDetailRepository.findIngredientDetailCountByRefrigeratorAndExpirationDate(
@@ -72,8 +73,7 @@ class IngredientDetailService(
     }
 
     fun getIngredientDetailRecent(pageable: Pageable): Page<IngredientDetailResponse> {
-        val user = userService.getCurrentLoginUser()
-        val refrigeratorList = refrigeratorRepository.findRefrigeratorsByUser(user)
+        val refrigeratorList = refrigeratorService.getCurrentLoginUserRefrigeratorList()
         val ingredientDetailRecentList =
             ingredientDetailRepository.findByRefrigerators(refrigeratorList, pageable)
 

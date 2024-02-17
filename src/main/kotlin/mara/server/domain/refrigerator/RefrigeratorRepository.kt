@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface RefrigeratorRepository : JpaRepository<Refrigerator, Long> {
-    fun findRefrigeratorsByUser(user: User): List<Refrigerator>
+    fun findByUser(user: User): List<Refrigerator>
 
-    fun findRefrigeratorByUserIn(user: List<User>, pageable: Pageable): Page<Refrigerator>
+    fun findByUserIn(user: List<User>, pageable: Pageable): Page<Refrigerator>
 }

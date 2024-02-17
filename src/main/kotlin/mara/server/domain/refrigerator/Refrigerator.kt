@@ -13,6 +13,7 @@ import java.time.LocalDateTime
 
 @Entity
 class Refrigerator(
+    @Column(length = 30)
     var name: String,
     var ingredientAddDate: LocalDateTime?,
     @ManyToOne(fetch = FetchType.LAZY)
