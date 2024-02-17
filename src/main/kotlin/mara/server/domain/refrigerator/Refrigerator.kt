@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
+import mara.server.common.BaseEntity
 import mara.server.domain.user.User
 import java.time.LocalDateTime
 
@@ -19,7 +20,7 @@ class Refrigerator(
     @JoinColumn(name = "userId")
     val user: User,
 
-) {
+) : BaseEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "refrigerator_id", nullable = false)

@@ -10,6 +10,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
+import mara.server.common.BaseEntity
 import mara.server.domain.ingredient.IngredientDetail
 import mara.server.domain.user.User
 import java.time.LocalDate
@@ -34,7 +35,7 @@ data class Share(
     var location: String,
     var status: ShareStatus,
     var thumbNailImage: String
-) {
+) : BaseEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0
