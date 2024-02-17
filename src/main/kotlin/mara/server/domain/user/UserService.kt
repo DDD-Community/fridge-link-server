@@ -41,7 +41,7 @@ class UserService(
         val newUser = createUser(user)
 
         var authId = newUser.kakaoId.toString()
-        if (newUser.googleEmail != null) authId = newUser.googleEmail!!
+        if (newUser.googleEmail != null && newUser.googleEmail != "") authId = newUser.googleEmail!!
 
         SecurityContextHolder.getContext().authentication =
             UsernamePasswordAuthenticationToken(authId, newUser.password)
