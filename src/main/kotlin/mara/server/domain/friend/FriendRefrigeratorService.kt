@@ -15,7 +15,7 @@ class FriendRefrigeratorService(
 
     fun getRecentFriendRefrigeratorList(): List<FriendRefrigeratorResponse> {
         val currentLoginUser = userService.getCurrentLoginUser()
-        val friendshipList = friendshipRepository.findAllByFromUser(currentLoginUser)
+        val friendshipList = friendshipRepository.findByFromUser(currentLoginUser)
             .orElseThrow { NoSuchElementException("친구 관계가 존재하지 않습니다.") }
 
         val userList = friendshipList.map { it.toUser }

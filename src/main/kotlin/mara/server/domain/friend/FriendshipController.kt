@@ -5,6 +5,9 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import mara.server.common.CommonResponse
 import mara.server.common.success
 import mara.server.domain.user.UserFriendResponse
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -26,8 +29,13 @@ class FriendshipController(
 
     @GetMapping
     @Operation(summary = "친구 조회 API")
-    fun getFriendshipList(): CommonResponse<List<UserFriendResponse>> {
-        return success(friendshipService.getFriendshipList())
+    fun getFriendshipList(
+        @PageableDefault(
+            size = 2
+        )
+        pageable: Pageable
+    ): CommonResponse<Page<UserFriendResponse>> {
+        return success(friendshipService.getFriendshipList(pageable))
     }
 
     @GetMapping("/count")

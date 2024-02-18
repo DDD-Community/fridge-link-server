@@ -4,6 +4,8 @@ import mara.server.domain.user.User
 import mara.server.domain.user.UserFriendResponse
 import mara.server.domain.user.UserRepository
 import mara.server.domain.user.UserService
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -31,12 +33,12 @@ class FriendshipService(
         return ok
     }
 
-    fun getFriendshipList(): List<UserFriendResponse> {
+    fun getFriendshipList(pageable: Pageable): Page<UserFriendResponse> {
         val currentLoginUser = userService.getCurrentLoginUser()
-        val friendshipList = friendshipRepository.findAllByFromUser(currentLoginUser)
+        val friendshipList = friendshipRepository.findAllByFromUser(currentLoginUser, pageable)
             .orElseThrow { NoSuchElementException("친구 관계가 존재하지 않습니다.") }
 
-        val userFriendResponseList: List<UserFriendResponse> = friendshipList.map { friendship ->
+        val userFriendResponseList: Page<UserFriendResponse> = friendshipList.map { friendship ->
             val userId = friendship.toUser.userId
             val user =
                 userRepository.findById(userId).orElseThrow { NoSuchElementException("해당 유저가 존재하지 않습니다. ID: $userId") }
