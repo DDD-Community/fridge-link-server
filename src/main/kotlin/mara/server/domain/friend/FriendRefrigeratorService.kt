@@ -23,7 +23,7 @@ class FriendRefrigeratorService(
 
         val friendRefrigeratorResponseList = refrigeratorList.map { refrig ->
             val ingredientDetailList =
-                ingredientDetailQuerydslRepository.getIngredientDetailByRefrigeratorAndIsDeletedFalse(refrig, 4)
+                ingredientDetailQuerydslRepository.getIngredientDetailByRefrigerator(refrig, 4)
             val ingredientList = ingredientDetailList.map { it.ingredient }
             FriendRefrigeratorResponse(refrig.user, refrig, ingredientList)
         }

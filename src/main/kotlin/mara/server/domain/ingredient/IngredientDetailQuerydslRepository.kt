@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository
 class IngredientDetailQuerydslRepository(
     private val query: JPAQueryFactory
 ) {
-    fun getIngredientDetailByRefrigeratorAndIsDeletedFalse(
+    fun getIngredientDetailByRefrigerator(
         refrigerator: Refrigerator,
         limit: Long
     ): List<IngredientDetail> {
@@ -16,5 +16,13 @@ class IngredientDetailQuerydslRepository(
         return query.selectFrom(ingredientDetail)
             .where(ingredientDetail.refrigerator.eq(refrigerator).and(ingredientDetail.isDeleted.isFalse)).limit(limit)
             .fetch()
+    }
+
+    fun getIngredientDetailByRefrigeratorList(
+        refrigeratorList: List<Refrigerator>,
+        limit: Long
+    ): List<IngredientDetail> {
+        val ingredientDetail = QIngredientDetail("ingredientDetail")
+        return query.selectFrom(ingredientDetail).where(ingredientDetail.refrigerator.`in`(refrigeratorList).and(ingredientDetail.isDeleted.isFalse)).orderBy(ingredientDetail.expirationDate.desc()).limit(limit).fetch()
     }
 }

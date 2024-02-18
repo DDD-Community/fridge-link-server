@@ -13,7 +13,8 @@ class IngredientDetailService(
     private val refrigeratorService: RefrigeratorService,
     private val refrigeratorRepository: RefrigeratorRepository,
     private val ingredientRepository: IngredientRepository,
-    private val ingredientDetailRepository: IngredientDetailRepository
+    private val ingredientDetailRepository: IngredientDetailRepository,
+    private val ingredientDetailQuerydslRepository: IngredientDetailQuerydslRepository
 
 ) {
     private val deleted = "deleted"
@@ -71,12 +72,12 @@ class IngredientDetailService(
         )
     }
 
-    fun getIngredientDetailRecent(pageable: Pageable): Page<IngredientDetailResponse> {
+    fun getIngredientDetailRecent(): List<IngredientDetailResponse> {
         val refrigeratorList = refrigeratorService.getCurrentLoginUserRefrigeratorList()
         val ingredientDetailRecentList =
-            ingredientDetailRepository.findByRefrigerators(refrigeratorList, pageable)
+            ingredientDetailQuerydslRepository.getIngredientDetailByRefrigeratorList(refrigeratorList, 4)
 
-        return ingredientDetailRecentList.toIngredientDetailResponseListPage()
+        return ingredientDetailRecentList.toIngredientDetailResponseList()
     }
 
     @Transactional
