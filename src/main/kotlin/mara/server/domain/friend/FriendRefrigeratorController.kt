@@ -21,7 +21,7 @@ class FriendRefrigeratorController(
         userPageable: Pageable,
         @Qualifier("ingredientPageable")
         ingredientPageable: Pageable,
-    ): CommonResponse<Page<FriendRefrigeratorResponse>> {
+    ): CommonResponse<List<FriendRefrigeratorResponse>> {
         return success(friendRefrigeratorService.getRecentFriendRefrigeratorList(userPageable, ingredientPageable))
     }
 }
