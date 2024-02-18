@@ -3,14 +3,13 @@ package mara.server.domain.friend
 import mara.server.domain.ingredient.Ingredient
 import mara.server.domain.refrigerator.Refrigerator
 import mara.server.domain.user.User
-import org.springframework.data.domain.Page
 
 data class FriendRefrigeratorResponse(
     val nickname: String,
     val refrigeratorId: Long,
-    val friendRefrigeratorIngredientGroupList: Page<FriendRefrigeratorIngredient>
+    val friendRefrigeratorIngredientGroupList: List<FriendRefrigeratorIngredient>
 ) {
-    constructor(user: User, refrigerator: Refrigerator, ingredientList: Page<Ingredient>) : this(
+    constructor(user: User, refrigerator: Refrigerator, ingredientList: List<Ingredient>) : this(
         nickname = user.nickName,
         refrigeratorId = refrigerator.refrigeratorId,
         friendRefrigeratorIngredientGroupList = ingredientList.map { FriendRefrigeratorIngredient(it) }
