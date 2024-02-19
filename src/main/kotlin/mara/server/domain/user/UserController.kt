@@ -57,15 +57,21 @@ class UserController(
         return success(userService.getCurrentLoginUserInviteCode())
     }
 
-    @GetMapping("/me/shares")
+    @GetMapping("/me/shares/created")
     @Operation(summary = "유저가 올린 나눔 조회 API")
-    fun getAllMyShareList(pageable: Pageable, @RequestParam("sortBy") sortBy: String, @RequestParam("status") status: String): CommonResponse<Page<ShareResponse>> {
-        return success(shareService.getAllMyShareList(pageable, sortBy, status))
+    fun getAllMyCreatedShareList(pageable: Pageable, @RequestParam("status") status: String): CommonResponse<Page<ShareResponse>> {
+        return success(shareService.getAllMyCreatedShareList(pageable, status))
     }
 
-    @GetMapping("/me/shares/applies")
+    @GetMapping("/me/shares/applied")
     @Operation(summary = "유저가 신청한 나눔 조회 API")
-    fun getAllMyApplyShareList(pageable: Pageable, @RequestParam("sortBy") sortBy: String, @RequestParam("status") status: String): CommonResponse<Page<ShareResponse>> {
-        return success(shareService.getAllMyApplyShareList(pageable, sortBy, status))
+    fun getAllMyAppliedShareList(pageable: Pageable, @RequestParam("status") status: String): CommonResponse<Page<ShareResponse>> {
+        return success(shareService.getAllMyAppliedShareList(pageable, status))
+    }
+
+    @GetMapping("/me/shares/all")
+    @Operation(summary = "유저가 관련된 모든 나눔 조회 API")
+    fun getAllMyShareList(pageable: Pageable, @RequestParam("status") status: String): CommonResponse<Page<ShareResponse>> {
+        return success(shareService.getAllMyShareList(pageable, status))
     }
 }
