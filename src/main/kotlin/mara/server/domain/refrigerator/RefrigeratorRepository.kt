@@ -15,10 +15,10 @@ interface CustomRefrigeratorRepository {
 }
 
 class CustomRefrigeratorRepositoryImpl(
-    private val query: JPAQueryFactory
+    private val queryFactory: JPAQueryFactory
 ) : CustomRefrigeratorRepository {
 
     override fun findByUserList(userList: List<User>, limit: Long): List<Refrigerator> {
-        return query.selectFrom(refrigerator).where(refrigerator.user.`in`(userList)).orderBy(refrigerator.ingredientAddDate.desc()).limit(limit).fetch()
+        return queryFactory.selectFrom(refrigerator).where(refrigerator.user.`in`(userList)).orderBy(refrigerator.ingredientAddDate.desc()).limit(limit).fetch()
     }
 }

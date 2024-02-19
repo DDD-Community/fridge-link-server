@@ -19,10 +19,10 @@ interface CustomUserRepository {
 }
 
 class CustomUserRepositoryImpl(
-    private val query: JPAQueryFactory
+    private val queryFactory: JPAQueryFactory
 ) : CustomUserRepository {
 
     override fun findByIdPage(userId: Long): List<User> {
-        return query.selectFrom(user).where(user.userId.eq(userId)).fetch()
+        return queryFactory.selectFrom(user).where(user.userId.eq(userId)).fetch()
     }
 }

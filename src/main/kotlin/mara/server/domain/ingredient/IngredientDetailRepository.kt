@@ -35,11 +35,11 @@ interface CustomIngredientDetailRepository {
 }
 
 class CustomIngredientDetailRepositoryImpl(
-    private val query: JPAQueryFactory
+    private val queryFactory: JPAQueryFactory
 ) : CustomIngredientDetailRepository {
 
     override fun findByRefrigerator(refrigerator: Refrigerator, limit: Long): List<IngredientDetail> {
-        return query.selectFrom(ingredientDetail)
+        return queryFactory.selectFrom(ingredientDetail)
             .where(ingredientDetail.refrigerator.eq(refrigerator).and(ingredientDetail.isDeleted.isFalse)).orderBy(
                 ingredientDetail.addDate.desc()
             ).limit(limit)
@@ -47,11 +47,11 @@ class CustomIngredientDetailRepositoryImpl(
     }
 
     override fun findByRefrigerator(refrigerator: Refrigerator, pageable: Pageable): Page<IngredientDetail> {
-        val results = query.selectFrom(ingredientDetail)
+        val results = queryFactory.selectFrom(ingredientDetail)
             .where(ingredientDetail.refrigerator.eq(refrigerator).and(ingredientDetail.isDeleted.isFalse))
             .offset(pageable.offset).limit(pageable.pageSize.toLong()).fetch()
 
-        val count = query.select(ingredientDetail.count()).from(ingredientDetail)
+        val count = queryFactory.select(ingredientDetail.count()).from(ingredientDetail)
             .where(ingredientDetail.refrigerator.eq(refrigerator).and(ingredientDetail.isDeleted.isFalse))
             .offset(pageable.offset).limit(pageable.pageSize.toLong()).fetchOne() ?: 0
 
@@ -59,7 +59,7 @@ class CustomIngredientDetailRepositoryImpl(
     }
 
     override fun findByRefrigeratorList(refrigeratorList: List<Refrigerator>, limit: Long): List<IngredientDetail> {
-        return query.selectFrom(ingredientDetail)
+        return queryFactory.selectFrom(ingredientDetail)
             .where(ingredientDetail.refrigerator.`in`(refrigeratorList).and(ingredientDetail.isDeleted.isFalse))
             .orderBy(ingredientDetail.expirationDate.desc()).limit(limit).fetch()
     }
@@ -69,7 +69,7 @@ class CustomIngredientDetailRepositoryImpl(
         expirationDay: LocalDateTime
     ): Long {
         val now = LocalDateTime.now()
-        val count = query.select(ingredientDetail.count()).from(ingredientDetail).where(
+        val count = queryFactory.select(ingredientDetail.count()).from(ingredientDetail).where(
             ingredientDetail.refrigerator.`in`(refrigeratorList)
                 .and(ingredientDetail.expirationDate.between(now, expirationDay))
                 .and(ingredientDetail.isDeleted.isFalse)
