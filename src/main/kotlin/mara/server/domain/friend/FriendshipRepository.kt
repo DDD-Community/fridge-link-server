@@ -39,7 +39,7 @@ class CustomFriendshipRepositoryImpl(
 
         val count = query.select(friendship.count()).from(friendship)
             .where(friendship.fromUser.eq(user))
-            .offset(pageable.offset).limit(pageable.pageSize.toLong()).fetchOne() ?: 0
+            .offset(pageable.offset).limit(pageable.pageSize.toLong()).orderBy(friendship.createdAt.asc()).fetchOne() ?: 0
 
         return PageImpl(results, pageable, count)
     }
