@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class FriendshipService(
     private val friendshipRepository: FriendshipRepository,
+    private val customFriendshipRepositoryImpl: CustomFriendshipRepositoryImpl,
     private val userRepository: UserRepository,
     private val userService: UserService
 ) {
@@ -35,8 +36,7 @@ class FriendshipService(
 
     fun getFriendshipList(pageable: Pageable): Page<UserFriendResponse> {
         val currentLoginUser = userService.getCurrentLoginUser()
-        val friendshipList = friendshipRepository.findAllByFromUser(currentLoginUser, pageable)
-            .orElseThrow { NoSuchElementException("친구 관계가 존재하지 않습니다.") }
+        val friendshipList = customFriendshipRepositoryImpl.findByFromUserPage(currentLoginUser, pageable)
 
         val userFriendResponseList: Page<UserFriendResponse> = friendshipList.map { friendship ->
             val userId = friendship.toUser.userId
@@ -61,9 +61,7 @@ class FriendshipService(
             val targetUser = userRepository.findById(friendshipDeleteRequest.friendId)
                 .orElseThrow { NoSuchElementException("해당 유저가 존재하지 않습니다. ID: ${friendshipDeleteRequest.friendId}") }
 
-            val friendshipList = friendshipRepository.findAllByFromUserAndToUser(currentLoginUser, targetUser)
-                .orElseThrow { NoSuchElementException("친구 관계가 존재하지 않습니다.") }
-
+            val friendshipList = customFriendshipRepositoryImpl.findByFromUserAndToUser(currentLoginUser, targetUser)
             friendshipList.forEach { friendshipRepository.delete(it) }
         }
 
