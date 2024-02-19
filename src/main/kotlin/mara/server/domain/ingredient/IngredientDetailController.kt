@@ -40,7 +40,7 @@ class IngredientDetailController(
     @Operation(summary = "특정 냉장고 식자재 상세 리스트 조회 API")
     fun getIngredientDetailList(
         @PageableDefault(
-            size = 5
+            size = 10
         )
         pageable: Pageable,
         @PathVariable(name = "id") refrigeratorId: Long
