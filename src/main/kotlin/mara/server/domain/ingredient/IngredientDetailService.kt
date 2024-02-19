@@ -13,8 +13,7 @@ class IngredientDetailService(
     private val refrigeratorService: RefrigeratorService,
     private val refrigeratorRepository: RefrigeratorRepository,
     private val ingredientRepository: IngredientRepository,
-    private val ingredientDetailRepository: IngredientDetailRepository,
-    private val customIngredientDetailRepositoryImpl: CustomIngredientDetailRepositoryImpl
+    private val ingredientDetailRepository: IngredientDetailRepository
 
 ) {
     private val deleted = "deleted"
@@ -58,7 +57,7 @@ class IngredientDetailService(
         val refrigerator = refrigeratorRepository.findById(refrigeratorId)
             .orElseThrow { NoSuchElementException("해당 냉장고가 존재하지 않습니다. ID: $refrigeratorId") }
         val ingredientDetailList =
-            customIngredientDetailRepositoryImpl.findByRefrigerator(refrigerator, pageable)
+            ingredientDetailRepository.findByRefrigerator(refrigerator, pageable)
         return ingredientDetailList.toIngredientDetailResponseListPage()
     }
 
@@ -66,7 +65,7 @@ class IngredientDetailService(
         val refrigeratorList = refrigeratorService.getCurrentLoginUserRefrigeratorList()
         val expirationDate = LocalDateTime.now().plusDays(days)
 
-        return customIngredientDetailRepositoryImpl.countByRefrigeratorListAndExpirationDay(
+        return ingredientDetailRepository.countByRefrigeratorListAndExpirationDay(
             refrigeratorList,
             expirationDate
         )
@@ -75,7 +74,7 @@ class IngredientDetailService(
     fun getIngredientDetailRecent(): List<IngredientDetailResponse> {
         val refrigeratorList = refrigeratorService.getCurrentLoginUserRefrigeratorList()
         val ingredientDetailRecentList =
-            customIngredientDetailRepositoryImpl.findByRefrigeratorList(refrigeratorList, 4)
+            ingredientDetailRepository.findByRefrigeratorList(refrigeratorList, 4)
 
         return ingredientDetailRecentList.toIngredientDetailResponseList()
     }

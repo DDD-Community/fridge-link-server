@@ -7,11 +7,9 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.stereotype.Repository
 import java.time.LocalDateTime
 
-@Repository
-interface IngredientDetailRepository : JpaRepository<IngredientDetail, Long>
+interface IngredientDetailRepository : JpaRepository<IngredientDetail, Long>, CustomIngredientDetailRepository
 
 interface CustomIngredientDetailRepository {
 
@@ -36,7 +34,6 @@ interface CustomIngredientDetailRepository {
     ): Long
 }
 
-@Repository
 class CustomIngredientDetailRepositoryImpl(
     private val query: JPAQueryFactory
 ) : CustomIngredientDetailRepository {
@@ -72,7 +69,7 @@ class CustomIngredientDetailRepositoryImpl(
         expirationDay: LocalDateTime
     ): Long {
         val now = LocalDateTime.now()
-        val count = query.select(ingredientDetail.count()).where(
+        val count = query.select(ingredientDetail.count()).from(ingredientDetail).where(
             ingredientDetail.refrigerator.`in`(refrigeratorList)
                 .and(ingredientDetail.expirationDate.between(now, expirationDay))
                 .and(ingredientDetail.isDeleted.isFalse)

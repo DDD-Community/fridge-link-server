@@ -7,11 +7,9 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.stereotype.Repository
 import java.util.Optional
 
-@Repository
-interface FriendshipRepository : JpaRepository<Friendship, Long> {
+interface FriendshipRepository : JpaRepository<Friendship, Long>, CustomFriendshipRepository {
     fun findByFromUser(
         user: User,
     ): Optional<List<Friendship>>
@@ -28,7 +26,6 @@ interface CustomFriendshipRepository {
     fun findByFromUserAndToUser(fromUser: User, toUser: User): List<Friendship>
 }
 
-@Repository
 class CustomFriendshipRepositoryImpl(
     private val query: JPAQueryFactory
 ) : CustomFriendshipRepository {

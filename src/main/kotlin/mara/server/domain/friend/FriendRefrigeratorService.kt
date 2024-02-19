@@ -1,7 +1,7 @@
 package mara.server.domain.friend
 
-import mara.server.domain.ingredient.CustomIngredientDetailRepositoryImpl
-import mara.server.domain.refrigerator.CustomRefrigeratorRepositoryImpl
+import mara.server.domain.ingredient.IngredientDetailRepository
+import mara.server.domain.refrigerator.RefrigeratorRepository
 import mara.server.domain.user.UserService
 import org.springframework.stereotype.Service
 
@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service
 class FriendRefrigeratorService(
     private val userService: UserService,
     private val friendshipRepository: FriendshipRepository,
-    private val customRefrigeratorRepositoryImpl: CustomRefrigeratorRepositoryImpl,
-    private val customIngredientDetailRepositoryImpl: CustomIngredientDetailRepositoryImpl
+    private val refrigeratorRepository: RefrigeratorRepository,
+    private val ingredientDetailRepository: IngredientDetailRepository
 ) {
 
     fun getRecentFriendRefrigeratorList(): List<FriendRefrigeratorResponse> {
@@ -19,11 +19,11 @@ class FriendRefrigeratorService(
             .orElseThrow { NoSuchElementException("친구 관계가 존재하지 않습니다.") }
 
         val userList = friendshipList.map { it.toUser }
-        val refrigeratorList = customRefrigeratorRepositoryImpl.findByUserList(userList, 5)
+        val refrigeratorList = refrigeratorRepository.findByUserList(userList, 5)
 
         val friendRefrigeratorResponseList = refrigeratorList.map { refrig ->
             val ingredientDetailList =
-                customIngredientDetailRepositoryImpl.findByRefrigerator(refrig, 4)
+                ingredientDetailRepository.findByRefrigerator(refrig, 4)
             val ingredientList = ingredientDetailList.map { it.ingredient }
             FriendRefrigeratorResponse(refrig.user, refrig, ingredientList)
         }
