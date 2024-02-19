@@ -72,14 +72,14 @@ class ShareService(
         return ShareResponse(getShare(shareId))
     }
 
-    fun getAllShareList(pageable: Pageable, sortBy: String): Page<ShareResponse> {
+    fun getAllShareList(pageable: Pageable, status: String): Page<ShareResponse> {
         val me = userService.getCurrentLoginUser()
-        val shareList = shareRepository.findAllMyFriendsShare(pageable, sortBy, me)
+        val shareList = shareRepository.findAllMyFriendsShare(pageable, ShareStatus.valueOf(status), me)
         return shareList.toShareResponseListPage()
     }
 
-    fun getAllMyShareList(pageable: Pageable, sortBy: String, status: String): Page<ShareResponse> {
-        return shareRepository.findAllMyShare(pageable, sortBy, ShareStatus.valueOf(status), userService.getCurrentLoginUser())
+    fun getAllMyCreatedShareList(pageable: Pageable, status: String): Page<ShareResponse> {
+        return shareRepository.findAllMyCreatedShare(pageable, ShareStatus.valueOf(status), userService.getCurrentLoginUser())
             .toShareResponseListPage()
     }
 
@@ -89,8 +89,13 @@ class ShareService(
         return applyShareList.map { it.user.nickName }.toList()
     }
 
-    fun getAllMyApplyShareList(pageable: Pageable, sortBy: String, status: String): Page<ShareResponse>? {
-        return shareRepository.findAllMyAppliedShare(pageable, sortBy, ShareStatus.valueOf(status), userService.getCurrentLoginUser())
+    fun getAllMyAppliedShareList(pageable: Pageable, status: String): Page<ShareResponse>? {
+        return shareRepository.findAllMyAppliedShare(pageable, ShareStatus.valueOf(status), userService.getCurrentLoginUser())
+            .toShareResponseListPage()
+    }
+
+    fun getAllMyShareList(pageable: Pageable, status: String): Page<ShareResponse>? {
+        return shareRepository.findAllMyShare(pageable, ShareStatus.valueOf(status), userService.getCurrentLoginUser())
             .toShareResponseListPage()
     }
 
