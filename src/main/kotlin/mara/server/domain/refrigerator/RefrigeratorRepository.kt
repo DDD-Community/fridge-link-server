@@ -22,6 +22,6 @@ class CustomRefrigeratorRepositoryImpl(
 ) : CustomRefrigeratorRepository {
 
     override fun findByUserList(userList: List<User>, limit: Long): List<Refrigerator> {
-        return query.selectFrom(refrigerator).where(refrigerator.user.`in`(userList)).limit(limit).fetch()
+        return query.selectFrom(refrigerator).where(refrigerator.user.`in`(userList)).orderBy(refrigerator.ingredientAddDate.desc()).limit(limit).fetch()
     }
 }

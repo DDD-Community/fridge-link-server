@@ -25,10 +25,7 @@ interface CustomFriendshipRepository {
 
     fun findByFromUserPage(user: User, pageable: Pageable): Page<Friendship>
 
-    fun findByFromUserAndToUser(
-        fromUser: User,
-        toUser: User
-    ): List<Friendship>
+    fun findByFromUserAndToUser(fromUser: User, toUser: User): List<Friendship>
 }
 
 @Repository
@@ -37,7 +34,7 @@ class CustomFriendshipRepositoryImpl(
 ) : CustomFriendshipRepository {
 
     override fun findByFromUserPage(user: User, pageable: Pageable): Page<Friendship> {
-        val results = query.selectFrom(friendship).where(friendship.fromUser.eq(user))
+        val results = query.select(friendship).from(friendship).where(friendship.fromUser.eq(user))
             .offset(pageable.offset).limit(pageable.pageSize.toLong()).fetch()
 
         val count = query.select(friendship.count()).from(friendship)

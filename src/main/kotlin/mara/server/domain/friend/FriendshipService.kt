@@ -37,8 +37,7 @@ class FriendshipService(
     fun getFriendshipList(pageable: Pageable): Page<UserFriendResponse> {
         val currentLoginUser = userService.getCurrentLoginUser()
         val friendshipList = customFriendshipRepositoryImpl.findByFromUserPage(currentLoginUser, pageable)
-
-        val userFriendResponseList: Page<UserFriendResponse> = friendshipList.map { friendship ->
+        val userFriendResponseList = friendshipList.map { friendship ->
             val userId = friendship.toUser.userId
             val user =
                 userRepository.findById(userId).orElseThrow { NoSuchElementException("해당 유저가 존재하지 않습니다. ID: $userId") }

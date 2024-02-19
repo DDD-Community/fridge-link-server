@@ -43,7 +43,9 @@ class CustomIngredientDetailRepositoryImpl(
 
     override fun findByRefrigerator(refrigerator: Refrigerator, limit: Long): List<IngredientDetail> {
         return query.selectFrom(ingredientDetail)
-            .where(ingredientDetail.refrigerator.eq(refrigerator).and(ingredientDetail.isDeleted.isFalse)).limit(limit)
+            .where(ingredientDetail.refrigerator.eq(refrigerator).and(ingredientDetail.isDeleted.isFalse)).orderBy(
+                ingredientDetail.addDate.desc()
+            ).limit(limit)
             .fetch()
     }
 
