@@ -51,3 +51,7 @@ data class IngredientDetailResponse(
 fun Page<IngredientDetail>.toIngredientDetailResponseListPage(): Page<IngredientDetailResponse> {
     return this.map { IngredientDetailResponse(it) }
 }
+
+fun List<IngredientDetail>.toIngredientDetailResponseList(): List<IngredientDetailResponse> {
+    return this.map { IngredientDetailResponse(it) }
+}

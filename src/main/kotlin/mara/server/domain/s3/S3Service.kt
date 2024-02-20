@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest
 import com.amazonaws.util.IOUtils
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
 import java.io.ByteArrayInputStream
 import java.util.UUID
@@ -19,6 +20,7 @@ class S3Service(
     @Value("\${cloud.aws.s3.dir}")
     private val dir: String
 ) {
+    @Transactional
     fun upload(file: MultipartFile, customDir: String? = dir): String {
         val fileName = UUID.randomUUID().toString() + "-" + file.originalFilename
         val objMeta = ObjectMetadata()

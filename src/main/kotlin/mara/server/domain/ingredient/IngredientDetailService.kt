@@ -1,7 +1,7 @@
 package mara.server.domain.ingredient
 
 import mara.server.domain.refrigerator.RefrigeratorRepository
-import mara.server.domain.user.UserService
+import mara.server.domain.refrigerator.RefrigeratorService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -10,10 +10,11 @@ import java.time.LocalDateTime
 
 @Service
 class IngredientDetailService(
-    private val ingredientDetailRepository: IngredientDetailRepository,
+    private val refrigeratorService: RefrigeratorService,
     private val refrigeratorRepository: RefrigeratorRepository,
     private val ingredientRepository: IngredientRepository,
-    private val userService: UserService
+    private val ingredientDetailRepository: IngredientDetailRepository
+
 ) {
     private val deleted = "deleted"
 
@@ -56,28 +57,26 @@ class IngredientDetailService(
         val refrigerator = refrigeratorRepository.findById(refrigeratorId)
             .orElseThrow { NoSuchElementException("해당 냉장고가 존재하지 않습니다. ID: $refrigeratorId") }
         val ingredientDetailList =
-            ingredientDetailRepository.findByRefrigeratorAndIsDeletedIsFalse(refrigerator, pageable)
+            ingredientDetailRepository.findByRefrigerator(refrigerator, pageable)
         return ingredientDetailList.toIngredientDetailResponseListPage()
     }
 
     fun getIngredientDetailCount(days: Long): Long {
-        val user = userService.getCurrentLoginUser()
-        val refrigeratorList = refrigeratorRepository.findRefrigeratorsByUser(user)
+        val refrigeratorList = refrigeratorService.getCurrentLoginUserRefrigeratorList()
         val expirationDate = LocalDateTime.now().plusDays(days)
 
-        return ingredientDetailRepository.findIngredientDetailCountByRefrigeratorAndExpirationDate(
+        return ingredientDetailRepository.countByRefrigeratorListAndExpirationDay(
             refrigeratorList,
             expirationDate
         )
     }
 
-    fun getIngredientDetailRecent(pageable: Pageable): Page<IngredientDetailResponse> {
-        val user = userService.getCurrentLoginUser()
-        val refrigeratorList = refrigeratorRepository.findRefrigeratorsByUser(user)
+    fun getIngredientDetailRecent(): List<IngredientDetailResponse> {
+        val refrigeratorList = refrigeratorService.getCurrentLoginUserRefrigeratorList()
         val ingredientDetailRecentList =
-            ingredientDetailRepository.findByRefrigerators(refrigeratorList, pageable)
+            ingredientDetailRepository.findByRefrigeratorList(refrigeratorList, 4)
 
-        return ingredientDetailRecentList.toIngredientDetailResponseListPage()
+        return ingredientDetailRecentList.toIngredientDetailResponseList()
     }
 
     @Transactional
