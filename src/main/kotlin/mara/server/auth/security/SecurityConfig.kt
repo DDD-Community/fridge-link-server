@@ -31,7 +31,8 @@ class SecurityConfig(
         "/users/**",
         "favicon.ico",
         "/error",
-        "/h2-console/**"
+        "/h2-console/**",
+        "/health-check"
     ) // sign-up, sign-in 추가
 
     @Bean
