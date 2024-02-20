@@ -77,7 +77,7 @@ class CustomShareRepositoryImpl(
             .where(applyShare.user.eq(user).and(share.status.eq(status)))
             .offset(pageable.offset)
             .limit(pageable.pageSize.toLong())
-            .orderBy(share.shareDate.asc()).fetch()
+            .orderBy(share.createdAt.desc()).fetch()
 
         val count = queryFactory.select(share.count()).from(applyShare)
             .join(applyShare.share, share)
@@ -97,7 +97,7 @@ class CustomShareRepositoryImpl(
         val query = queryFactory.selectFrom(share)
             .where(share.id.`in`(appliedShareIdList).and(share.user.eq(user).and(share.status.eq(status)))).offset(pageable.offset)
             .limit(pageable.pageSize.toLong())
-            .orderBy(getOrder(pageable.sort.toString())).fetch()
+            .orderBy(share.createdAt.desc()).fetch()
 
         val count = queryFactory.select(share.count()).from(share)
             .where(share.id.`in`(appliedShareIdList).and(share.user.eq(user).and(share.status.eq(status)))).offset(pageable.offset)
