@@ -62,7 +62,7 @@ class UserService(
         return userRepository.save(user)
     }
 
-    fun checkNickName(nickname: String): CheckDuplicateResponse = CheckDuplicateResponse(userRepository.existsByNickName(nickname))
+    fun checkNickname(nickname: String): CheckDuplicateResponse = CheckDuplicateResponse(userRepository.existsByNickname(nickname))
 
     fun kakaoLogin(authorizedCode: String): AuthDto {
         // 리다이랙트 url 환경 따라 다르게 전달하기 위한 구분 값

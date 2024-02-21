@@ -24,7 +24,7 @@ class UserController(
     }
 
     @GetMapping("/nickname/check")
-    fun checkNickname(@RequestParam("nickname") nickname: String): CommonResponse<CheckDuplicateResponse> = success(userService.checkNickName(nickname))
+    fun checkNickname(@RequestParam("nickname") nickname: String): CommonResponse<CheckDuplicateResponse> = success(userService.checkNickname(nickname))
 
     @GetMapping("/kakao-login")
     fun kakaoLogin(@RequestParam(value = "code") authorizedCode: String): CommonResponse<AuthDto> {
