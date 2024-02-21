@@ -74,7 +74,7 @@ class CustomIngredientDetailRepositoryImpl(
                 .and(ingredientDetail.isDeleted.isFalse)
         ).fetchOne()
 
-        return count ?: 0
+        return count!!
     }
 
     override fun countByRefrigeratorListAndExpirationDay(
@@ -88,6 +88,6 @@ class CustomIngredientDetailRepositoryImpl(
                 .and(ingredientDetail.isDeleted.isFalse)
         ).fetchOne()
 
-        return count ?: 0
+        return count!!
     }
 }
