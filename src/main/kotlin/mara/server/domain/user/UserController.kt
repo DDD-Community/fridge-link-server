@@ -31,7 +31,7 @@ class UserController(
 
     @GetMapping("/nickname/check")
     @Operation(summary = "닉네임 중복 체크 API")
-    fun checkNickname(@RequestParam("nickname") nickname: String): CommonResponse<CheckDuplicateResponse> = success(userService.checkNickName(nickname))
+    fun checkNickname(@RequestParam("nickname") nickname: String): CommonResponse<CheckDuplicateResponse> = success(userService.checkNickname(nickname))
 
     @GetMapping("/kakao-login")
     @Operation(summary = "카카오 로그인 API")

@@ -13,7 +13,7 @@ enum class Role { USER }
 @Entity
 @Table(name = "app_user")
 class User(
-    val nickName: String,
+    val nickname: String,
     val password: String,
     val kakaoId: Long?,
     val kakaoEmail: String?,

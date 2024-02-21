@@ -51,9 +51,9 @@ class UserService(
     }
     private fun createUser(userRequest: UserRequest): User {
         val user = User(
-            nickName = userRequest.nickName,
+            nickname = userRequest.nickname,
             kakaoId = userRequest.kakaoId,
-            password = passwordEncoder.encode(userRequest.nickName),
+            password = passwordEncoder.encode(userRequest.nickname),
             googleEmail = userRequest.googleEmail,
             kakaoEmail = userRequest.kakaoEmail,
             profileImage = ProfileImage.valueOf(userRequest.profileImage),
@@ -62,7 +62,7 @@ class UserService(
         return userRepository.save(user)
     }
 
-    fun checkNickName(nickName: String): CheckDuplicateResponse = CheckDuplicateResponse(userRepository.existsByNickName(nickName))
+    fun checkNickname(nickname: String): CheckDuplicateResponse = CheckDuplicateResponse(userRepository.existsByNickname(nickname))
 
     fun kakaoLogin(authorizedCode: String): AuthDto {
         // 리다이랙트 url 환경 따라 다르게 전달하기 위한 구분 값
