@@ -1,5 +1,7 @@
 package mara.server.domain.friend
 
+import mara.server.domain.ingredient.IngredientDetailRepository
+import mara.server.domain.refrigerator.RefrigeratorRepository
 import mara.server.domain.user.User
 import mara.server.domain.user.UserFriendResponse
 import mara.server.domain.user.UserRepository
@@ -13,7 +15,9 @@ import org.springframework.transaction.annotation.Transactional
 class FriendshipService(
     private val friendshipRepository: FriendshipRepository,
     private val userRepository: UserRepository,
-    private val userService: UserService
+    private val userService: UserService,
+    private val refrigeratorRepository: RefrigeratorRepository,
+    private val ingredientDetailRepository: IngredientDetailRepository
 ) {
 
     private val ok = "ok"
@@ -37,10 +41,10 @@ class FriendshipService(
         val currentLoginUser = userService.getCurrentLoginUser()
         val friendshipList = friendshipRepository.findByFromUserPage(currentLoginUser, pageable)
         val userFriendResponseList = friendshipList.map { friendship ->
-            val userId = friendship.toUser.userId
-            val user =
-                userRepository.findById(userId).orElseThrow { NoSuchElementException("해당 유저가 존재하지 않습니다. ID: $userId") }
-            UserFriendResponse(user)
+            val user = friendship.toUser
+            val refrigeratorList = refrigeratorRepository.findByUser(user)
+            val ingredientCount = ingredientDetailRepository.countByRefrigeratorList(refrigeratorList)
+            UserFriendResponse(user, ingredientCount)
         }
 
         return userFriendResponseList

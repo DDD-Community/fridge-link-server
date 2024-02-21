@@ -28,6 +28,10 @@ interface CustomIngredientDetailRepository {
         limit: Long
     ): List<IngredientDetail>
 
+    fun countByRefrigeratorList(
+        refrigeratorList: List<Refrigerator>,
+    ): Long
+
     fun countByRefrigeratorListAndExpirationDay(
         refrigeratorList: List<Refrigerator>,
         expirationDay: LocalDateTime
@@ -62,6 +66,15 @@ class CustomIngredientDetailRepositoryImpl(
         return queryFactory.selectFrom(ingredientDetail)
             .where(ingredientDetail.refrigerator.`in`(refrigeratorList).and(ingredientDetail.isDeleted.isFalse))
             .orderBy(ingredientDetail.expirationDate.desc()).limit(limit).fetch()
+    }
+
+    override fun countByRefrigeratorList(refrigeratorList: List<Refrigerator>): Long {
+        val count = queryFactory.select(ingredientDetail.count()).from(ingredientDetail).where(
+            ingredientDetail.refrigerator.`in`(refrigeratorList)
+                .and(ingredientDetail.isDeleted.isFalse)
+        ).fetchOne()
+
+        return count ?: 0
     }
 
     override fun countByRefrigeratorListAndExpirationDay(

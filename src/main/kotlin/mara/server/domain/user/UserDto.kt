@@ -37,10 +37,12 @@ class UserInviteCodeResponse(
 
 class UserFriendResponse(
     val userId: Long,
-    val nickName: String
+    val nickName: String,
+    val ingredientCount: Long
 ) {
-    constructor(user: User) : this(
+    constructor(user: User, ingredientCount: Long) : this(
         userId = user.userId,
-        nickName = user.nickName
+        nickName = user.nickName,
+        ingredientCount = ingredientCount
     )
 }
