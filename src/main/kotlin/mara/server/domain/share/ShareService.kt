@@ -2,6 +2,8 @@ package mara.server.domain.share
 
 import mara.server.domain.ingredient.IngredientDetailRepository
 import mara.server.domain.user.UserService
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.lang.RuntimeException
@@ -70,13 +72,15 @@ class ShareService(
         return ShareResponse(getShare(shareId))
     }
 
-    fun getAllShareList(): List<ShareResponse>? {
-        val shareList = shareRepository.findAll()
-        return shareList.toShareResponseList()
+    fun getAllShareList(pageable: Pageable, status: String): Page<ShareResponse> {
+        val me = userService.getCurrentLoginUser()
+        val shareList = shareRepository.findAllMyFriendsShare(pageable, ShareStatus.valueOf(status), me)
+        return shareList.toShareResponseListPage()
     }
 
-    fun getAllMyShareList(): List<ShareResponse>? {
-        return shareRepository.findAllByUser(userService.getCurrentLoginUser())?.toShareResponseList()
+    fun getAllMyCreatedShareList(pageable: Pageable, status: String): Page<ShareResponse> {
+        return shareRepository.findAllMyCreatedShare(pageable, ShareStatus.valueOf(status), userService.getCurrentLoginUser())
+            .toShareResponseListPage()
     }
 
     fun getAllApplyUserList(shareId: Long): List<String>? {
@@ -85,10 +89,14 @@ class ShareService(
         return applyShareList.map { it.user.nickname }.toList()
     }
 
-    fun getAllMyApplyShareList(): List<ShareResponse>? {
-        return applyShareRepository.findAllByUser(userService.getCurrentLoginUser())
-            ?.map { ShareResponse(it.share) }
-            ?.toList()
+    fun getAllMyAppliedShareList(pageable: Pageable, status: String): Page<ShareResponse>? {
+        return shareRepository.findAllMyAppliedShare(pageable, ShareStatus.valueOf(status), userService.getCurrentLoginUser())
+            .toShareResponseListPage()
+    }
+
+    fun getAllMyShareList(pageable: Pageable, status: String): Page<ShareResponse>? {
+        return shareRepository.findAllMyShare(pageable, ShareStatus.valueOf(status), userService.getCurrentLoginUser())
+            .toShareResponseListPage()
     }
 
     @Transactional

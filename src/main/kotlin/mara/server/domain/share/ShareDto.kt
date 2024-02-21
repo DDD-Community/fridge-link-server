@@ -1,5 +1,6 @@
 package mara.server.domain.share
 
+import org.springframework.data.domain.Page
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -63,6 +64,6 @@ data class ShareResponse(
     )
 }
 
-fun List<Share>.toShareResponseList(): List<ShareResponse> {
+fun Page<Share>.toShareResponseListPage(): Page<ShareResponse> {
     return this.map { ShareResponse(it) }
 }
