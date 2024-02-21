@@ -5,9 +5,9 @@ import mara.server.domain.friend.QFriendship.friendship
 import mara.server.domain.user.QUser
 import mara.server.domain.user.User
 import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.support.PageableExecutionUtils
 import java.util.Optional
 
 interface FriendshipRepository : JpaRepository<Friendship, Long>, CustomFriendshipRepository {
@@ -54,7 +54,7 @@ class CustomFriendshipRepositoryImpl(
         ).where(friendship.fromUser.eq(user))
             .offset(pageable.offset).limit(pageable.pageSize.toLong()).fetchOne() ?: 0
 
-        return PageImpl(results, pageable, count)
+        return PageableExecutionUtils.getPage(results, pageable) { count }
     }
 
     override fun findByFromUserAndToUser(fromUser: User, toUser: User): List<Friendship> {

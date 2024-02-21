@@ -4,9 +4,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory
 import mara.server.domain.ingredient.QIngredientDetail.ingredientDetail
 import mara.server.domain.refrigerator.Refrigerator
 import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.support.PageableExecutionUtils
 import java.time.LocalDateTime
 
 interface IngredientDetailRepository : JpaRepository<IngredientDetail, Long>, CustomIngredientDetailRepository
@@ -59,7 +59,7 @@ class CustomIngredientDetailRepositoryImpl(
             .where(ingredientDetail.refrigerator.eq(refrigerator).and(ingredientDetail.isDeleted.isFalse))
             .offset(pageable.offset).limit(pageable.pageSize.toLong()).fetchOne() ?: 0
 
-        return PageImpl(results, pageable, count)
+        return PageableExecutionUtils.getPage(results, pageable) { count }
     }
 
     override fun findByRefrigeratorList(refrigeratorList: List<Refrigerator>, limit: Long): List<IngredientDetail> {
