@@ -31,7 +31,8 @@ class FriendshipController(
     @Operation(summary = "친구 조회 API")
     fun getFriendshipList(
         @PageableDefault(
-            size = 10
+            size = 10,
+            sort = ["createdAt"]
         )
         pageable: Pageable
     ): CommonResponse<Page<UserFriendResponse>> {

@@ -2,6 +2,7 @@ package mara.server.domain.friend
 
 import com.querydsl.jpa.impl.JPAQueryFactory
 import mara.server.domain.friend.QFriendship.friendship
+import mara.server.domain.user.QUser
 import mara.server.domain.user.User
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
@@ -31,12 +32,27 @@ class CustomFriendshipRepositoryImpl(
 ) : CustomFriendshipRepository {
 
     override fun findByFromUserPage(user: User, pageable: Pageable): Page<Friendship> {
-        val results = queryFactory.select(friendship).from(friendship).where(friendship.fromUser.eq(user))
-            .offset(pageable.offset).limit(pageable.pageSize.toLong()).fetch()
+        val appUser = QUser.user
+        val query = queryFactory.select(friendship).from(friendship).innerJoin(friendship.toUser, appUser).on(
+            friendship.toUser.userId.eq(appUser.userId)
+        ).where(friendship.fromUser.eq(user))
+            .offset(pageable.offset).limit(pageable.pageSize.toLong())
 
-        val count = queryFactory.select(friendship.count()).from(friendship)
-            .where(friendship.fromUser.eq(user))
-            .offset(pageable.offset).limit(pageable.pageSize.toLong()).orderBy(friendship.createdAt.asc()).fetchOne() ?: 0
+        pageable.sort.forEach { order ->
+            val path = when (order.property) {
+                "createdAt" -> friendship.createdAt.asc()
+                "nickname" -> appUser.nickName.asc()
+                else -> throw IllegalArgumentException("Unsupported sorting property: ${order.property}")
+            }
+            query.orderBy(path)
+        }
+
+        val results = query.fetch()
+
+        val count = queryFactory.select(friendship.count()).from(friendship).innerJoin(friendship.toUser, appUser).on(
+            friendship.toUser.userId.eq(appUser.userId)
+        ).where(friendship.fromUser.eq(user))
+            .offset(pageable.offset).limit(pageable.pageSize.toLong()).fetchOne() ?: 0
 
         return PageImpl(results, pageable, count)
     }
