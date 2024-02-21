@@ -31,6 +31,9 @@ class CustomFriendshipRepositoryImpl(
     private val queryFactory: JPAQueryFactory
 ) : CustomFriendshipRepository {
 
+    private val createdAt: String = "createdAt"
+    private val nickname: String = "nickname"
+
     override fun findByFromUserPage(user: User, pageable: Pageable): Page<Friendship> {
         val appUser = QUser.user
         val query = queryFactory.select(friendship).from(friendship).innerJoin(friendship.toUser, appUser).on(
@@ -40,8 +43,8 @@ class CustomFriendshipRepositoryImpl(
 
         pageable.sort.forEach { order ->
             val path = when (order.property) {
-                "createdAt" -> friendship.createdAt.asc()
-                "nickname" -> appUser.nickName.asc()
+                createdAt -> friendship.createdAt.asc()
+                nickname -> appUser.nickname.asc()
                 else -> throw IllegalArgumentException("Unsupported sorting property: ${order.property}")
             }
             query.orderBy(path)

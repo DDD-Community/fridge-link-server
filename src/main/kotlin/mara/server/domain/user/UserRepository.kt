@@ -10,7 +10,7 @@ interface UserRepository : JpaRepository<User, Long>, CustomUserRepository {
     fun findByKakaoId(id: Long): User?
     fun findByGoogleEmail(email: String): User?
     fun findByInviteCode(inviteCode: String): Optional<User>
-    fun existsByNickName(nickName: String): Boolean
+    fun existsByNickName(nickname: String): Boolean
 }
 
 interface CustomUserRepository {

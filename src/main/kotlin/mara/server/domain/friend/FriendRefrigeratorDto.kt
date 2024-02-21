@@ -10,7 +10,7 @@ data class FriendRefrigeratorResponse(
     val friendRefrigeratorIngredientGroupList: List<FriendRefrigeratorIngredient>
 ) {
     constructor(user: User, refrigerator: Refrigerator, ingredientList: List<Ingredient>) : this(
-        nickname = user.nickName,
+        nickname = user.nickname,
         refrigeratorId = refrigerator.refrigeratorId,
         friendRefrigeratorIngredientGroupList = ingredientList.map { FriendRefrigeratorIngredient(it) }
     )
