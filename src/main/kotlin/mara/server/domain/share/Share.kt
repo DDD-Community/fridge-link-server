@@ -1,8 +1,9 @@
 package mara.server.domain.share
 
-import com.fasterxml.jackson.annotation.JsonValue
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
@@ -33,6 +34,7 @@ data class Share(
     var shareDatetime: LocalDateTime,
     var limitPerson: Int,
     var location: String,
+    @Enumerated(EnumType.STRING)
     var status: ShareStatus,
     var thumbNailImage: String
 ) : BaseEntity() {
@@ -76,8 +78,8 @@ data class Share(
     }
 }
 
-enum class ShareStatus(@JsonValue val statusValue: String) {
-    SHARE_START("start"),
-    SHARE_IN_PROGRESS("in_progress"),
-    SHARE_COMPLETE("complete")
+enum class ShareStatus() {
+    SHARE_START,
+    SHARE_IN_PROGRESS,
+    SHARE_COMPLETE
 }

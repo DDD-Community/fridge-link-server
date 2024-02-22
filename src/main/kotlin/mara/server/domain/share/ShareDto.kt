@@ -59,7 +59,7 @@ data class ShareResponse(
         limitDate = share.ingredientDetail.expirationDate.toLocalDate(),
         limitPerson = share.limitPerson,
         location = share.location,
-        status = share.status.statusValue,
+        status = share.status.name,
         thumbNailImage = share.thumbNailImage,
     )
 }
