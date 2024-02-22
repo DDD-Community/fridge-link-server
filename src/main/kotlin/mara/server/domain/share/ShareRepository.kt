@@ -47,9 +47,9 @@ class CustomShareRepositoryImpl(
             .orderBy(getOrder(sortBy)).fetch()
 
         val count = queryFactory.select(share.count()).from(share).where(share.user.userId.`in`(friendsList).and(share.status.eq(status))).offset(pageable.offset)
-            .limit(pageable.pageSize.toLong()).fetchOne()
+            .limit(pageable.pageSize.toLong()).fetchOne() ?: 0
 
-        return PageableExecutionUtils.getPage(query, pageable) { count!! }
+        return PageableExecutionUtils.getPage(query, pageable) { count }
     }
 
     override fun findAllMyCreatedShare(pageable: Pageable, status: ShareStatus, user: User): Page<Share> {
@@ -60,9 +60,9 @@ class CustomShareRepositoryImpl(
             .orderBy(share.createdAt.desc()).fetch()
 
         val count = queryFactory.select(share.count()).from(share).where(share.user.eq(user).and(share.status.eq(status))).offset(pageable.offset)
-            .limit(pageable.pageSize.toLong()).fetchOne()
+            .limit(pageable.pageSize.toLong()).fetchOne() ?: 0
 
-        return PageableExecutionUtils.getPage(query, pageable) { count!! }
+        return PageableExecutionUtils.getPage(query, pageable) { count }
     }
 
     override fun findAllMyAppliedShare(
@@ -83,9 +83,9 @@ class CustomShareRepositoryImpl(
             .join(applyShare.share, share)
             .where(applyShare.user.eq(user).and(share.status.eq(status))).offset(pageable.offset)
             .limit(pageable.pageSize.toLong())
-            .fetchOne()
+            .fetchOne() ?: 0
 
-        return PageableExecutionUtils.getPage(query, pageable) { count!! }
+        return PageableExecutionUtils.getPage(query, pageable) { count }
     }
 
     override fun findAllMyShare(pageable: Pageable, status: ShareStatus, user: User): Page<Share> {
@@ -101,9 +101,9 @@ class CustomShareRepositoryImpl(
 
         val count = queryFactory.select(share.count()).from(share)
             .where(share.id.`in`(appliedShareIdList).and(share.user.eq(user).and(share.status.eq(status)))).offset(pageable.offset)
-            .limit(pageable.pageSize.toLong()).fetchOne()
+            .limit(pageable.pageSize.toLong()).fetchOne() ?: 0
 
-        return PageableExecutionUtils.getPage(query, pageable) { count!! }
+        return PageableExecutionUtils.getPage(query, pageable) { count }
     }
     private fun getOrder(sortBy: String): OrderSpecifier<*> {
         val orderSpecifier = when (sortBy) {
