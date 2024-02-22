@@ -35,9 +35,9 @@ class CustomShareRepositoryImpl(
             .from(friendship)
             .where(friendship.fromUser.eq(user))
 
-        var sortBy = ""
+        var sortBy = registeredDate
         pageable.sort.forEach { order ->
-            sortBy = order.property
+            if (order.property == dueDate) sortBy = dueDate
         }
 
         val query = queryFactory.selectFrom(share)
