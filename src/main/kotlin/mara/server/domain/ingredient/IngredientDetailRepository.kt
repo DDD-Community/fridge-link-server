@@ -56,10 +56,9 @@ class CustomIngredientDetailRepositoryImpl(
             .offset(pageable.offset).limit(pageable.pageSize.toLong()).fetch()
 
         val count = queryFactory.select(ingredientDetail.count()).from(ingredientDetail)
-            .where(ingredientDetail.refrigerator.eq(refrigerator).and(ingredientDetail.isDeleted.isFalse))
-            .offset(pageable.offset).limit(pageable.pageSize.toLong()).fetchOne() ?: 0
+            .where(ingredientDetail.refrigerator.eq(refrigerator).and(ingredientDetail.isDeleted.isFalse)).fetchOne()
 
-        return PageableExecutionUtils.getPage(results, pageable) { count }
+        return PageableExecutionUtils.getPage(results, pageable) { count!! }
     }
 
     override fun findByRefrigeratorList(refrigeratorList: List<Refrigerator>, limit: Long): List<IngredientDetail> {
@@ -70,11 +69,10 @@ class CustomIngredientDetailRepositoryImpl(
 
     override fun countByRefrigeratorList(refrigeratorList: List<Refrigerator>): Long {
         val count = queryFactory.select(ingredientDetail.count()).from(ingredientDetail).where(
-            ingredientDetail.refrigerator.`in`(refrigeratorList)
-                .and(ingredientDetail.isDeleted.isFalse)
-        ).fetchOne() ?: 0
+            ingredientDetail.refrigerator.`in`(refrigeratorList).and(ingredientDetail.isDeleted.isFalse)
+        ).fetchOne()
 
-        return count
+        return count!!
     }
 
     override fun countByRefrigeratorListAndExpirationDay(
@@ -86,8 +84,8 @@ class CustomIngredientDetailRepositoryImpl(
             ingredientDetail.refrigerator.`in`(refrigeratorList)
                 .and(ingredientDetail.expirationDate.between(now, expirationDay))
                 .and(ingredientDetail.isDeleted.isFalse)
-        ).fetchOne() ?: 0
+        ).fetchOne()
 
-        return count
+        return count!!
     }
 }

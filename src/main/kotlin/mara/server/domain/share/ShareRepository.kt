@@ -46,10 +46,10 @@ class CustomShareRepositoryImpl(
             .limit(pageable.pageSize.toLong())
             .orderBy(getOrder(sortBy)).fetch()
 
-        val count = queryFactory.select(share.count()).from(share).where(share.user.userId.`in`(friendsList).and(share.status.eq(status))).offset(pageable.offset)
-            .limit(pageable.pageSize.toLong()).fetchOne() ?: 0
+        val count = queryFactory.select(share.count()).from(share)
+            .where(share.user.userId.`in`(friendsList).and(share.status.eq(status))).fetchOne()
 
-        return PageableExecutionUtils.getPage(query, pageable) { count }
+        return PageableExecutionUtils.getPage(query, pageable) { count!! }
     }
 
     override fun findAllMyCreatedShare(pageable: Pageable, status: ShareStatus, user: User): Page<Share> {
@@ -59,10 +59,11 @@ class CustomShareRepositoryImpl(
             .limit(pageable.pageSize.toLong())
             .orderBy(share.createdAt.desc()).fetch()
 
-        val count = queryFactory.select(share.count()).from(share).where(share.user.eq(user).and(share.status.eq(status))).offset(pageable.offset)
-            .limit(pageable.pageSize.toLong()).fetchOne() ?: 0
+        val count =
+            queryFactory.select(share.count()).from(share).where(share.user.eq(user).and(share.status.eq(status)))
+                .fetchOne()
 
-        return PageableExecutionUtils.getPage(query, pageable) { count }
+        return PageableExecutionUtils.getPage(query, pageable) { count!! }
     }
 
     override fun findAllMyAppliedShare(
@@ -81,11 +82,9 @@ class CustomShareRepositoryImpl(
 
         val count = queryFactory.select(share.count()).from(applyShare)
             .join(applyShare.share, share)
-            .where(applyShare.user.eq(user).and(share.status.eq(status))).offset(pageable.offset)
-            .limit(pageable.pageSize.toLong())
-            .fetchOne() ?: 0
+            .where(applyShare.user.eq(user).and(share.status.eq(status))).fetchOne()
 
-        return PageableExecutionUtils.getPage(query, pageable) { count }
+        return PageableExecutionUtils.getPage(query, pageable) { count!! }
     }
 
     override fun findAllMyShare(pageable: Pageable, status: ShareStatus, user: User): Page<Share> {
@@ -95,16 +94,17 @@ class CustomShareRepositoryImpl(
             .fetch()
 
         val query = queryFactory.selectFrom(share)
-            .where(share.id.`in`(appliedShareIdList).and(share.user.eq(user).and(share.status.eq(status)))).offset(pageable.offset)
+            .where(share.id.`in`(appliedShareIdList).and(share.user.eq(user).and(share.status.eq(status))))
+            .offset(pageable.offset)
             .limit(pageable.pageSize.toLong())
             .orderBy(share.createdAt.desc()).fetch()
 
         val count = queryFactory.select(share.count()).from(share)
-            .where(share.id.`in`(appliedShareIdList).and(share.user.eq(user).and(share.status.eq(status)))).offset(pageable.offset)
-            .limit(pageable.pageSize.toLong()).fetchOne() ?: 0
+            .where(share.id.`in`(appliedShareIdList).and(share.user.eq(user).and(share.status.eq(status)))).fetchOne()
 
-        return PageableExecutionUtils.getPage(query, pageable) { count }
+        return PageableExecutionUtils.getPage(query, pageable) { count!! }
     }
+
     private fun getOrder(sortBy: String): OrderSpecifier<*> {
         val orderSpecifier = when (sortBy) {
             registeredDate -> share.createdAt.desc()
