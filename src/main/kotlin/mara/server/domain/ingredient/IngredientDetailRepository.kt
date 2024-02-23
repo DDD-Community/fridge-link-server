@@ -56,8 +56,7 @@ class CustomIngredientDetailRepositoryImpl(
             .offset(pageable.offset).limit(pageable.pageSize.toLong()).fetch()
 
         val count = queryFactory.select(ingredientDetail.count()).from(ingredientDetail)
-            .where(ingredientDetail.refrigerator.eq(refrigerator).and(ingredientDetail.isDeleted.isFalse))
-            .offset(pageable.offset).limit(pageable.pageSize.toLong()).fetchOne()
+            .where(ingredientDetail.refrigerator.eq(refrigerator).and(ingredientDetail.isDeleted.isFalse)).fetchOne()
 
         return PageableExecutionUtils.getPage(results, pageable) { count!! }
     }
@@ -70,8 +69,7 @@ class CustomIngredientDetailRepositoryImpl(
 
     override fun countByRefrigeratorList(refrigeratorList: List<Refrigerator>): Long {
         val count = queryFactory.select(ingredientDetail.count()).from(ingredientDetail).where(
-            ingredientDetail.refrigerator.`in`(refrigeratorList)
-                .and(ingredientDetail.isDeleted.isFalse)
+            ingredientDetail.refrigerator.`in`(refrigeratorList).and(ingredientDetail.isDeleted.isFalse)
         ).fetchOne()
 
         return count!!

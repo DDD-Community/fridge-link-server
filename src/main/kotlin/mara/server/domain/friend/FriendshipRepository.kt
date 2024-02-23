@@ -54,8 +54,7 @@ class CustomFriendshipRepositoryImpl(
 
         val count = queryFactory.select(friendship.count()).from(friendship).innerJoin(friendship.toUser, appUser).on(
             friendship.toUser.userId.eq(appUser.userId)
-        ).where(friendship.fromUser.eq(user))
-            .offset(pageable.offset).limit(pageable.pageSize.toLong()).fetchOne()
+        ).where(friendship.fromUser.eq(user)).fetchOne()
 
         return PageableExecutionUtils.getPage(results, pageable) { count!! }
     }

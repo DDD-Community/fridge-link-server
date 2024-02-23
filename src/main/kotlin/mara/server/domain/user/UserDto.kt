@@ -38,11 +38,13 @@ class UserInviteCodeResponse(
 class UserFriendResponse(
     val userId: Long,
     val nickname: String,
+    val profileImage: ProfileImage,
     val ingredientCount: Long
 ) {
     constructor(user: User, ingredientCount: Long) : this(
         userId = user.userId,
         nickname = user.nickname,
+        profileImage = user.profileImage,
         ingredientCount = ingredientCount
     )
 }

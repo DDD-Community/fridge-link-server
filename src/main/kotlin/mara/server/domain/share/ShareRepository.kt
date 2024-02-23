@@ -46,8 +46,8 @@ class CustomShareRepositoryImpl(
             .limit(pageable.pageSize.toLong())
             .orderBy(getOrder(sortBy)).fetch()
 
-        val count = queryFactory.select(share.count()).from(share).where(share.user.userId.`in`(friendsList).and(share.status.eq(status))).offset(pageable.offset)
-            .limit(pageable.pageSize.toLong()).fetchOne()
+        val count = queryFactory.select(share.count()).from(share)
+            .where(share.user.userId.`in`(friendsList).and(share.status.eq(status))).fetchOne()
 
         return PageableExecutionUtils.getPage(query, pageable) { count!! }
     }
@@ -59,8 +59,9 @@ class CustomShareRepositoryImpl(
             .limit(pageable.pageSize.toLong())
             .orderBy(share.createdAt.desc()).fetch()
 
-        val count = queryFactory.select(share.count()).from(share).where(share.user.eq(user).and(share.status.eq(status))).offset(pageable.offset)
-            .limit(pageable.pageSize.toLong()).fetchOne()
+        val count =
+            queryFactory.select(share.count()).from(share).where(share.user.eq(user).and(share.status.eq(status)))
+                .fetchOne()
 
         return PageableExecutionUtils.getPage(query, pageable) { count!! }
     }
@@ -81,9 +82,7 @@ class CustomShareRepositoryImpl(
 
         val count = queryFactory.select(share.count()).from(applyShare)
             .join(applyShare.share, share)
-            .where(applyShare.user.eq(user).and(share.status.eq(status))).offset(pageable.offset)
-            .limit(pageable.pageSize.toLong())
-            .fetchOne()
+            .where(applyShare.user.eq(user).and(share.status.eq(status))).fetchOne()
 
         return PageableExecutionUtils.getPage(query, pageable) { count!! }
     }
@@ -95,16 +94,17 @@ class CustomShareRepositoryImpl(
             .fetch()
 
         val query = queryFactory.selectFrom(share)
-            .where(share.id.`in`(appliedShareIdList).and(share.user.eq(user).and(share.status.eq(status)))).offset(pageable.offset)
+            .where(share.id.`in`(appliedShareIdList).and(share.user.eq(user).and(share.status.eq(status))))
+            .offset(pageable.offset)
             .limit(pageable.pageSize.toLong())
             .orderBy(share.createdAt.desc()).fetch()
 
         val count = queryFactory.select(share.count()).from(share)
-            .where(share.id.`in`(appliedShareIdList).and(share.user.eq(user).and(share.status.eq(status)))).offset(pageable.offset)
-            .limit(pageable.pageSize.toLong()).fetchOne()
+            .where(share.id.`in`(appliedShareIdList).and(share.user.eq(user).and(share.status.eq(status)))).fetchOne()
 
         return PageableExecutionUtils.getPage(query, pageable) { count!! }
     }
+
     private fun getOrder(sortBy: String): OrderSpecifier<*> {
         val orderSpecifier = when (sortBy) {
             registeredDate -> share.createdAt.desc()
