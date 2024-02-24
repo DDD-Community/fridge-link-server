@@ -1,5 +1,6 @@
 package mara.server.domain.share
 
+import mara.server.domain.user.ProfileImage
 import org.springframework.data.domain.Page
 import java.time.LocalDate
 import java.time.LocalTime
@@ -36,6 +37,8 @@ data class UpdateShareStatusRequest(
 )
 
 data class ShareResponse(
+    val nickname: String,
+    val profileImage: ProfileImage,
     val shareId: Long,
     val title: String,
     val itemName: String,
@@ -50,6 +53,8 @@ data class ShareResponse(
     val thumbNailImage: String
 ) {
     constructor(share: Share) : this(
+        nickname = share.user.nickname,
+        profileImage = share.user.profileImage,
         shareId = share.id,
         title = share.title,
         content = share.content,
@@ -64,6 +69,20 @@ data class ShareResponse(
     )
 }
 
+data class AppliedUserDto(
+    val nickname: String,
+    val profileImage: ProfileImage,
+) {
+    constructor(applyShare: ApplyShare) : this(
+        nickname = applyShare.user.nickname,
+        profileImage = applyShare.user.profileImage,
+    )
+}
+
 fun Page<Share>.toShareResponseListPage(): Page<ShareResponse> {
     return this.map { ShareResponse(it) }
+}
+
+fun List<ApplyShare>.toApplyShareResponseList(): List<AppliedUserDto> {
+    return this.map { AppliedUserDto(it) }
 }
