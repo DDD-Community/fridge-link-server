@@ -73,7 +73,7 @@ class CustomIngredientDetailRepositoryImpl(
     override fun findByRefrigeratorList(refrigeratorList: List<Refrigerator>, limit: Long): List<IngredientDetail> {
         return queryFactory.selectFrom(ingredientDetail)
             .where(ingredientDetail.refrigerator.`in`(refrigeratorList).and(ingredientDetail.isDeleted.isFalse))
-            .orderBy(ingredientDetail.expirationDate.desc()).limit(limit).fetch()
+            .orderBy(ingredientDetail.expirationDate.asc()).limit(limit).fetch()
     }
 
     override fun countByRefrigeratorList(refrigeratorList: List<Refrigerator>): Long {
