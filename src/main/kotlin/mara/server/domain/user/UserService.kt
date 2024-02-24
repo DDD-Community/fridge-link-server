@@ -6,6 +6,11 @@ import mara.server.auth.kakao.KakaoApiClient
 import mara.server.auth.security.getCurrentLoginUserId
 import mara.server.config.redis.RefreshToken
 import mara.server.config.redis.RefreshTokenRepository
+import mara.server.domain.friend.FriendshipRepository
+import mara.server.domain.ingredient.IngredientDetailRepository
+import mara.server.domain.refrigerator.RefrigeratorRepository
+import mara.server.domain.share.ApplyShareRepository
+import mara.server.domain.share.ShareRepository
 import mara.server.util.StringUtil
 import mara.server.util.logger
 import org.springframework.beans.factory.annotation.Value
@@ -19,6 +24,11 @@ import java.util.UUID
 @Service
 class UserService(
     private val userRepository: UserRepository,
+    private val refrigeratorRepository: RefrigeratorRepository,
+    private val ingredientDetailRepository: IngredientDetailRepository,
+    private val shareRepository: ShareRepository,
+    private val applyShareRepository: ApplyShareRepository,
+    private val friendshipRepository: FriendshipRepository,
     private val jwtProvider: JwtProvider,
     private val passwordEncoder: BCryptPasswordEncoder,
     private val refreshTokenRepository: RefreshTokenRepository,
@@ -117,5 +127,14 @@ class UserService(
     fun createRefreshToken(user: User): String {
         val refreshToken = refreshTokenRepository.save(RefreshToken(UUID.randomUUID().toString(), user.userId, refreshDurationMins))
         return refreshToken.refreshToken
+    }
+
+    fun getCountMyStatistics(): UserStatisticResponse {
+        val user = getCurrentLoginUser()
+        val refrigeratorList = refrigeratorRepository.findByUser(user)
+        val ingredientCount = ingredientDetailRepository.countByRefrigeratorList(refrigeratorList)
+        val shareCount = shareRepository.countByUser(user) + applyShareRepository.countByUser(user)
+        val friendCount = friendshipRepository.countByFromUser(user)
+        return UserStatisticResponse(ingredientCount, shareCount, friendCount)
     }
 }

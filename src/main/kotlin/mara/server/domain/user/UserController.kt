@@ -74,4 +74,10 @@ class UserController(
     fun getAllMyShareList(pageable: Pageable, @RequestParam("status") status: String): CommonResponse<Page<ShareResponse>> {
         return success(shareService.getAllMyShareList(pageable, status))
     }
+
+    @GetMapping("/me/statistics")
+    @Operation(summary = "유저의 식자재 수, 나눔 수, 친구 수 조회 API")
+    fun getCountMyStatistics(): CommonResponse<UserStatisticResponse> {
+        return success(userService.getCountMyStatistics())
+    }
 }

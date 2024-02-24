@@ -11,7 +11,9 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.support.PageableExecutionUtils
 
-interface ShareRepository : JpaRepository<Share, Long>, CustomShareRepository
+interface ShareRepository : JpaRepository<Share, Long>, CustomShareRepository {
+    fun countByUser(user: User): Long
+}
 
 interface CustomShareRepository {
     fun findAllMyFriendsShare(pageable: Pageable, status: ShareStatus, user: User): Page<Share>
