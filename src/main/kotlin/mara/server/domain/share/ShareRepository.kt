@@ -33,7 +33,9 @@ class CustomShareRepositoryImpl(
     override fun findAllMyFriendsShare(pageable: Pageable, status: ShareStatus, user: User): Page<Share> {
         val friendsList = queryFactory.select(friendship.toUser.userId)
             .from(friendship)
-            .where(friendship.fromUser.eq(user))
+            .where(friendship.fromUser.eq(user)).fetch()
+
+        friendsList.add(user.userId)
 
         var sortBy = registeredDate
         pageable.sort.forEach { order ->
