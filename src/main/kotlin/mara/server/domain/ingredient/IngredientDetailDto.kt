@@ -27,6 +27,7 @@ data class IngredientDetailUpdateRequest(
 
 data class IngredientDetailResponse(
     val ingredientDetailId: Long,
+    val ingredientImage: String,
     val name: String,
     val quantity: Int,
     val location: IngredientLocation,
@@ -38,6 +39,7 @@ data class IngredientDetailResponse(
 
     constructor(ingredientDetail: IngredientDetail) : this(
         ingredientDetailId = ingredientDetail.ingredientDetailId,
+        ingredientImage = ingredientDetail.ingredient.iconImage,
         name = ingredientDetail.name,
         quantity = ingredientDetail.quantity,
         location = ingredientDetail.location,

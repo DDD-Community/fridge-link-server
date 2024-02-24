@@ -20,6 +20,7 @@ interface CustomIngredientDetailRepository {
 
     fun findByRefrigerator(
         refrigerator: Refrigerator,
+        location: IngredientLocation,
         pageable: Pageable
     ): Page<IngredientDetail>
 
@@ -50,13 +51,15 @@ class CustomIngredientDetailRepositoryImpl(
             .fetch()
     }
 
-    override fun findByRefrigerator(refrigerator: Refrigerator, pageable: Pageable): Page<IngredientDetail> {
+    override fun findByRefrigerator(refrigerator: Refrigerator, location: IngredientLocation, pageable: Pageable): Page<IngredientDetail> {
         val results = queryFactory.selectFrom(ingredientDetail)
-            .where(ingredientDetail.refrigerator.eq(refrigerator).and(ingredientDetail.isDeleted.isFalse))
+            .where(ingredientDetail.refrigerator.eq(refrigerator).and(ingredientDetail.isDeleted.isFalse).and(
+                ingredientDetail.location.eq(location)))
             .offset(pageable.offset).limit(pageable.pageSize.toLong()).fetch()
 
         val count = queryFactory.select(ingredientDetail.count()).from(ingredientDetail)
-            .where(ingredientDetail.refrigerator.eq(refrigerator).and(ingredientDetail.isDeleted.isFalse)).fetchOne()
+            .where(ingredientDetail.refrigerator.eq(refrigerator).and(ingredientDetail.isDeleted.isFalse).and(
+                ingredientDetail.location.eq(location))).fetchOne()
 
         return PageableExecutionUtils.getPage(results, pageable) { count!! }
     }
