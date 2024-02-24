@@ -37,7 +37,7 @@ class IngredientDetailService(
             memo = ingredientDetailRequest.memo,
             addDate = ingredientDetailRequest.addDate,
             expirationDate = ingredientDetailRequest.expirationDate,
-            isDeleted = ingredientDetailRequest.isDeleted
+            isDeleted = false
         )
 
         // 식재료 추가 일자 update
