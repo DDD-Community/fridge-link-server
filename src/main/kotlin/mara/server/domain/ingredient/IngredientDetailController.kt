@@ -43,9 +43,10 @@ class IngredientDetailController(
             size = 10
         )
         pageable: Pageable,
+        location: IngredientLocation,
         @PathVariable(name = "id") refrigeratorId: Long
     ): CommonResponse<Page<IngredientDetailResponse>> {
-        return success(ingredientDetailService.getIngredientDetailList(refrigeratorId, pageable))
+        return success(ingredientDetailService.getIngredientDetailList(refrigeratorId, location, pageable))
     }
 
     @GetMapping("/count")

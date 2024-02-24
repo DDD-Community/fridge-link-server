@@ -53,11 +53,11 @@ class IngredientDetailService(
         return IngredientDetailResponse(ingredientDetail)
     }
 
-    fun getIngredientDetailList(refrigeratorId: Long, pageable: Pageable): Page<IngredientDetailResponse> {
+    fun getIngredientDetailList(refrigeratorId: Long, location: IngredientLocation, pageable: Pageable): Page<IngredientDetailResponse> {
         val refrigerator = refrigeratorRepository.findById(refrigeratorId)
             .orElseThrow { NoSuchElementException("해당 냉장고가 존재하지 않습니다. ID: $refrigeratorId") }
         val ingredientDetailList =
-            ingredientDetailRepository.findByRefrigerator(refrigerator, pageable)
+            ingredientDetailRepository.findByRefrigerator(refrigerator, location, pageable)
         return ingredientDetailList.toIngredientDetailResponseListPage()
     }
 
