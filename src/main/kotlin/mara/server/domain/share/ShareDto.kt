@@ -1,5 +1,6 @@
 package mara.server.domain.share
 
+import mara.server.domain.user.ProfileImage
 import org.springframework.data.domain.Page
 import java.time.LocalDate
 import java.time.LocalTime
@@ -36,6 +37,8 @@ data class UpdateShareStatusRequest(
 )
 
 data class ShareResponse(
+    val userName: String,
+    val profileImage: ProfileImage,
     val shareId: Long,
     val title: String,
     val itemName: String,
@@ -50,6 +53,8 @@ data class ShareResponse(
     val thumbNailImage: String
 ) {
     constructor(share: Share) : this(
+        userName = share.user.nickname,
+        profileImage = share.user.profileImage,
         shareId = share.id,
         title = share.title,
         content = share.content,
