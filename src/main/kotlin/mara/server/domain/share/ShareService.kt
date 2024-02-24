@@ -83,10 +83,9 @@ class ShareService(
             .toShareResponseListPage()
     }
 
-    fun getAllApplyUserList(shareId: Long): List<String>? {
+    fun getAllApplyUserList(shareId: Long): List<AppliedUserDto>? {
         val share = getShare(shareId)
-        val applyShareList = share.applyShareList
-        return applyShareList.map { it.user.nickname }.toList()
+        return share.applyShareList.toApplyShareResponseList()
     }
 
     fun getAllMyAppliedShareList(pageable: Pageable, status: String): Page<ShareResponse>? {
