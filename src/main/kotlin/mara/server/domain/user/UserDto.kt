@@ -48,3 +48,9 @@ class UserFriendResponse(
         ingredientCount = ingredientCount
     )
 }
+
+class UserStatisticResponse(
+    val ingredientCount: Long,
+    val shareCount: Long,
+    val friendCount: Long
+)
