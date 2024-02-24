@@ -5,11 +5,13 @@ import mara.server.domain.refrigerator.Refrigerator
 import mara.server.domain.user.User
 
 data class FriendRefrigeratorResponse(
+    var userId: Long,
     val nickname: String,
     val refrigeratorId: Long,
     val friendRefrigeratorIngredientGroupList: List<FriendRefrigeratorIngredient>
 ) {
     constructor(user: User, refrigerator: Refrigerator, ingredientList: List<Ingredient>) : this(
+        userId = user.userId,
         nickname = user.nickname,
         refrigeratorId = refrigerator.refrigeratorId,
         friendRefrigeratorIngredientGroupList = ingredientList.map { FriendRefrigeratorIngredient(it) }
