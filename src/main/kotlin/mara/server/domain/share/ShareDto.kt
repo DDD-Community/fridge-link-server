@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
-import java.time.temporal.ChronoUnit
 
 data class ShareRequest(
     val title: String,
@@ -16,7 +15,7 @@ data class ShareRequest(
     val limitPerson: Int,
     val location: String,
     val status: String,
-    val thumbNailImage: String
+    val thumbnailImage: String
 )
 
 data class ApplyShareRequest(
@@ -48,19 +47,19 @@ data class ShareResponse(
     val location: String,
     val peopleCount: Int,
     val status: String,
-    val thumbNailImage: String,
+    val thumbnailImage: String,
     val isApplied: Boolean?
 ) {
     constructor(share: Share, isApplied: Boolean?) : this(
         shareId = share.id,
         title = share.title,
-        shareTime = share.shareTime.truncatedTo(ChronoUnit.MINUTES),
+        shareTime = share.shareTime,
         shareDate = share.shareDate,
         limitPerson = share.limitPerson,
         location = share.location,
-        peopleCount = share.peopleCnt,
+        peopleCount = share.peopleCount,
         status = share.status.name,
-        thumbNailImage = share.thumbNailImage,
+        thumbnailImage = share.thumbnailImage,
         isApplied = isApplied
     )
 }
@@ -76,7 +75,7 @@ data class ShareDetailResponse(
     val expirationDate: LocalDateTime,
     val limitPerson: Int,
     val location: String,
-    val peopleCnt: Int,
+    val peopleCount: Int,
     val status: ShareStatus,
     val thumbNailImage: String,
     val itemName: String,
@@ -93,9 +92,9 @@ data class ShareDetailResponse(
         expirationDate = share.ingredientDetail.expirationDate,
         limitPerson = share.limitPerson,
         location = share.location,
-        peopleCnt = share.peopleCnt,
+        peopleCount = share.peopleCount,
         status = share.status,
-        thumbNailImage = share.thumbNailImage,
+        thumbNailImage = share.thumbnailImage,
         itemName = share.ingredientDetail.name,
         shareId = share.id,
         isMine = isMine

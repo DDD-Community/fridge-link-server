@@ -54,8 +54,8 @@ class UserController(
 
     @PutMapping
     @Operation(summary = "유저 업데이트 API")
-    fun updateUser(@RequestBody updateRequest: UserUpdateRequest): CommonResponse<Boolean> {
-        return success(userService.updateUser(updateRequest))
+    fun updateUser(@RequestBody userUpdateRequest: UserUpdateRequest): CommonResponse<Boolean> {
+        return success(userService.updateUser(userUpdateRequest))
     }
 
     @GetMapping("/me/invite-code")

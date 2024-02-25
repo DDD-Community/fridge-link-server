@@ -114,9 +114,9 @@ class UserService(
         )
     }
 
-    fun updateUser(updateRequest: UserUpdateRequest): Boolean {
+    fun updateUser(userUpdateRequest: UserUpdateRequest): Boolean {
         val user = getCurrentLoginUser()
-        user.updateUserInfo(updateRequest)
+        user.updateUserInfo(userUpdateRequest)
         val updatedUser = userRepository.save(user)
 
         return updatedUser.userId == user.userId

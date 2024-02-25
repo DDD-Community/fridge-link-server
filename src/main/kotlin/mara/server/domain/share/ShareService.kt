@@ -38,7 +38,7 @@ class ShareService(
             limitPerson = shareRequest.limitPerson,
             location = shareRequest.location,
             status = ShareStatus.valueOf(shareRequest.status),
-            thumbNailImage = shareRequest.thumbNailImage,
+            thumbnailImage = shareRequest.thumbnailImage,
         )
 
         return shareRepository.save(share).id
@@ -60,7 +60,7 @@ class ShareService(
          기획에 따로 해당 상황일 때 신청을 막는 기능은 없지만
          혹시 모를 상황에 대비해 추가 함
          **/
-        share.plusPeopleCnt()
+        share.plusPeopleCount()
         return shareRepository.save(share).id
     }
 
@@ -75,10 +75,10 @@ class ShareService(
     }
 
     fun getAllShareList(pageable: Pageable, status: String): Page<ShareResponse> {
-        val me = userService.getCurrentLoginUser()
-        val shareList = shareRepository.findAllMyFriendsShare(pageable, ShareStatus.valueOf(status), me).map { share ->
+        val currentLoginUser = userService.getCurrentLoginUser()
+        val shareList = shareRepository.findAllMyFriendsShare(pageable, ShareStatus.valueOf(status), currentLoginUser).map { share ->
             val hasMatchingUser = share.applyShareList.any { applyShare ->
-                applyShare.user.userId == me.userId
+                applyShare.user.userId == currentLoginUser.userId
             }
             ShareResponse(share, hasMatchingUser)
         }
@@ -150,7 +150,7 @@ class ShareService(
         /**
          신청을 취소하면 사람 수 차감
          **/
-        applyShare.share.minusPeopleCnt()
+        applyShare.share.minusPeopleCount()
         applyShareRepository.deleteById(applyId)
         return deleted
     }
