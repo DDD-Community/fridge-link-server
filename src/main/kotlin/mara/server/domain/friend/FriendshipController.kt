@@ -39,12 +39,6 @@ class FriendshipController(
         return success(friendshipService.getFriendshipList(pageable))
     }
 
-    @GetMapping("/count")
-    @Operation(summary = "친구 수 조회 API")
-    fun getFriendshipCount(): CommonResponse<Long> {
-        return success(friendshipService.getFriendshipCount())
-    }
-
     @PostMapping("/delete")
     @Operation(summary = "친구 삭제 API")
     fun deleteFriendship(@RequestBody friendshipDeleteRequestList: List<FriendshipDeleteRequest>): CommonResponse<String> {

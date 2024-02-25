@@ -29,7 +29,7 @@ class FriendshipService(
         val fromUser = userRepository.findById(currentUserId)
             .orElseThrow { NoSuchElementException("해당 유저가 존재하지 않습니다. ID: $currentUserId") }
         val toUser = userRepository.findByInviteCode(friendshipRequest.inviteCode)
-            .orElseThrow { NoSuchElementException("해당 초대코드를 가진 사용자가 존재하지 않습니다.") }
+            ?: throw NoSuchElementException("해당 초대코드를 가진 사용자가 존재하지 않습니다. 초대코드: ${friendshipRequest.inviteCode}")
 
         addFriendship(fromUser, toUser)
         addFriendship(toUser, fromUser)
@@ -48,11 +48,6 @@ class FriendshipService(
         }
 
         return userFriendResponseList
-    }
-
-    fun getFriendshipCount(): Long {
-        val currentLoginUser = userService.getCurrentLoginUser()
-        return friendshipRepository.countByFromUser(currentLoginUser)
     }
 
     @Transactional

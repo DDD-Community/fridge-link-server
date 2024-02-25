@@ -3,13 +3,12 @@ package mara.server.domain.user
 import com.querydsl.jpa.impl.JPAQueryFactory
 import mara.server.domain.user.QUser.user
 import org.springframework.data.jpa.repository.JpaRepository
-import java.util.Optional
 
 interface UserRepository : JpaRepository<User, Long>, CustomUserRepository {
 
     fun findByKakaoId(id: Long): User?
     fun findByGoogleEmail(email: String): User?
-    fun findByInviteCode(inviteCode: String): Optional<User>
+    fun findByInviteCode(inviteCode: String): User?
     fun existsByNickname(nickname: String): Boolean
 }
 
