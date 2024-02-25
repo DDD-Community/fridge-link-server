@@ -114,6 +114,13 @@ class UserService(
         )
     }
 
+    fun updateUser(updateRequest: UserUpdateRequest): Boolean {
+        val user = getCurrentLoginUser()
+        user.updateUserInfo(updateRequest)
+        val updatedUser = userRepository.save(user)
+
+        return updatedUser.userId == user.userId
+    }
     fun createRefreshToken(user: User): String {
         val refreshToken = refreshTokenRepository.save(RefreshToken(UUID.randomUUID().toString(), user.userId, refreshDurationMins))
         return refreshToken.refreshToken

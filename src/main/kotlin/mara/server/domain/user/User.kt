@@ -13,7 +13,7 @@ enum class Role { USER }
 @Entity
 @Table(name = "app_user")
 class User(
-    val nickname: String,
+    var nickname: String,
     val password: String,
     val kakaoId: Long?,
     val kakaoEmail: String?,
@@ -29,6 +29,11 @@ class User(
     @Enumerated(EnumType.STRING)
     var role: Role = Role.USER
         protected set
+
+    fun updateUserInfo(updateRequest: UserUpdateRequest) {
+        this.nickname = updateRequest.nickname
+        this.profileImage = updateRequest.profileImage
+    }
 }
 
 enum class ProfileImage {
