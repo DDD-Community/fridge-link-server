@@ -21,7 +21,10 @@ class S3Service(
     private val dir: String
 ) {
     @Transactional
-    fun upload(file: MultipartFile, customDir: String? = dir): String {
+    fun upload(file: MultipartFile, customDir: String?): String {
+        val resultDir = customDir ?: dir
+        if (resultDir.startsWith("/")) throw IllegalArgumentException("올바르지 않은 경로입니다. $resultDir")
+
         val fileName = UUID.randomUUID().toString() + "-" + file.originalFilename
         val objMeta = ObjectMetadata()
 
@@ -31,10 +34,10 @@ class S3Service(
         val byteArrayIs = ByteArrayInputStream(bytes)
 
         s3Client.putObject(
-            PutObjectRequest(bucket, dir + fileName, byteArrayIs, objMeta)
+            PutObjectRequest(bucket, resultDir + fileName, byteArrayIs, objMeta)
                 .withCannedAcl(CannedAccessControlList.PublicRead)
         )
 
-        return s3Client.getUrl(bucket, dir + fileName).toString()
+        return s3Client.getUrl(bucket, resultDir + fileName).toString()
     }
 }
