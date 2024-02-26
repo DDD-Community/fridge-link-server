@@ -80,9 +80,9 @@ data class ShareDetailResponse(
     val thumbNailImage: String,
     val itemName: String,
     val shareId: Long,
-    val isMine: Boolean,
+    val isCreatedCurrentLoginUser: Boolean,
 ) {
-    constructor(share: Share, isMine: Boolean) : this(
+    constructor(share: Share, isCreatedCurrentLoginUser: Boolean) : this(
         nickname = share.user.nickname,
         profileImage = share.user.profileImage,
         title = share.title,
@@ -97,7 +97,7 @@ data class ShareDetailResponse(
         thumbNailImage = share.thumbnailImage,
         itemName = share.ingredientDetail.name,
         shareId = share.id,
-        isMine = isMine
+        isCreatedCurrentLoginUser = isCreatedCurrentLoginUser
     )
 }
 
@@ -112,7 +112,7 @@ data class AppliedUserResponse(
 }
 
 fun Page<Share>.toShareResponseListPage(): Page<ShareResponse> {
-    return this.map { ShareResponse(it, null) }
+    return this.map { ShareResponse(it, true) }
 }
 
 fun List<ApplyShare>.toApplyShareResponseList(): List<AppliedUserResponse> {
