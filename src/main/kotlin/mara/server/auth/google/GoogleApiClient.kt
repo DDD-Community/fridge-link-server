@@ -1,6 +1,5 @@
 package mara.server.auth.google
 
-import mara.server.util.logger
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -28,16 +27,16 @@ class GoogleApiClient(
 
 ) {
 
-    val log = logger()
-
-    fun getRedirectUri(): String {
-        val os = System.getProperty("os.name")
-        log.info("OS : {}", os)
-        if (os.contains("Mac") || os.contains("Windows")) return "http://localhost:8080/users/google-login"
-        return "http://localhost:3000/login"
+    fun getRedirectUri(status: String): String {
+        return when (status) {
+            "local" -> "http://localhost:8080/users/google-login"
+            "dev" -> "http://localhost:3000/login"
+            "prod" -> "https://fridgelink.site/login"
+            else -> throw IllegalAccessException("잘못된 status 값 입니다.")
+        }
     }
 
-    fun requestAccessToken(authorizedCode: String): String {
+    fun requestAccessToken(authorizedCode: String, status: String): String {
         val url = "$authUrl/token"
         val httpHeaders = HttpHeaders()
         httpHeaders.contentType = MediaType.APPLICATION_FORM_URLENCODED
@@ -46,7 +45,7 @@ class GoogleApiClient(
         body.add("grant_type", "authorization_code")
         body.add("client_id", clientId)
         body.add("client_secret", secret)
-        body.add("redirect_uri", getRedirectUri())
+        body.add("redirect_uri", getRedirectUri(status))
 
         val request = HttpEntity(body, httpHeaders)
 
