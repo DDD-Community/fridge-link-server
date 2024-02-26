@@ -1,5 +1,6 @@
 package mara.server.domain.share
 
+import mara.server.auth.security.getCurrentLoginUserId
 import mara.server.domain.ingredient.IngredientDetailRepository
 import mara.server.domain.user.UserService
 import org.springframework.data.domain.Page
@@ -37,7 +38,7 @@ class ShareService(
             limitPerson = shareRequest.limitPerson,
             location = shareRequest.location,
             status = ShareStatus.valueOf(shareRequest.status),
-            thumbNailImage = shareRequest.thumbNailImage,
+            thumbnailImage = shareRequest.thumbnailImage,
         )
 
         return shareRepository.save(share).id
@@ -59,7 +60,7 @@ class ShareService(
          기획에 따로 해당 상황일 때 신청을 막는 기능은 없지만
          혹시 모를 상황에 대비해 추가 함
          **/
-        share.plusPeopleCnt()
+        share.plusPeopleCount()
         return shareRepository.save(share).id
     }
 
@@ -68,14 +69,20 @@ class ShareService(
             .orElseThrow { NoSuchElementException("해당 나눔 게시물이 존재하지 않습니다. ID: $shareId") }
     }
 
-    fun getShareInfo(shareId: Long): ShareResponse {
-        return ShareResponse(getShare(shareId))
+    fun getShareInfo(shareId: Long): ShareDetailResponse {
+        val share = getShare(shareId)
+        return ShareDetailResponse(share, getCurrentLoginUserId() == share.user.userId)
     }
 
     fun getAllShareList(pageable: Pageable, status: String): Page<ShareResponse> {
-        val me = userService.getCurrentLoginUser()
-        val shareList = shareRepository.findAllMyFriendsShare(pageable, ShareStatus.valueOf(status), me)
-        return shareList.toShareResponseListPage()
+        val currentLoginUser = userService.getCurrentLoginUser()
+        val shareList = shareRepository.findAllMyFriendsShare(pageable, ShareStatus.valueOf(status), currentLoginUser).map { share ->
+            val hasMatchingUser = share.applyShareList.any { applyShare ->
+                applyShare.user.userId == currentLoginUser.userId
+            }
+            ShareResponse(share, hasMatchingUser)
+        }
+        return shareList
     }
 
     fun getAllMyCreatedShareList(pageable: Pageable, status: String): Page<ShareResponse> {
@@ -83,7 +90,7 @@ class ShareService(
             .toShareResponseListPage()
     }
 
-    fun getAllApplyUserList(shareId: Long): List<AppliedUserDto>? {
+    fun getAllApplyUserList(shareId: Long): List<AppliedUserResponse>? {
         val share = getShare(shareId)
         return share.applyShareList.toApplyShareResponseList()
     }
@@ -143,7 +150,7 @@ class ShareService(
         /**
          신청을 취소하면 사람 수 차감
          **/
-        applyShare.share.minusPeopleCnt()
+        applyShare.share.minusPeopleCount()
         applyShareRepository.deleteById(applyId)
         return deleted
     }

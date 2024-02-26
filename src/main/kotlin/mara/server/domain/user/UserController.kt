@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -49,6 +50,12 @@ class UserController(
     @Operation(summary = "로그인한 유저 조회 API")
     fun getCurrentLoginUser(): CommonResponse<UserResponse> {
         return success(userService.getCurrentUserInfo())
+    }
+
+    @PutMapping
+    @Operation(summary = "유저 업데이트 API")
+    fun updateUser(@RequestBody userUpdateRequest: UserUpdateRequest): CommonResponse<Boolean> {
+        return success(userService.updateUser(userUpdateRequest))
     }
 
     @GetMapping("/me/invite-code")

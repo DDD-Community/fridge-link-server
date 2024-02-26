@@ -36,13 +36,13 @@ data class Share(
     var location: String,
     @Enumerated(EnumType.STRING)
     var status: ShareStatus,
-    var thumbNailImage: String
+    var thumbnailImage: String
 ) : BaseEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0
 
-    var peopleCnt: Int = 0
+    var peopleCount: Int = 0
 
     @OneToMany(mappedBy = "share", cascade = [CascadeType.ALL], orphanRemoval = true)
     protected val applyShareMutableList: MutableList<ApplyShare> = mutableListOf()
@@ -52,12 +52,12 @@ data class Share(
         this.applyShareMutableList.add(applyShare)
     }
 
-    fun plusPeopleCnt() {
-        this.peopleCnt += 1
+    fun plusPeopleCount() {
+        this.peopleCount += 1
     }
 
-    fun minusPeopleCnt() {
-        this.peopleCnt -= 1
+    fun minusPeopleCount() {
+        this.peopleCount -= 1
     }
     fun updateIngredientDetail(ingredientDetail: IngredientDetail) {
         this.ingredientDetail = ingredientDetail
@@ -74,7 +74,7 @@ data class Share(
         this.shareDatetime = updateShareRequest.shareDate.atTime(updateShareRequest.shareTime)
         this.limitPerson = updateShareRequest.limitPerson
         this.location = updateShareRequest.location
-        this.thumbNailImage = updateShareRequest.thumbNailImage
+        this.thumbnailImage = updateShareRequest.thumbNailImage
     }
 }
 

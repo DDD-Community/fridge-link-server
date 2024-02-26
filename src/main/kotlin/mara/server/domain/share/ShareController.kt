@@ -34,7 +34,7 @@ class ShareController(private val shareService: ShareService) {
 
     @GetMapping("/{id}")
     @Operation(summary = "나눔 상세 조회 API")
-    fun getShareInfo(@PathVariable(name = "id") id: Long): CommonResponse<ShareResponse> {
+    fun getShareInfo(@PathVariable(name = "id") id: Long): CommonResponse<ShareDetailResponse> {
         return success(shareService.getShareInfo(id))
     }
 
@@ -46,7 +46,7 @@ class ShareController(private val shareService: ShareService) {
 
     @GetMapping("/{id}/applies")
     @Operation(summary = "나눔 신청 사용자 이름 조회 API")
-    fun getAllApplyUserList(@PathVariable(name = "id") shareId: Long): CommonResponse<List<AppliedUserDto>?> {
+    fun getAllApplyUserList(@PathVariable(name = "id") shareId: Long): CommonResponse<List<AppliedUserResponse>?> {
         return success(shareService.getAllApplyUserList(shareId))
     }
 
