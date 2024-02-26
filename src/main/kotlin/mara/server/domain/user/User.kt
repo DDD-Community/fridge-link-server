@@ -30,7 +30,7 @@ class User(
     var role: Role = Role.USER
         protected set
 
-    fun updateUserInfo(updateRequest: UserUpdateRequest) {
+    fun updateInfo(updateRequest: UserUpdateRequest) {
         this.nickname = updateRequest.nickname
         this.profileImage = updateRequest.profileImage
     }
