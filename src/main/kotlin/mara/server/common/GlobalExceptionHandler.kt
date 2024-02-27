@@ -11,6 +11,6 @@ class GlobalExceptionHandler {
     @ExceptionHandler(InvalidDeployStatusException::class)
     fun handleInvalidDeployStatusException(ex: InvalidDeployStatusException): ResponseEntity<CommonResponse<Any>> {
         log.warn("[{}] handled: {}", ex.javaClass.simpleName, ex.message)
-        return badRequest(ex.message ?: "entity not found exception")
+        return badRequest(ex.message ?: "Invalid status value")
     }
 }
