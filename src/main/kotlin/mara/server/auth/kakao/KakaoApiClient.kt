@@ -1,5 +1,8 @@
 package mara.server.auth.kakao
 
+import mara.server.auth.DeployStatus
+import mara.server.common.InvalidDeployStatusException
+import mara.server.common.WRONG_STATUS_ERROR
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -8,6 +11,7 @@ import org.springframework.stereotype.Component
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import org.springframework.web.client.RestTemplate
+import java.util.Locale
 
 @Component
 class KakaoApiClient(
@@ -29,11 +33,16 @@ class KakaoApiClient(
 ) {
 
     fun getRedirectUri(status: String): String {
-        return when (status) {
-            "local" -> "http://localhost:8080/users/kakao-login"
-            "dev" -> "http://localhost:3000/login"
-            "prod" -> "https://fridgelink.site/login"
-            else -> throw IllegalAccessException("잘못된 status 값 입니다.")
+        val deployStatus = try {
+            DeployStatus.valueOf(status.uppercase(Locale.getDefault()))
+        } catch (e: IllegalArgumentException) {
+            throw InvalidDeployStatusException(WRONG_STATUS_ERROR)
+        }
+
+        return when (deployStatus) {
+            DeployStatus.LOCAL -> "http://localhost:8080/users/kakao-login"
+            DeployStatus.DEV -> "http://localhost:3000/login"
+            DeployStatus.PROD -> "https://fridgelink.site/login"
         }
     }
 

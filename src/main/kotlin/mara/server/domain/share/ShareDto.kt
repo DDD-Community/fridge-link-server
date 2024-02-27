@@ -50,7 +50,7 @@ data class ShareResponse(
     val thumbnailImage: String,
     val isApplied: Boolean?
 ) {
-    constructor(share: Share, isApplied: Boolean?) : this(
+    constructor(share: Share, isApplied: Boolean) : this(
         shareId = share.id,
         title = share.title,
         shareTime = share.shareTime,
@@ -77,12 +77,13 @@ data class ShareDetailResponse(
     val location: String,
     val peopleCount: Int,
     val status: ShareStatus,
-    val thumbNailImage: String,
+    val thumbnailImage: String,
     val itemName: String,
     val shareId: Long,
-    val isCreatedCurrentLoginUser: Boolean,
+    val isCreatedByCurrentLoginUser: Boolean,
+    val isApplied: Boolean,
 ) {
-    constructor(share: Share, isCreatedCurrentLoginUser: Boolean) : this(
+    constructor(share: Share, isCreatedByCurrentLoginUser: Boolean, isApplied: Boolean) : this(
         nickname = share.user.nickname,
         profileImage = share.user.profileImage,
         title = share.title,
@@ -94,10 +95,11 @@ data class ShareDetailResponse(
         location = share.location,
         peopleCount = share.peopleCount,
         status = share.status,
-        thumbNailImage = share.thumbnailImage,
+        thumbnailImage = share.thumbnailImage,
         itemName = share.ingredientDetail.name,
         shareId = share.id,
-        isCreatedCurrentLoginUser = isCreatedCurrentLoginUser
+        isCreatedByCurrentLoginUser = isCreatedByCurrentLoginUser,
+        isApplied = isApplied,
     )
 }
 

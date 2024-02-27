@@ -11,3 +11,9 @@ class ClientConfig {
         return RestTemplate()
     }
 }
+
+enum class DeployStatus {
+    LOCAL,
+    DEV,
+    PROD
+}

@@ -71,7 +71,10 @@ class ShareService(
 
     fun getShareInfo(shareId: Long): ShareDetailResponse {
         val share = getShare(shareId)
-        return ShareDetailResponse(share, getCurrentLoginUserId() == share.user.userId)
+        val hasMatchingUser = share.applyShareList.any { applyShare ->
+            applyShare.user.userId == getCurrentLoginUserId()
+        }
+        return ShareDetailResponse(share, getCurrentLoginUserId() == share.user.userId, hasMatchingUser)
     }
 
     fun getAllShareList(pageable: Pageable, status: String): Page<ShareResponse> {
