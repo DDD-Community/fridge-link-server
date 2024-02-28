@@ -36,13 +36,12 @@ class KakaoApiClient(
         val deployStatus = try {
             DeployStatus.valueOf(status.uppercase(Locale.getDefault()))
         } catch (e: IllegalArgumentException) {
-            throw InvalidDeployStatusException(WRONG_STATUS_ERROR)
+            throw InvalidDeployStatusException("$WRONG_STATUS_ERROR: $status")
         }
 
         return when (deployStatus) {
             DeployStatus.LOCAL -> "http://localhost:8080/users/kakao-login"
-            DeployStatus.DEV -> "http://localhost:3000/login"
-            DeployStatus.PROD -> "https://fridgelink.site/login"
+            else -> deployStatus.uri
         }
     }
 

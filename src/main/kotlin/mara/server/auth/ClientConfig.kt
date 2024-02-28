@@ -12,8 +12,8 @@ class ClientConfig {
     }
 }
 
-enum class DeployStatus {
-    LOCAL,
-    DEV,
-    PROD
+enum class DeployStatus(val uri:String) {
+    LOCAL(""),
+    DEV("http://localhost:3000/login"),
+    PROD("https://fridgelink.site/login")
 }

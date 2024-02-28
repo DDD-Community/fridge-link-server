@@ -37,11 +37,9 @@ class GoogleApiClient(
         } catch (e: IllegalArgumentException) {
             throw InvalidDeployStatusException(WRONG_STATUS_ERROR)
         }
-
         return when (deployStatus) {
             DeployStatus.LOCAL -> "http://localhost:8080/users/google-login"
-            DeployStatus.DEV -> "http://localhost:3000/login"
-            DeployStatus.PROD -> "https://fridgelink.site/login"
+            else -> deployStatus.uri
         }
     }
 
