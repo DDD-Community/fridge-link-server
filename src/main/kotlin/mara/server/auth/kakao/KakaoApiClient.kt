@@ -36,7 +36,7 @@ class KakaoApiClient(
         val deployStatus = try {
             DeployStatus.valueOf(status.uppercase(Locale.getDefault()))
         } catch (e: IllegalArgumentException) {
-            throw InvalidDeployStatusException("$WRONG_STATUS_ERROR: $status")
+            throw InvalidDeployStatusException(WRONG_STATUS_ERROR, status)
         }
 
         return when (deployStatus) {

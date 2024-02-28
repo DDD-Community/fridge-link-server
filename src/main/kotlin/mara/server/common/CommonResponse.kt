@@ -10,6 +10,6 @@ data class CommonResponse<T>(
 
 fun <T> success(data: T? = null): CommonResponse<T> = CommonResponse(data = data)
 
-fun <T> fail(message: String): ResponseEntity<CommonResponse<T>> = ResponseEntity
-    .status(HttpStatus.BAD_REQUEST)
-    .body(CommonResponse(message = message))
+fun <T> fail(message: String, httpStatus: HttpStatus, data: T?): ResponseEntity<CommonResponse<T>> = ResponseEntity
+    .status(httpStatus)
+    .body(CommonResponse(message = message, data = data))

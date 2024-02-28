@@ -35,7 +35,7 @@ class GoogleApiClient(
         val deployStatus = try {
             DeployStatus.valueOf(status.uppercase(Locale.getDefault()))
         } catch (e: IllegalArgumentException) {
-            throw InvalidDeployStatusException(WRONG_STATUS_ERROR)
+            throw InvalidDeployStatusException(WRONG_STATUS_ERROR, status)
         }
         return when (deployStatus) {
             DeployStatus.LOCAL -> "http://localhost:8080/users/google-login"
