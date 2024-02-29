@@ -1,6 +1,8 @@
 package mara.server.auth.google
 
-import mara.server.util.logger
+import mara.server.auth.DeployStatus
+import mara.server.exception.InvalidDeployStatusException
+import mara.server.exception.InvalidDeployStatusException.Companion.INVALID_DEPLOY_STATUS
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Component
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import org.springframework.web.client.RestTemplate
+import java.util.Locale
 
 @Component
 class GoogleApiClient(
@@ -28,16 +31,19 @@ class GoogleApiClient(
 
 ) {
 
-    val log = logger()
-
-    fun getRedirectUri(): String {
-        val os = System.getProperty("os.name")
-        log.info("OS : {}", os)
-        if (os.contains("Mac") || os.contains("Windows")) return "http://localhost:8080/users/google-login"
-        return "http://localhost:3000/login"
+    fun getRedirectUri(status: String): String {
+        val deployStatus = try {
+            DeployStatus.valueOf(status.uppercase(Locale.getDefault()))
+        } catch (e: IllegalArgumentException) {
+            throw InvalidDeployStatusException("$INVALID_DEPLOY_STATUS Status: $status")
+        }
+        return when (deployStatus) {
+            DeployStatus.LOCAL -> "http://localhost:8080/users/google-login"
+            else -> deployStatus.uri
+        }
     }
 
-    fun requestAccessToken(authorizedCode: String): String {
+    fun requestAccessToken(authorizedCode: String, status: String): String {
         val url = "$authUrl/token"
         val httpHeaders = HttpHeaders()
         httpHeaders.contentType = MediaType.APPLICATION_FORM_URLENCODED
@@ -46,7 +52,7 @@ class GoogleApiClient(
         body.add("grant_type", "authorization_code")
         body.add("client_id", clientId)
         body.add("client_secret", secret)
-        body.add("redirect_uri", getRedirectUri())
+        body.add("redirect_uri", getRedirectUri(status))
 
         val request = HttpEntity(body, httpHeaders)
 

@@ -3,11 +3,17 @@ package mara.server.domain.share
 import mara.server.auth.security.getCurrentLoginUserId
 import mara.server.domain.ingredient.IngredientDetailRepository
 import mara.server.domain.user.UserService
+import mara.server.exception.IllegalAccessShareException
+import mara.server.exception.IllegalAccessShareException.Companion.CREATED_BY_LOGIN_USER
+import mara.server.exception.IllegalAccessShareException.Companion.DIFFERENT_USER
+import mara.server.exception.IllegalAccessShareException.Companion.DUPLICATED_APPLY
+import mara.server.exception.ShareException.Companion.NO_SUCH_APPLY_SHARE
+import mara.server.exception.ShareException.Companion.NO_SUCH_INGREDIENT
+import mara.server.exception.ShareException.Companion.NO_SUCH_SHARE
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.lang.RuntimeException
 
 @Service
 class ShareService(
@@ -24,7 +30,7 @@ class ShareService(
         val ingredientDetailId = shareRequest.ingredientDetailId
         val ingredientDetail =
             ingredientDetailRepository.findById(ingredientDetailId)
-                .orElseThrow { NoSuchElementException("해당 식재료가 존재하지 않습니다. ID: $ingredientDetailId") }
+                .orElseThrow { NoSuchElementException("$NO_SUCH_INGREDIENT Id: $ingredientDetailId") }
         val user = userService.getCurrentLoginUser()
         // 생성 보단 조회가 빈번 할것 같아, 매번 조회 할 때마다, 일자와 시간을 분리하기 보단, 저장 할 때 각각 & 일자+시간 저장 하는 방식으로 진행
         val share = Share(
@@ -48,8 +54,8 @@ class ShareService(
     fun applyShare(applyShareRequest: ApplyShareRequest): Long {
         val share = getShare(applyShareRequest.shareId)
         val user = userService.getCurrentLoginUser()
-        if (share.user.userId == user.userId) throw IllegalAccessException("본인이 올린 나눔 글에는 신청을 할 수 없습니다.")
-        if (applyShareRepository.existsByUserAndShare(user, share)) throw IllegalAccessException("이미 신청한 나눔 입니다.")
+        if (share.user.userId == user.userId) throw IllegalAccessShareException(CREATED_BY_LOGIN_USER)
+        if (applyShareRepository.existsByUserAndShare(user, share)) throw IllegalAccessShareException(DUPLICATED_APPLY)
         val applyShare = ApplyShare(
             user = user,
             share = share
@@ -66,12 +72,15 @@ class ShareService(
 
     fun getShare(shareId: Long): Share {
         return shareRepository.findById(shareId)
-            .orElseThrow { NoSuchElementException("해당 나눔 게시물이 존재하지 않습니다. ID: $shareId") }
+            .orElseThrow { NoSuchElementException("$NO_SUCH_SHARE Id: $shareId") }
     }
 
     fun getShareInfo(shareId: Long): ShareDetailResponse {
         val share = getShare(shareId)
-        return ShareDetailResponse(share, getCurrentLoginUserId() == share.user.userId)
+        val hasMatchingUser = share.applyShareList.any { applyShare ->
+            applyShare.user.userId == getCurrentLoginUserId()
+        }
+        return ShareDetailResponse(share, getCurrentLoginUserId() == share.user.userId, hasMatchingUser)
     }
 
     fun getAllShareList(pageable: Pageable, status: String): Page<ShareResponse> {
@@ -114,7 +123,7 @@ class ShareService(
                 ingredientDetailRepository.findById(
                     ingredientDetailId
                 )
-                    .orElseThrow { NoSuchElementException("해당 식재료가 존재하지 않습니다. ID: $ingredientDetailId") }
+                    .orElseThrow { NoSuchElementException("$NO_SUCH_INGREDIENT Id: $ingredientDetailId") }
             share.updateIngredientDetail(ingredientDetail)
         }
 
@@ -136,7 +145,7 @@ class ShareService(
     @Transactional
     fun deleteShare(shareId: Long): String {
         val user = userService.getCurrentLoginUser()
-        if (user.userId != getShare(shareId).user.userId) throw RuntimeException("잘못된 사용자로부터 전달된 요청입니다.")
+        if (user.userId != getShare(shareId).user.userId) throw IllegalAccessShareException(DIFFERENT_USER)
         shareRepository.deleteById(shareId)
         return deleted
     }
@@ -145,8 +154,8 @@ class ShareService(
     fun deleteApplyShare(applyId: Long): String {
         val user = userService.getCurrentLoginUser()
         val applyShare = applyShareRepository.findById(applyId)
-            .orElseThrow { NoSuchElementException("해당 나눔 신청이 존재 하지 않습니다. ID: $applyId") }
-        if (user.userId != applyShare.user.userId) throw RuntimeException("잘못된 사용자로부터 전달된 요청입니다.")
+            .orElseThrow { NoSuchElementException("$NO_SUCH_APPLY_SHARE Id: $applyId") }
+        if (user.userId != applyShare.user.userId) throw IllegalAccessShareException(DIFFERENT_USER)
         /**
          신청을 취소하면 사람 수 차감
          **/

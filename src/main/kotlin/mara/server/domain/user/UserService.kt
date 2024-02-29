@@ -74,9 +74,9 @@ class UserService(
 
     fun checkNickname(nickname: String): CheckDuplicateResponse = CheckDuplicateResponse(userRepository.existsByNickname(nickname))
 
-    fun kakaoLogin(authorizedCode: String): AuthDto {
+    fun kakaoLogin(authorizedCode: String, status: String): AuthDto {
         // 리다이랙트 url 환경 따라 다르게 전달하기 위한 구분 값
-        val accessToken = kakaoApiClient.requestAccessToken(authorizedCode)
+        val accessToken = kakaoApiClient.requestAccessToken(authorizedCode, status)
         val oauthInfoResponse = kakaoApiClient.requestOauthInfo(accessToken)
         log.info("kakaoId ? " + oauthInfoResponse.id)
         val user = userRepository.findByKakaoId(oauthInfoResponse.id)
@@ -100,8 +100,8 @@ class UserService(
         )
     }
 
-    fun googleLogin(authorizedCode: String): AuthDto {
-        val accessToken = googleApiClient.requestAccessToken(authorizedCode)
+    fun googleLogin(authorizedCode: String, status: String): AuthDto {
+        val accessToken = googleApiClient.requestAccessToken(authorizedCode, status)
         val oauthInfoResponse = googleApiClient.requestOauthInfo(accessToken)
 
         log.info(oauthInfoResponse.email)

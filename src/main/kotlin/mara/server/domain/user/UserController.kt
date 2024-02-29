@@ -36,14 +36,14 @@ class UserController(
 
     @GetMapping("/kakao-login")
     @Operation(summary = "카카오 로그인 API")
-    fun kakaoLogin(@RequestParam(value = "code") authorizedCode: String): CommonResponse<AuthDto> {
-        return success(userService.kakaoLogin(authorizedCode))
+    fun kakaoLogin(@RequestParam(value = "code") authorizedCode: String, @RequestParam(value = "status") status: String): CommonResponse<AuthDto> {
+        return success(userService.kakaoLogin(authorizedCode, status))
     }
 
     @GetMapping("/google-login")
     @Operation(summary = "구글 로그인 API")
-    fun googleLogin(@RequestParam(value = "code") authorizedCode: String): CommonResponse<AuthDto> {
-        return success(userService.googleLogin(authorizedCode))
+    fun googleLogin(@RequestParam(value = "code") authorizedCode: String, @RequestParam(value = "status") status: String): CommonResponse<AuthDto> {
+        return success(userService.googleLogin(authorizedCode, status))
     }
 
     @GetMapping("/me")
