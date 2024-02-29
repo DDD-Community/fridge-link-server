@@ -1,5 +1,7 @@
-package mara.server.common
+package mara.server.exception
 
+import mara.server.common.ErrorResponse
+import mara.server.common.fail
 import mara.server.util.logger
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -15,4 +17,10 @@ class GlobalExceptionHandler {
         log.warn("Custom Exception [{}] was handled: {}", ex.javaClass.simpleName, ex.message)
         return fail(HttpStatus.BAD_REQUEST, ex.message ?: "BadRequestException occurred")
     }
+
+    // @ExceptionHandler(NoSuchUserException::class)
+    // fun handleNotFoundException(ex: Exception): ResponseEntity<ErrorResponse> {
+    //     log.warn("Custom Exception [{}] was handled: {}", ex.javaClass.simpleName, ex.message)
+    //     return fail(HttpStatus.NOT_FOUND, ex.message ?: "NotFoundException occurred")
+    // }
 }

@@ -2,6 +2,7 @@ package mara.server.domain.ingredient
 
 import mara.server.domain.refrigerator.RefrigeratorRepository
 import mara.server.domain.refrigerator.RefrigeratorService
+import mara.server.exception.RefrigeratorException.Companion.NO_SUCH_REFRIGERATOR
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -22,7 +23,7 @@ class IngredientDetailService(
     fun createIngredientDetail(ingredientDetailRequest: IngredientDetailRequest): Long {
         val refrigeratorId = ingredientDetailRequest.refrigeratorId
         val refrigerator = refrigeratorRepository.findById(refrigeratorId)
-            .orElseThrow { NoSuchElementException("해당 냉장고가 존재하지 않습니다. ID: $refrigeratorId") }
+            .orElseThrow { NoSuchElementException(NO_SUCH_REFRIGERATOR) }
 
         val ingredientId = ingredientDetailRequest.ingredientId
         val ingredient = ingredientRepository.findById(ingredientId)
@@ -55,7 +56,7 @@ class IngredientDetailService(
 
     fun getIngredientDetailList(refrigeratorId: Long, location: IngredientLocation, pageable: Pageable): Page<IngredientDetailResponse> {
         val refrigerator = refrigeratorRepository.findById(refrigeratorId)
-            .orElseThrow { NoSuchElementException("해당 냉장고가 존재하지 않습니다. ID: $refrigeratorId") }
+            .orElseThrow { NoSuchElementException(NO_SUCH_REFRIGERATOR) }
         val ingredientDetailList =
             ingredientDetailRepository.findByRefrigerator(refrigerator, location, pageable)
         return ingredientDetailList.toIngredientDetailResponseListPage()

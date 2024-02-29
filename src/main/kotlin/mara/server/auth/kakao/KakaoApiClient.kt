@@ -1,8 +1,8 @@
 package mara.server.auth.kakao
 
 import mara.server.auth.DeployStatus
-import mara.server.common.InvalidDeployStatusException
-import mara.server.common.InvalidDeployStatusException.Companion.INVALID_DEPLOY_STATUS_ERROR
+import mara.server.exception.InvalidDeployStatusException
+import mara.server.exception.InvalidDeployStatusException.Companion.INVALID_DEPLOY_STATUS
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -36,7 +36,7 @@ class KakaoApiClient(
         val deployStatus = try {
             DeployStatus.valueOf(status.uppercase(Locale.getDefault()))
         } catch (e: IllegalArgumentException) {
-            throw InvalidDeployStatusException(INVALID_DEPLOY_STATUS_ERROR)
+            throw InvalidDeployStatusException(INVALID_DEPLOY_STATUS)
         }
 
         return when (deployStatus) {
