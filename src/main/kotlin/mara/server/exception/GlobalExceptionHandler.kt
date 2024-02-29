@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 class GlobalExceptionHandler {
     val log = logger()
 
-    @ExceptionHandler(InvalidDeployStatusException::class, InvalidS3PathException::class)
+    @ExceptionHandler(InvalidDeployStatusException::class, InvalidS3PathException::class, NoSuchElementException::class)
     fun handleBadRequestException(ex: Exception): ResponseEntity<ErrorResponse> {
         log.warn("Custom Exception [{}] was handled: {}", ex.javaClass.simpleName, ex.message)
         return fail(HttpStatus.BAD_REQUEST, ex.message ?: "BadRequestException occurred")
     }
 
-    @ExceptionHandler(IllegalAccessCreatedByLoginUserException::class)
+    @ExceptionHandler(IllegalAccessShareException::class)
     fun handleForbiddenException(ex: Exception): ResponseEntity<ErrorResponse> {
         log.warn("Custom Exception [{}] was handled: {}", ex.javaClass.simpleName, ex.message)
         return fail(HttpStatus.FORBIDDEN, ex.message ?: "ForbiddenException occurred")
