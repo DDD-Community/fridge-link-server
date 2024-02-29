@@ -8,8 +8,12 @@ data class CommonResponse<T>(
     var data: T? = null,
 )
 
+data class ErrorResponse(
+    var message: String
+)
+
 fun <T> success(data: T? = null): CommonResponse<T> = CommonResponse(data = data)
 
-fun <T> fail(message: String, httpStatus: HttpStatus, data: T?): ResponseEntity<CommonResponse<T>> = ResponseEntity
+fun fail(httpStatus: HttpStatus, message: String): ResponseEntity<ErrorResponse> = ResponseEntity
     .status(httpStatus)
-    .body(CommonResponse(message = message, data = data))
+    .body(ErrorResponse(message = message))

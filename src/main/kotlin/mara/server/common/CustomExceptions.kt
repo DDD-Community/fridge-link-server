@@ -1,4 +1,8 @@
 package mara.server.common
 
-const val WRONG_STATUS_ERROR = "Invalid status value"
-class InvalidDeployStatusException(message: String, val additionalData: Any?) : RuntimeException(message)
+class CustomExceptions
+class InvalidDeployStatusException(message: String) : RuntimeException(message) {
+    companion object {
+        const val INVALID_DEPLOY_STATUS_ERROR = "유효하지 않은 배포 상태 값 입니다."
+    }
+}

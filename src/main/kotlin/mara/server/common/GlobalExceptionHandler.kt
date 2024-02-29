@@ -11,21 +11,8 @@ class GlobalExceptionHandler {
     val log = logger()
 
     @ExceptionHandler(InvalidDeployStatusException::class)
-    fun handleBadRequestException(ex: InvalidDeployStatusException): ResponseEntity<CommonResponse<Any>> {
-        log.warn("[{}] handled: {}", ex.javaClass.simpleName, ex.message)
-
-        /**
-         * 차후 확장성을 고려하여 하단의 주석 처럼 수정 할 수 있음
-         *
-         * val httpStatus = when (ex) {
-         *         is InvalidDeployStatusException -> HttpStatus.BAD_REQUEST
-         *         is AnotherCustomException -> HttpStatus.INTERNAL_SERVER_ERROR
-         *         else -> HttpStatus.INTERNAL_SERVER_ERROR // 기본적으로 설정할 HTTP 상태 코드
-         *     }
-         * */
-
-        val httpStatus = HttpStatus.BAD_REQUEST
-        val data = ex.additionalData
-        return fail(ex.message ?: "An error occurred", httpStatus, data)
+    fun handleBadRequestException(ex: Exception): ResponseEntity<ErrorResponse> {
+        log.warn("Custom Exception [{}] was handled: {}", ex.javaClass.simpleName, ex.message)
+        return fail(HttpStatus.BAD_REQUEST, ex.message ?: "BadRequestException occurred")
     }
 }

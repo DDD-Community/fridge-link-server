@@ -2,7 +2,7 @@ package mara.server.auth.google
 
 import mara.server.auth.DeployStatus
 import mara.server.common.InvalidDeployStatusException
-import mara.server.common.WRONG_STATUS_ERROR
+import mara.server.common.InvalidDeployStatusException.Companion.INVALID_DEPLOY_STATUS_ERROR
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -35,7 +35,7 @@ class GoogleApiClient(
         val deployStatus = try {
             DeployStatus.valueOf(status.uppercase(Locale.getDefault()))
         } catch (e: IllegalArgumentException) {
-            throw InvalidDeployStatusException(WRONG_STATUS_ERROR, status)
+            throw InvalidDeployStatusException(INVALID_DEPLOY_STATUS_ERROR)
         }
         return when (deployStatus) {
             DeployStatus.LOCAL -> "http://localhost:8080/users/google-login"
