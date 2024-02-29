@@ -3,6 +3,8 @@ package mara.server.domain.share
 import mara.server.auth.security.getCurrentLoginUserId
 import mara.server.domain.ingredient.IngredientDetailRepository
 import mara.server.domain.user.UserService
+import mara.server.exception.IllegalAccessCreatedByLoginUserException
+import mara.server.exception.IllegalAccessCreatedByLoginUserException.Companion.CREATED_BY_LOGIN_USER
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -48,7 +50,7 @@ class ShareService(
     fun applyShare(applyShareRequest: ApplyShareRequest): Long {
         val share = getShare(applyShareRequest.shareId)
         val user = userService.getCurrentLoginUser()
-        if (share.user.userId == user.userId) throw IllegalAccessException("본인이 올린 나눔 글에는 신청을 할 수 없습니다.")
+        if (share.user.userId == user.userId) throw IllegalAccessCreatedByLoginUserException(CREATED_BY_LOGIN_USER)
         if (applyShareRepository.existsByUserAndShare(user, share)) throw IllegalAccessException("이미 신청한 나눔 입니다.")
         val applyShare = ApplyShare(
             user = user,
