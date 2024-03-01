@@ -98,13 +98,13 @@ class CustomShareRepositoryImpl(
             .fetch()
 
         val query = queryFactory.selectFrom(share)
-            .where(share.id.`in`(appliedShareIdList).and(share.user.eq(user).and(share.status.eq(status))))
+            .where((share.id.`in`(appliedShareIdList).or(share.user.eq(user)).and(share.status.eq(status))))
             .offset(pageable.offset)
             .limit(pageable.pageSize.toLong())
             .orderBy(share.createdAt.desc()).fetch()
 
         val count = queryFactory.select(share.count()).from(share)
-            .where(share.id.`in`(appliedShareIdList).and(share.user.eq(user).and(share.status.eq(status)))).fetchOne()
+            .where((share.id.`in`(appliedShareIdList).or(share.user.eq(user)).and(share.status.eq(status)))).fetchOne()
 
         return PageableExecutionUtils.getPage(query, pageable) { count!! }
     }
