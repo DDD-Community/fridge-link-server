@@ -70,7 +70,7 @@ class ShareController(private val shareService: ShareService) {
 
     @DeleteMapping("/applies/{id}")
     @Operation(summary = "나눔 신청 취소 API")
-    fun deleteApply(@PathVariable(name = "id") applyId: Long): CommonResponse<String> {
-        return success(shareService.deleteApplyShare(applyId))
+    fun deleteApply(@PathVariable(name = "id") shareId: Long): CommonResponse<String> {
+        return success(shareService.deleteApplyShare(shareId))
     }
 }
