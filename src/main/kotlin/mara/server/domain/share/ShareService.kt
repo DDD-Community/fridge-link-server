@@ -7,7 +7,6 @@ import mara.server.exception.IllegalAccessShareException
 import mara.server.exception.IllegalAccessShareException.Companion.CREATED_BY_LOGIN_USER
 import mara.server.exception.IllegalAccessShareException.Companion.DIFFERENT_USER
 import mara.server.exception.IllegalAccessShareException.Companion.DUPLICATED_APPLY
-import mara.server.exception.ShareException.Companion.NO_SUCH_APPLY_SHARE
 import mara.server.exception.ShareException.Companion.NO_SUCH_INGREDIENT
 import mara.server.exception.ShareException.Companion.NO_SUCH_SHARE
 import org.springframework.data.domain.Page
@@ -151,16 +150,14 @@ class ShareService(
     }
 
     @Transactional
-    fun deleteApplyShare(applyId: Long): String {
+    fun deleteApplyShare(shareId: Long): String {
         val user = userService.getCurrentLoginUser()
-        val applyShare = applyShareRepository.findById(applyId)
-            .orElseThrow { NoSuchElementException("$NO_SUCH_APPLY_SHARE Id: $applyId") }
-        if (user.userId != applyShare.user.userId) throw IllegalAccessShareException(DIFFERENT_USER)
-        /**
-         신청을 취소하면 사람 수 차감
-         **/
+        val share = shareRepository.findById(shareId).orElseThrow { NoSuchElementException("$NO_SUCH_SHARE Id: $shareId") }
+        val applyShare = applyShareRepository.findByUserAndShare(user, share)
+
         applyShare.share.minusPeopleCount()
-        applyShareRepository.deleteById(applyId)
+        applyShareRepository.delete(applyShare)
+
         return deleted
     }
 }

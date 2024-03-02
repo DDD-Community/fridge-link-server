@@ -35,7 +35,7 @@ cloud:
 
 jwt:
   secret-key: ${jwt-secret-key}
-  access-duration-mils: 1800000
+  access-duration-mils: 21600000
   refresh-duration-mins: 20160
 
 logging:
